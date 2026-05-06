@@ -35,6 +35,25 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Add admin route entrypoints
+        shell: bash
+        run: |
+          for route in \
+            login \
+            artigos \
+            artigos/novo \
+            autores \
+            autores/novo \
+            categorias \
+            categorias/nova \
+            mensagens \
+            usuarios \
+            usuarios/novo
+          do
+            mkdir -p "dist/kwadv.csm/browser/$route"
+            cp dist/kwadv.csm/browser/index.html "dist/kwadv.csm/browser/$route/index.html"
+          done
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
