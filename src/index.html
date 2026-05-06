@@ -3,6 +3,19 @@
 <head>
   <meta charset="utf-8">
   <title>Painel do Administrador</title>
+  <script>
+    (function(location) {
+      if (location.search[1] === '/') {
+        var decoded = location.search
+          .slice(1)
+          .split('&')
+          .map(function(value) { return value.replace(/~and~/g, '&'); })
+          .join('?');
+
+        window.history.replaceState(null, '', decoded + location.hash);
+      }
+    })(window.location);
+  </script>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="logos/icon.ico">
