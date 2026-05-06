@@ -1,1 +1,223 @@
-<p>author-detail works!</p>
+<section class="p-8">
+    <div class="max-w-6xl mx-auto space-y-6">
+        <div class="flex items-center justify-between gap-4">
+            <div>
+                @if (!modalMode) {
+                    <a [routerLink]="['/autores']" class="text-sm font-medium text-(--color-1) hover:text-(--color-3)">
+                        Voltar para autores
+                    </a>
+                }
+                <h2 class="text-2xl font-bold text-slate-900 mt-2">
+                    {{ isCreating ? 'Novo autor' : 'Editar autor' }}
+                </h2>
+                <p class="mt-2 text-sm leading-6 text-slate-600">
+                    Atualize o perfil publico, foto, links e dados editoriais deste autor.
+                </p>
+            </div>
+
+            <div class="flex items-center gap-2">
+                @if (!isCreating && authorId !== null) {
+                    <span class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                        Autor #{{ authorId }}
+                    </span>
+                }
+
+                @if (modalMode) {
+                    <button type="button" (click)="closeDetail()" class="rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700" aria-label="Fechar">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                }
+            </div>
+        </div>
+
+        @if (errorMessage) {
+            <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                {{ errorMessage }}
+            </div>
+        }
+
+        @if (feedbackMessage) {
+            <div class="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+                {{ feedbackMessage }}
+            </div>
+        }
+
+        @if (isLoading) {
+            <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+                <div class="h-40 rounded-xl bg-slate-100 animate-pulse"></div>
+            </div>
+        } @else {
+            <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
+                <form [formGroup]="form" (ngSubmit)="saveAuthor()" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
+                    <div class="grid gap-6 md:grid-cols-2">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold text-slate-900 mb-2" for="author-name">Nome</label>
+                            <input
+                                id="author-name"
+                                type="text"
+                                formControlName="name"
+                                class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                placeholder="Nome do autor"
+                            />
+                            @if (form.controls.name.touched && form.controls.name.invalid) {
+                                <p class="mt-2 text-xs text-red-600">Informe o nome do autor.</p>
+                            }
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold text-slate-900 mb-2" for="author-headline">Headline</label>
+                            <textarea
+                                id="author-headline"
+                                rows="3"
+                                formControlName="headline"
+                                class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                placeholder="Como este autor aparece no portal"
+                            ></textarea>
+                            @if (form.controls.headline.touched && form.controls.headline.invalid) {
+                                <p class="mt-2 text-xs text-red-600">Informe a headline editorial.</p>
+                            }
+                        </div>
+
+                        <div class="md:col-span-2 space-y-3">
+                            <label class="block text-sm font-semibold text-slate-900" for="author-photo-file">Foto do autor</label>
+                            <div class="flex flex-col gap-3 rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+                                <div class="flex items-center gap-3">
+                                    <img [src]="previewImageUrl" alt="Preview do autor" class="h-14 w-14 rounded-full border border-slate-200 bg-white object-cover" />
+                                    <div>
+                                        <p class="text-sm font-semibold text-slate-900">
+                                            {{ isUploadingImage ? 'Enviando imagem...' : (hasProfileImage ? 'Trocar imagem atual' : 'Enviar imagem local') }}
+                                        </p>
+                                        <p class="mt-1 text-xs text-slate-500">PNG, JPG, WEBP ou GIF ate 10 MB.</p>
+                                    </div>
+                                </div>
+
+                                <input
+                                    #profileImageInput
+                                    id="author-photo-file"
+                                    type="file"
+                                    [accept]="acceptedImageTypes"
+                                    class="hidden"
+                                    (change)="onProfileImageFileSelected($event)"
+                                />
+
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <button
+                                        type="button"
+                                        (click)="profileImageInput.click()"
+                                        [disabled]="isSaving || isUploadingImage"
+                                        class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-(--color-1) transition hover:border-(--color-1) hover:bg-(--color-4) disabled:cursor-not-allowed disabled:opacity-50"
+                                    >
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16V4m0 0l-4 4m4-4l4 4M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2"></path>
+                                        </svg>
+                                        {{ isUploadingImage ? 'Enviando...' : (hasProfileImage ? 'Trocar imagem' : 'Subir imagem') }}
+                                    </button>
+
+                                    @if (hasProfileImage) {
+                                        <button
+                                            type="button"
+                                            (click)="removeProfileImage()"
+                                            [disabled]="isSaving || isUploadingImage"
+                                            class="inline-flex items-center justify-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-2.5 text-sm font-semibold text-red-700 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                                        >
+                                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 7h12M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2m-8 0l1 12a2 2 0 002 2h4a2 2 0 002-2l1-12"></path>
+                                            </svg>
+                                            Excluir foto
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-900 mb-2" for="author-linkedin">LinkedIn</label>
+                            <input
+                                id="author-linkedin"
+                                type="url"
+                                formControlName="linkedinUrl"
+                                class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                placeholder="https://www.linkedin.com/in/..."
+                            />
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-900 mb-2" for="author-website">Site</label>
+                            <input
+                                id="author-website"
+                                type="url"
+                                formControlName="websiteUrl"
+                                class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                placeholder="https://..."
+                            />
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-3 pt-2">
+                        <div class="text-xs text-slate-500">
+                            Os links ficam visiveis no perfil publico do autor quando preenchidos.
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            @if (!isCreating) {
+                                <button
+                                    type="button"
+                                    (click)="deleteAuthor()"
+                                    [disabled]="isDeleting || isSaving || isUploadingImage"
+                                    class="inline-flex items-center rounded-xl border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-700 hover:bg-red-50 disabled:opacity-50"
+                                >
+                                    {{ isDeleting ? 'Excluindo...' : 'Excluir' }}
+                                </button>
+                            }
+
+                            <button
+                                type="submit"
+                                [disabled]="isSaving || isDeleting || isUploadingImage"
+                                class="inline-flex items-center rounded-xl bg-(--color-1) px-5 py-2.5 text-sm font-semibold text-white hover:bg-(--color-3) disabled:opacity-50"
+                            >
+                                {{ isSaving ? 'Salvando...' : 'Salvar autor' }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <aside class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-5">
+                    <div class="flex items-center gap-4">
+                        <img [src]="previewImageUrl" alt="Preview do autor" class="w-20 h-20 rounded-full border border-slate-200 object-cover" />
+                        <div>
+                            <p class="text-sm font-semibold text-slate-900">{{ form.controls.name.value || 'Autor sem nome' }}</p>
+                            <p class="text-xs text-slate-500 mt-1">{{ form.controls.headline.value || 'A headline aparecera aqui.' }}</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                            <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Artigos vinculados</p>
+                            <p class="mt-1 text-2xl font-bold text-slate-900">{{ articleCount }}</p>
+                        </div>
+
+                        <div class="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                            <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">LinkedIn</p>
+                            @if (linkedinUrl) {
+                                <a [href]="linkedinUrl" target="_blank" rel="noopener noreferrer" class="mt-1 block truncate text-sm font-medium text-(--color-1) hover:text-(--color-3)">{{ linkedinUrl }}</a>
+                            } @else {
+                                <p class="mt-1 text-sm text-slate-500">Nao informado</p>
+                            }
+                        </div>
+
+                        <div class="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                            <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Site</p>
+                            @if (websiteUrl) {
+                                <a [href]="websiteUrl" target="_blank" rel="noopener noreferrer" class="mt-1 block truncate text-sm font-medium text-(--color-1) hover:text-(--color-3)">{{ websiteUrl }}</a>
+                            } @else {
+                                <p class="mt-1 text-sm text-slate-500">Nao informado</p>
+                            }
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        }
+    </div>
+</section>

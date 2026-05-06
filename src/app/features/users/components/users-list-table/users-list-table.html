@@ -1,0 +1,111 @@
+<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex flex-col">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm whitespace-nowrap">
+            <thead
+                class="bg-slate-50 text-(--color-1) uppercase tracking-wider text-[12px] font-bold border-b border-slate-200">
+                <tr>
+                    <th class="px-6 py-4">ID</th>
+                    <th class="px-6 py-4">Perfil</th>
+                    <th class="px-6 py-4">Status</th>
+                    <th class="px-6 py-4">Autor vinculado</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                @if (!hasLoadedOnce && isLoading) {
+                    @if (showLoadingState) {
+                        @for (row of skeletonRows; track row) {
+                            <tr>
+                                <td colspan="4" class="px-6 py-4">
+                                    <div class="h-12 rounded-lg bg-slate-100 animate-pulse"></div>
+                                </td>
+                            </tr>
+                        }
+                    } @else {
+                        <tr>
+                            <td colspan="4" class="h-[20rem]"></td>
+                        </tr>
+                    }
+                } @else if (errorMessage && filteredUsers.length === 0) {
+                    <tr>
+                        <td colspan="4" class="px-6 py-8 text-center">
+                            <div class="flex flex-col items-center gap-3">
+                                <p class="text-sm text-red-700">{{ errorMessage }}</p>
+                                <button
+                                    type="button"
+                                    (click)="retryLoad()"
+                                    class="px-3 py-1.5 rounded-md border border-red-300 bg-red-50 text-sm font-medium text-red-700 hover:bg-red-100 transition-colors"
+                                >
+                                    Tentar novamente
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                } @else if (filteredUsers.length === 0) {
+                    <tr>
+                        <td colspan="4" class="px-6 py-8 text-sm text-slate-500 text-center">Nenhum usuario cadastrado.</td>
+                    </tr>
+                } @else {
+                    @for (user of paginatedUsers; track user.id) {
+                        <tr class="hover:bg-slate-50/70 transition-colors cursor-pointer" (click)="openUser(user.id)">
+                            <td class="px-6 py-4">
+                                <div class="font-semibold text-slate-900">#{{ user.id }}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="font-semibold text-slate-900">{{ user.displayName }}</div>
+                                <div class="text-xs text-slate-500 mt-0.5">{{ user.email }}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span [class]="getStatusClasses(user)">
+                                    <span
+                                        class="h-1.5 w-1.5 rounded-full"
+                                        [class.bg-emerald-500]="user.isActive === true"
+                                        [class.bg-red-500]="user.isActive === false"
+                                        [class.bg-slate-400]="user.isActive === null"
+                                    ></span>
+                                    {{ getStatusLabel(user) }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="font-medium text-slate-800">{{ user.linkedAuthorName }}</div>
+                                <div class="text-xs text-slate-500 mt-0.5">{{ user.linkedAuthorHeadline }}</div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="p-4 border-t border-slate-200 bg-white flex items-center justify-between">
+        <p class="text-sm text-slate-500">
+            @if (!hasLoadedOnce && isLoading) {
+                Carregando usuarios...
+            } @else if (isLoading) {
+                Atualizando usuarios...
+            } @else if (errorMessage) {
+                Paginacao indisponivel enquanto a tabela nao carrega.
+            } @else {
+                Mostrando de <span class="font-medium text-slate-900">{{ displayFrom }}</span> a
+                <span class="font-medium text-slate-900">{{ displayTo }}</span> de <span class="font-medium text-slate-900">{{ resultsCount }}</span>
+                resultados
+            }
+        </p>
+        <div class="flex items-center gap-1">
+            <button type="button"
+                class="px-3 py-1.5 border border-slate-200 rounded-md text-slate-600 hover:bg-slate-50 disabled:opacity-50 text-sm font-medium"
+                [disabled]="isLoading || !!errorMessage || currentPage === 1 || resultsCount === 0" (click)="goToPreviousPage()">Anterior</button>
+
+            @for (page of pageControls; track $index) {
+                @if (isPageNumber(page)) {
+                    <button type="button" [class]="getPageButtonClasses(page)" (click)="goToPage(page)">{{ page }}</button>
+                } @else {
+                    <span class="px-2 text-sm font-medium text-slate-400">...</span>
+                }
+            }
+
+            <button type="button"
+                class="px-3 py-1.5 border border-slate-200 rounded-md text-slate-600 hover:bg-slate-50 disabled:opacity-50 text-sm font-medium"
+                [disabled]="isLoading || !!errorMessage || currentPage === totalPages || resultsCount === 0" (click)="goToNextPage()">Proxima</button>
+        </div>
+    </div>
+</div>

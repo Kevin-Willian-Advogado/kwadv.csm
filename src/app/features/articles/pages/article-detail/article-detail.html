@@ -1,1 +1,48 @@
-<p>article-detail works!</p>
+<div class="bg-slate-50 text-slate-900 h-dvh min-h-screen flex flex-col overflow-hidden">
+  <app-article-topbar
+    [status]="article.status"
+    [isSaving]="isSaving"
+    [isLoading]="isLoading"
+    [isCreating]="isCreating"
+    [articleTitle]="article.title"
+    [articleSlug]="article.slug"
+    [categoryName]="article.categoryName"
+    [publishedAt]="article.publishedAt"
+    [lastSavedAt]="lastSavedAt"
+    [pendingPipelineAction]="pendingPipelineAction"
+    [pipelineQueuedAt]="pipelineQueuedAt"
+    [isDirty]="isDirty"
+    (save)="onSave($event)"
+  ></app-article-topbar>
+
+  @if (toastState) {
+    <app-toast-notification
+      [type]="toastState.type"
+      [title]="toastState.title"
+      [messages]="toastState.messages"
+      [autoCloseMs]="toastState.autoCloseMs"
+      (close)="dismissToast()"
+    ></app-toast-notification>
+  }
+
+  <main class="flex-1 min-h-0 flex gap-4 overflow-hidden px-4 md:px-6 pb-4 md:pb-6 mt-4">
+    <app-article-form
+      class="h-full"
+      [formData]="article"
+      [categories]="categories"
+      [currentAuthor]="currentAuthor"
+      [isSaving]="isSaving || isLoading"
+      [validationErrors]="validationErrors"
+      [slugValidationStatus]="slugValidationStatus"
+      [slugValidationMessage]="slugValidationMessage"
+      (formDataChange)="onFormDataChange($event)"
+    ></app-article-form>
+
+    <app-article-text-editor
+      class="h-full flex-1 min-w-0"
+      [content]="article.content"
+      [isSaving]="isSaving || isLoading"
+      (contentChange)="onContentChange($event)"
+    ></app-article-text-editor>
+  </main>
+</div>

@@ -1,0 +1,80 @@
+﻿<div class="mb-8 mt-4">
+    <div class="flex items-center justify-between mb-3">
+        <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">Em Destaque</h2>
+        <span class="text-xs font-semibold px-2 py-1 bg-slate-200 text-slate-600 rounded-md">{{ filledSlotsCount }}/{{ maxHighlights }} preenchidos</span>
+    </div>
+
+    @if (!hasLoadedOnce && isLoading) {
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            @if (showLoadingState) {
+                @for (slot of slotIndexes; track slot) {
+                    <div class="h-32 rounded-xl border border-slate-200 bg-slate-100/70 animate-pulse"></div>
+                }
+            } @else {
+                @for (slot of slotIndexes; track slot) {
+                    <div class="h-32 rounded-xl border border-transparent bg-transparent"></div>
+                }
+            }
+        </div>
+    } @else {
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 transition-opacity duration-200" [class.opacity-75]="isLoading">
+            @for (slotIndex of slotIndexes; track slotIndex) {
+                @if (articleForSlot(slotIndex); as highlightArticle) {
+                    <div (click)="openReplaceModal(slotIndex)"
+                        class="group relative bg-white border rounded-xl overflow-hidden border-slate-200 shadow-sm transition-all duration-300 flex flex-col h-32 cursor-pointer">
+                        <div class="flex flex-1 overflow-hidden">
+                            <div class="w-24 h-full bg-slate-100 shrink-0 overflow-hidden border-r border-slate-100">
+                                <img [src]="highlightArticle.coverImageUrl" [alt]="highlightArticle.title"
+                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            </div>
+                            <div class="p-3 flex flex-col justify-center min-w-0">
+                                <span class="text-[10px] font-bold uppercase mb-1 truncate">{{ highlightArticle.categoryName }}</span>
+                                <h4 class="text-xs font-bold text-slate-800 leading-snug line-clamp-2 transition-colors">
+                                    {{ highlightArticle.title }}
+                                </h4>
+                                <p class="text-xs text-(--color-3) mt-0.5 truncate w-full">{{ highlightArticle.subtitle }}</p>
+                                <p class="text-[10px] text-(--color-3) mt-1">Publicado em {{ highlightArticle.publishedAt | date: 'dd/MM/yyyy' }}</p>
+                            </div>
+                        </div>
+                        <button type="button" [disabled]="isSaving"
+                            (click)="$event.stopPropagation(); removeHighlight(slotIndex)"
+                            class="absolute top-2 right-2 p-1.5 text-slate-300 hover:text-red-500 transition rounded-full hover:bg-red-50">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                } @else {
+                    <button type="button" [disabled]="isSaving || filledSlotsCount >= maxHighlights"
+                        (click)="openAddModal()"
+                        class="h-32 border-2 border-dashed border-slate-200 rounded-xl flex flex-col items-center justify-center bg-slate-50/50 hover:bg-blue-50/50 hover:border-blue-300 hover:text-blue-600 transition-all group disabled:opacity-50 disabled:cursor-not-allowed">
+                        <div class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center mb-2 group-hover:border-blue-200 group-hover:scale-110 transition-all">
+                            <svg class="w-4 h-4 text-slate-400 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </div>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 group-hover:text-blue-600">Adicionar Destaque</span>
+                    </button>
+                }
+            }
+        </div>
+    }
+
+    @if (errorMessage) {
+        <div class="mt-3 px-3 py-2 rounded-md border border-red-200 bg-red-50 text-sm text-red-700 flex items-center justify-between gap-3">
+            <span>{{ errorMessage }}</span>
+            <button type="button" (click)="retryLoad()"
+                class="px-3 py-1.5 rounded-md border border-red-300 hover:bg-red-100 transition-colors font-medium">Tentar novamente</button>
+        </div>
+    }
+</div>
+
+<app-highlights-article-modal
+    [isOpen]="isModalOpen"
+    [isSaving]="isSaving"
+    [searchTerm]="searchTerm"
+    [modalArticles]="modalArticles"
+    [modalErrorMessage]="modalErrorMessage"
+    (closeModal)="closeModal()"
+    (searchChange)="onSearchChange($event)"
+    (articleSelected)="selectArticle($event)"></app-highlights-article-modal>

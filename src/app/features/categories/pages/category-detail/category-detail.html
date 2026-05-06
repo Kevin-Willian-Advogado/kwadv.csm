@@ -1,0 +1,131 @@
+<section class="p-8">
+    <div class="max-w-6xl mx-auto space-y-6">
+        <div class="flex items-center justify-between gap-4">
+            <div>
+                @if (!modalMode) {
+                    <a [routerLink]="['/categorias']" class="text-sm font-medium text-(--color-1) hover:text-(--color-3)">
+                        Voltar para categorias
+                    </a>
+                }
+                <h2 class="text-2xl font-bold text-slate-900 mt-2">
+                    {{ isCreating ? 'Nova categoria' : 'Editar categoria' }}
+                </h2>
+                <p class="mt-2 text-sm leading-6 text-slate-600">
+                    Ajuste a descricao editorial e acompanhe o uso dessa categoria no portal.
+                </p>
+            </div>
+
+            <div class="flex items-center gap-2">
+                @if (!isCreating && categoryId !== null) {
+                    <span class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                        Categoria #{{ categoryId }}
+                    </span>
+                }
+
+                @if (modalMode) {
+                    <button type="button" (click)="closeDetail()" class="rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700" aria-label="Fechar">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                }
+            </div>
+        </div>
+
+        @if (errorMessage) {
+            <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                {{ errorMessage }}
+            </div>
+        }
+
+        @if (feedbackMessage) {
+            <div class="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+                {{ feedbackMessage }}
+            </div>
+        }
+
+        @if (isLoading) {
+            <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+                <div class="h-40 rounded-xl bg-slate-100 animate-pulse"></div>
+            </div>
+        } @else {
+            <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
+                <form [formGroup]="form" (ngSubmit)="saveCategory()" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-900 mb-2" for="category-name">Nome</label>
+                            <input
+                                id="category-name"
+                                type="text"
+                                formControlName="name"
+                                class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                placeholder="Nome da categoria"
+                            />
+                            @if (form.controls.name.touched && form.controls.name.invalid) {
+                                <p class="mt-2 text-xs text-red-600">Informe o nome da categoria.</p>
+                            }
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-900 mb-2" for="category-description">Descricao</label>
+                            <textarea
+                                id="category-description"
+                                rows="5"
+                                formControlName="description"
+                                class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                placeholder="Descreva o papel desta categoria no portal"
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-3 pt-2">
+                        <div class="text-xs text-slate-500">
+                            O uso nos artigos continua sendo medido pelo nome atual da categoria.
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            @if (!isCreating) {
+                                <button
+                                    type="button"
+                                    (click)="deleteCategory()"
+                                    [disabled]="isDeleting || isSaving"
+                                    class="inline-flex items-center rounded-xl border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-700 hover:bg-red-50 disabled:opacity-50"
+                                >
+                                    {{ isDeleting ? 'Excluindo...' : 'Excluir' }}
+                                </button>
+                            }
+
+                            <button
+                                type="submit"
+                                [disabled]="isSaving || isDeleting"
+                                class="inline-flex items-center rounded-xl bg-(--color-1) px-5 py-2.5 text-sm font-semibold text-white hover:bg-(--color-3) disabled:opacity-50"
+                            >
+                                {{ isSaving ? 'Salvando...' : 'Salvar categoria' }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <aside class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-5">
+                    <div>
+                        <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Resumo</p>
+                        <p class="text-lg font-semibold text-slate-900 mt-2">{{ form.controls.name.value || 'Categoria sem nome' }}</p>
+                        <p class="text-sm text-slate-500 mt-2">{{ form.controls.description.value || 'A descricao editorial aparecera aqui.' }}</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Uso no portal</p>
+                            <p class="text-sm text-slate-700 mt-1">{{ relatedArticleCount }} artigo(s) vinculados</p>
+                        </div>
+
+                        <div>
+                            <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Estado</p>
+                            <p class="text-sm text-slate-700 mt-1">{{ isCreating ? 'Novo cadastro' : 'Cadastro existente' }}</p>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        }
+    </div>
+</section>

@@ -1,0 +1,71 @@
+<aside class="fixed top-0 left-0 z-50 flex h-screen w-64 flex-col border-r border-slate-200 bg-white shadow-sm">
+    <div class="flex h-16 items-center border-b border-slate-200 px-5">
+        <img src="/logos/logo-2.svg" alt="KW Advocacia" class="h-8 w-auto" />
+    </div>
+
+    <nav class="flex-1 space-y-1 px-3 py-5">
+        <p class="px-3 pb-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">Menu</p>
+
+        <a [routerLink]="['/artigos']" routerLinkActive="bg-(--color-2) text-(--color-1)" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1)">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z" />
+            </svg>
+            Artigos
+        </a>
+
+        <a [routerLink]="['/autores']" routerLinkActive="bg-(--color-2) text-(--color-1)" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1)">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+            Autores
+        </a>
+
+        <a [routerLink]="['/categorias']" routerLinkActive="bg-(--color-2) text-(--color-1)" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1)">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect width="7" height="7" x="3" y="3" rx="1" />
+                <rect width="7" height="7" x="14" y="3" rx="1" />
+                <rect width="7" height="7" x="14" y="14" rx="1" />
+                <rect width="7" height="7" x="3" y="14" rx="1" />
+            </svg>
+            Categorias
+        </a>
+
+        <a [routerLink]="['/mensagens']" routerLinkActive="bg-(--color-2) text-(--color-1)" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1)">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z" />
+            </svg>
+            Mensagens
+        </a>
+
+        <a [routerLink]="['/usuarios']" routerLinkActive="bg-(--color-2) text-(--color-1)" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1)">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+            Usuarios
+        </a>
+    </nav>
+
+    <div class="border-t border-slate-200 p-3">
+        <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1)">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.22.61.8 1 1.45 1H21a2 2 0 0 1 0 4h-.15c-.65 0-1.23.39-1.45 1z" />
+            </svg>
+            Configuracoes
+        </a>
+
+        <button type="button" (click)="logout()" class="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 transition hover:bg-red-50">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" x2="9" y1="12" y2="12" />
+            </svg>
+            Sair
+        </button>
+    </div>
+</aside>

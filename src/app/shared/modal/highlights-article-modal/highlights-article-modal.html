@@ -1,0 +1,63 @@
+@if (isOpen) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <button type="button" (click)="closeModal.emit()" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"></button>
+
+        <div
+            class="relative w-full max-w-[50rem] bg-white rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-200 flex flex-col max-h-[80vh] overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between bg-white shrink-0">
+                <h2 class="text-lg font-bold text-(--color-1) flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    Buscar Artigos Publicados
+                </h2>
+                <button type="button" (click)="closeModal.emit()" class="text-slate-400 hover:text-slate-600 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="p-6 bg-slate-50/50 border-b border-slate-200 shrink-0">
+                <label class="block text-sm font-medium text-slate-700 mb-1">Pesquisar</label>
+                <div class="relative">
+                    <input #searchInput type="text" [value]="searchTerm" (input)="onSearchChange(searchInput.value)"
+                        class="w-full rounded-md border-slate-300 shadow-sm px-4 py-2 border placeholder-gray-400 focus:ring-1 focus:ring-(--color-1) focus:border-(--color-1) outline-none transition-all"
+                        placeholder="Ex: Direito vs Tecnologia">
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-2">
+                @if (modalArticles.length === 0) {
+                    <div class="text-sm text-slate-500 py-8 text-center">Nenhum artigo publicado disponivel para destacar.</div>
+                } @else {
+                    @for (article of modalArticles; track article.id) {
+                        <div (click)="onArticleSelected(article)"
+                            class="h-[7.5rem] bg-white border border-slate-200 rounded-xl overflow-hidden flex items-stretch group hover:border-(--color-1) hover:shadow-md transition cursor-pointer"
+                            [class.opacity-60]="isSaving">
+                            <div class="w-32 sm:w-40 bg-slate-200 shrink-0 relative overflow-hidden">
+                                <img [src]="article.coverImageUrl" [alt]="article.title"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            </div>
+                            <div class="p-4 flex flex-col justify-between flex-1">
+                                <div>
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="text-[10px] font-bold text-(--color-1) uppercase tracking-wider">{{ article.categoryName }}</span>
+                                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-100 text-green-700">Publicado</span>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-(--color-1) leading-tight mb-2 line-clamp-1">{{ article.title }}</h4>
+                                    <p class="text-sm text-(--color-3)">{{ article.subtitle }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
+            @if (modalErrorMessage) {
+                <div class="px-6 py-3 border-t border-red-200 bg-red-50 text-sm text-red-700">{{ modalErrorMessage }}</div>
+            }
+        </div>
+    </div>
+}

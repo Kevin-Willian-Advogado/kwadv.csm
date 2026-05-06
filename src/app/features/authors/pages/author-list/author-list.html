@@ -1,1 +1,18 @@
-<p>author-list works!</p>
+<section class="p-8">
+    <app-authors-list-table (authorSelected)="openEditModal($event)"></app-authors-list-table>
+</section>
+
+@if (isEditorOpen) {
+    <div class="fixed inset-0 z-[70] flex items-center justify-center p-4">
+        <button type="button" class="absolute inset-0 bg-slate-950/50 backdrop-blur-sm" aria-label="Fechar" (click)="closeEditor()"></button>
+        <div class="relative max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-2xl bg-white shadow-2xl">
+            <app-author-detail
+                [modalMode]="true"
+                [selectedAuthorId]="selectedAuthorId"
+                (closed)="closeEditor()"
+                (saved)="handleMutation()"
+                (deleted)="handleMutation()"
+            ></app-author-detail>
+        </div>
+    </div>
+}

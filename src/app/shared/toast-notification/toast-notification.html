@@ -1,0 +1,70 @@
+<div class="fixed top-5 right-5 z-50 w-[min(92vw,26rem)] toast-enter">
+  <div
+    class="overflow-hidden rounded-2xl border bg-white/95 backdrop-blur shadow-[0_18px_45px_rgba(15,23,42,0.18)]"
+    [class.border-emerald-200]="type === 'success'"
+    [class.border-red-200]="type === 'error'"
+    [class.border-sky-200]="type === 'info'"
+  >
+    <div
+      class="flex items-start gap-3 px-4 py-4"
+      [class.bg-emerald-50/80]="type === 'success'"
+      [class.bg-red-50/85]="type === 'error'"
+      [class.bg-sky-50/85]="type === 'info'"
+    >
+      <div
+        class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+        [class.bg-emerald-100]="type === 'success'"
+        [class.text-emerald-700]="type === 'success'"
+        [class.bg-red-100]="type === 'error'"
+        [class.text-red-700]="type === 'error'"
+        [class.bg-sky-100]="type === 'info'"
+        [class.text-sky-700]="type === 'info'"
+      >
+        @if (type === 'success') {
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M16.704 5.29a1 1 0 0 1 .006 1.414l-8 8.07a1 1 0 0 1-1.42 0L3.29 10.77a1 1 0 1 1 1.415-1.415l3.296 3.296 7.294-7.355a1 1 0 0 1 1.409-.006Z" clip-rule="evenodd" />
+          </svg>
+        } @else if (type === 'info') {
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-11a.75.75 0 0 0-1.5 0v3.69c0 .199.079.39.22.53l2.5 2.5a.75.75 0 1 0 1.06-1.06l-2.28-2.28V7Z" clip-rule="evenodd" />
+          </svg>
+        } @else {
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M18 10A8 8 0 1 1 2 10a8 8 0 0 1 16 0Zm-8.75-3.25a.75.75 0 0 1 1.5 0v4a.75.75 0 0 1-1.5 0v-4Zm.75 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
+          </svg>
+        }
+      </div>
+
+      <div class="min-w-0 flex-1">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <p class="text-sm font-semibold text-slate-900">{{ title }}</p>
+            @if (messages.length === 1) {
+              <p class="mt-1 text-sm text-slate-600">{{ messages[0] }}</p>
+            } @else {
+              <ul class="mt-2 space-y-1 text-sm text-slate-600">
+                @for (message of messages; track message) {
+                  <li class="flex items-start gap-2">
+                    <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-current opacity-60"></span>
+                    <span>{{ message }}</span>
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+
+          <button
+            type="button"
+            (click)="onClose()"
+            class="rounded-lg p-1.5 text-slate-400 transition hover:bg-white/70 hover:text-slate-700"
+            aria-label="Fechar notificacao"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

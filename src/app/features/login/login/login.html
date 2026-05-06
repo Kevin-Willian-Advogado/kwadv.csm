@@ -1,1 +1,80 @@
-<p>login works!</p>
+<main class="w-full min-h-screen flex items-center justify-center bg-[#E6E8E9]">
+  <section class="w-full max-w-[25rem] transition-all duration-500 bg-white shadow-2xl p-8 rounded-3xl">
+    <div class="flex flex-col items-center gap-8">
+      <img src="/logos/logo-3.svg" alt="Logo" class="h-[6.25rem]">
+      <div class="text-center">
+        <h1 class="text-2xl font-bold text-gray-800">Acesso Restrito</h1>
+        <p class="text-gray-500 text-sm mt-1">Digite suas credenciais de acesso</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-full flex flex-col gap-5">
+        <div class="flex flex-col gap-1.5">
+          <label class="text-gray-700 text-xs font-bold uppercase tracking-wider ml-1">E-mail</label>
+          <div class="relative">
+            <input type="email" formControlName="email" required maxlength="200" placeholder="email@exemplo.com" class="w-full bg-white border border-slate-400 placeholder-gray-400 rounded-xl p-3.5 pl-4">
+          </div>
+
+          @if (loginForm.get('email')?.errors?.['required'] && loginForm.get('email')?.touched) {
+            <span class="text-red-500 text-[10px] ml-1">E-mail obrigatorio.</span>
+          }
+
+          @if (loginForm.get('email')?.errors?.['email'] && loginForm.get('email')?.touched) {
+            <span class="text-red-500 text-[10px] ml-1">E-mail invalido.</span>
+          }
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-gray-700 text-xs font-bold uppercase tracking-wider ml-1">Senha</label>
+          <div class="relative group">
+            <input [type]="isPasswordVisible ? 'text' : 'password'" formControlName="senha" id="passwordInput" required maxlength="10" placeholder="P@ssW0rd" class="w-full bg-white border border-slate-400 placeholder-gray-400 rounded-xl p-3.5 pl-4 pr-12">
+            <button type="button" (click)="togglePassword()" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#273F4B] outline-none">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                @if (!isPasswordVisible) {
+                  <g><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></g>
+                }
+
+                @if (isPasswordVisible) {
+                  <g><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.52 13.52 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path><line x1="2" y1="2" x2="22" y2="22"></line></g>
+                }
+              </svg>
+            </button>
+          </div>
+
+          @if (loginForm.get('senha')?.errors?.['required'] && loginForm.get('senha')?.touched) {
+            <div class="text-red-500 text-[10px] ml-1">Senha obrigatoria.</div>
+          }
+
+          @if (loginForm.get('senha')?.errors?.['minlength'] && loginForm.get('senha')?.touched) {
+            <div class="text-red-500 text-[10px] ml-1">A senha deve ter no minimo 6 caracteres.</div>
+          }
+        </div>
+
+        <div class="flex justify-end -mt-2">
+          <button
+            type="button"
+            disabled
+            title="Recuperacao de senha em breve"
+            class="text-xs text-[#273F4B] font-semibold opacity-60 cursor-not-allowed"
+          >
+            Esqueceu sua senha?
+          </button>
+        </div>
+
+        @if (errorMessage) {
+          <p class="text-red-500 text-xs text-center -mt-2">{{ errorMessage }}</p>
+        }
+
+        <button type="submit" [disabled]="loginForm.invalid || isLoading" class="relative w-full bg-[#273F4B] text-white py-4 rounded-xl font-bold hover:bg-[#1e323c] active:scale-[0.97] transition-all shadow-lg flex items-center justify-center gap-3 disabled:opacity-50">
+          @if (!isLoading) {
+            <span>Entrar no Sistema</span>
+          }
+
+          @if (isLoading) {
+            <div class="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+            <span>Entrando...</span>
+          }
+        </button>
+      </form>
+    </div>
+  </section>
+</main>

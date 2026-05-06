@@ -1,0 +1,100 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+  <button
+    type="button"
+    class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+    aria-label="Fechar modal"
+    (click)="closeModal()"
+  ></button>
+
+  <div class="relative w-full max-w-[680px] max-h-[82vh] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.18)]">
+    <div class="flex items-center justify-between border-b border-slate-100 px-6 py-5">
+      <div>
+        <h2 class="text-lg font-bold text-(--color-1)">Adicionar autor</h2>
+        <p class="mt-1 text-sm text-slate-500">Selecione um ou mais autores para assinar este artigo.</p>
+      </div>
+
+      <button
+        type="button"
+        (click)="closeModal()"
+        class="rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+        aria-label="Fechar"
+      >
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="border-b border-slate-100 bg-slate-50/80 px-6 py-4">
+      <input
+        [(ngModel)]="searchTerm"
+        [ngModelOptions]="{ standalone: true }"
+        type="text"
+        placeholder="Buscar por nome ou headline"
+        class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-slate-300 focus:ring-2 focus:ring-slate-200"
+      />
+    </div>
+
+    <div class="max-h-[56vh] overflow-y-auto p-4">
+      @if (isLoading) {
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">
+          Carregando autores...
+        </div>
+      } @else if (errorMessage) {
+        <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-8 text-center text-sm text-red-700">
+          {{ errorMessage }}
+        </div>
+      } @else if (filteredAuthors.length === 0) {
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">
+          Nenhum autor encontrado para a busca atual.
+        </div>
+      } @else {
+        <div class="space-y-2">
+          @for (author of filteredAuthors; track author.id) {
+            <button
+              type="button"
+              (click)="selectAuthor(author)"
+              [disabled]="isAuthorSelected(author.id)"
+              class="flex w-full items-center justify-between gap-4 rounded-xl border px-4 py-3 text-left transition"
+              [class.border-slate-200]="!isAuthorSelected(author.id)"
+              [class.hover:border-(--color-1)]="!isAuthorSelected(author.id)"
+              [class.hover:bg-(--color-4)]="!isAuthorSelected(author.id)"
+              [class.border-slate-100]="isAuthorSelected(author.id)"
+              [class.bg-slate-50]="isAuthorSelected(author.id)"
+              [class.opacity-70]="isAuthorSelected(author.id)"
+            >
+              <div class="flex min-w-0 items-center gap-4">
+                <img
+                  [src]="author.profileImageUrl || '/images/avatar-placeholder.png'"
+                  [alt]="'Autor ' + author.name"
+                  class="h-12 w-12 shrink-0 rounded-full border-2 border-white object-cover shadow-sm"
+                />
+                <div class="min-w-0">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <h3 class="truncate text-sm font-semibold text-slate-800">{{ author.name }}</h3>
+                    @if (isCurrentAuthor(author.id)) {
+                      <span class="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-700">
+                        Meu autor
+                      </span>
+                    }
+                  </div>
+                  <p class="truncate text-xs text-slate-500">{{ author.headline || 'Sem headline cadastrada' }}</p>
+                </div>
+              </div>
+
+              <span
+                class="shrink-0 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide"
+                [class.bg-slate-200]="isAuthorSelected(author.id)"
+                [class.text-slate-600]="isAuthorSelected(author.id)"
+                [class.bg-(--color-4)]="!isAuthorSelected(author.id)"
+                [class.text-(--color-1)]="!isAuthorSelected(author.id)"
+              >
+                {{ isAuthorSelected(author.id) ? 'Selecionado' : 'Adicionar' }}
+              </span>
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>
