@@ -39,6 +39,8 @@ Deno.serve(async (req) => {
   }
 
   try {
+    requireAuthenticatedRequest(req)
+
     const body = await readRequestBody(req)
     const articleId = requirePositiveInteger(body.articleId)
     const articleSlug = normalizeText(body.articleSlug) ?? normalizeText(body.slug) ?? ''
@@ -181,6 +183,32 @@ function normalizePublicationAction(value: unknown): ArticlePublicationAction {
   }
 
   return 'publish'
+}
+
+function requireAuthenticatedRequest(req: Request): void {
+  const payload = decodeJwtPayload(req.headers.get('authorization'))
+  const role = normalizeText(payload?.['role'])
+
+  if (role !== 'authenticated') {
+    throw new RequestError('Sessao autenticada obrigatoria para acionar publicacao.', 401)
+  }
+}
+
+function decodeJwtPayload(authorizationHeader: string | null): Record<string, unknown> | null {
+  const token = authorizationHeader?.replace(/^Bearer\s+/i, '').trim() ?? ''
+  const [, payload] = token.split('.')
+
+  if (!payload) {
+    return null
+  }
+
+  try {
+    const base64 = payload.replace(/-/g, '+').replace(/_/g, '/')
+    const paddedBase64 = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=')
+    return JSON.parse(atob(paddedBase64)) as Record<string, unknown>
+  } catch {
+    return null
+  }
 }
 
 function normalizeText(value: unknown): string | null {
