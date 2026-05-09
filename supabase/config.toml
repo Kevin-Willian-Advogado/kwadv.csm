@@ -417,3 +417,9 @@ entrypoint = "./functions/gerenciar-usuarios/index.ts"
 # Specifies static files to be bundled with the function. Supports glob patterns.
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/gerenciar-usuarios/*.html" ]
+
+[functions.publicar-artigo]
+enabled = true
+verify_jwt = true
+import_map = "./functions/publicar-artigo/deno.json"
+entrypoint = "./functions/publicar-artigo/index.ts"

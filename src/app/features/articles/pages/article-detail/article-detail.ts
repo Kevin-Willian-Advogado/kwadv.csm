@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EMPTY, Subject, catchError, debounceTime, distinctUntilChanged, finalize, map, of, switchMap, takeUntil } from 'rxjs';
+import { EMPTY, Observable, Subject, catchError, debounceTime, distinctUntilChanged, finalize, map, of, switchMap, takeUntil, throwError } from 'rxjs';
 import {
   ArticleEditorData,
   ArticleEditorAuthor,
   ArticleUpsertPayload,
   ArticlesService,
 } from '../../../../core/articles.service';
+import { ArticlePublicationService } from '../../../../core/article-publication.service';
 import { AuthorsService, CurrentAuthorContext } from '../../../../core/authors.service';
 import {
   ArticleEditorFormData,
@@ -36,6 +37,16 @@ interface ArticleDetailToastState {
 
 type SlugValidationStatus = 'idle' | 'checking' | 'available' | 'unavailable' | 'error';
 
+class ArticlePublicationDispatchError extends Error {
+  constructor(
+    readonly originalError: unknown,
+    readonly savedArticle: ArticleEditorData,
+    readonly action: ArticleSaveAction,
+  ) {
+    super('Nao foi possivel acionar a Action do GitHub para o artigo salvo.');
+  }
+}
+
 @Component({
   selector: 'app-article-detail',
   imports: [CommonModule, ArticleTopbar, ArticleForm, ArticleTextEditor, ToastNotification],
@@ -46,6 +57,7 @@ export class ArticleDetail implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly articlesService = inject(ArticlesService);
+  private readonly articlePublicationService = inject(ArticlePublicationService);
   private readonly authorsService = inject(AuthorsService);
   private readonly destroy$ = new Subject<void>();
   private readonly slugValidation$ = new Subject<{ slug: string; articleId: number | null }>();
@@ -121,9 +133,13 @@ export class ArticleDetail implements OnInit, OnDestroy {
           }
 
           const payload = this.buildPayload(action);
-          return this.article.id
+          const saveRequest$ = this.article.id
             ? this.articlesService.updateArticle(this.article.id, payload)
             : this.articlesService.createArticle(payload);
+
+          return saveRequest$.pipe(
+            switchMap((savedArticle) => this.queuePublicationAfterSave(savedArticle, action)),
+          );
         }),
         finalize(() => (this.isSaving = false)),
       )
@@ -179,8 +195,11 @@ export class ArticleDetail implements OnInit, OnDestroy {
         this.clearPipelineFeedback();
       }
 
+      const shouldPreserveToast =
+        isSameArticle && (this.toastState?.kind === 'pipeline' || this.toastState?.kind === 'error');
+
       this.isCreating = false;
-      this.loadArticle(slug, isSameArticle && this.toastState?.kind === 'pipeline');
+      this.loadArticle(slug, shouldPreserveToast);
     });
   }
 
@@ -491,13 +510,23 @@ export class ArticleDetail implements OnInit, OnDestroy {
       ? this.articlesService.updateArticle(this.article.id, payload)
       : this.articlesService.createArticle(payload);
 
-    request$.pipe(finalize(() => (this.isSaving = false))).subscribe({
-      next: (savedArticle) => this.handlePersistSuccess(savedArticle, action),
-      error: (error: unknown) => this.handlePersistError(error),
-    });
+    request$
+      .pipe(
+        switchMap((savedArticle) => this.queuePublicationAfterSave(savedArticle, action)),
+        finalize(() => (this.isSaving = false)),
+      )
+      .subscribe({
+        next: (savedArticle) => this.handlePersistSuccess(savedArticle, action),
+        error: (error: unknown) => this.handlePersistError(error),
+      });
   }
 
   private handlePersistSuccess(savedArticle: ArticleEditorData, action: ArticleSaveAction): void {
+    this.applyPersistedArticle(savedArticle, action);
+    this.showPersistSuccessToast(action);
+  }
+
+  private applyPersistedArticle(savedArticle: ArticleEditorData, action: ArticleSaveAction): void {
     const wasCreating = !this.article.id;
     const savedAt = savedArticle.updatedAt ?? new Date().toISOString();
 
@@ -508,7 +537,6 @@ export class ArticleDetail implements OnInit, OnDestroy {
     this.clearValidationState();
     this.queueSlugValidation();
     this.updatePipelineFeedback(action, savedAt);
-    this.showPersistSuccessToast(action);
 
     if (wasCreating) {
       this.router.navigate(['/artigos', this.article.slug], { replaceUrl: true });
@@ -516,6 +544,11 @@ export class ArticleDetail implements OnInit, OnDestroy {
   }
 
   private handlePersistError(error: unknown): void {
+    if (error instanceof ArticlePublicationDispatchError) {
+      this.handlePublicationDispatchFailure(error);
+      return;
+    }
+
     console.error('Erro ao salvar artigo:', error);
     if (this.isDuplicateSlugError(error)) {
       this.setSlugValidationState('unavailable', this.article.slug, 'Ja existe um artigo com este slug.');
@@ -525,6 +558,40 @@ export class ArticleDetail implements OnInit, OnDestroy {
     }
 
     this.showErrorToast(this.getSaveErrorMessage(error));
+  }
+
+  private queuePublicationAfterSave(
+    savedArticle: ArticleEditorData,
+    action: ArticleSaveAction,
+  ): Observable<ArticleEditorData> {
+    if (!this.shouldDispatchPublication(action)) {
+      return of(savedArticle);
+    }
+
+    return this.articlePublicationService
+      .dispatchPublication({
+        articleId: savedArticle.id,
+        articleSlug: savedArticle.slug,
+        action,
+        actorId: this.currentUserId,
+        updatedAt: savedArticle.updatedAt,
+      })
+      .pipe(
+        map(() => savedArticle),
+        catchError((error: unknown) =>
+          throwError(() => new ArticlePublicationDispatchError(error, savedArticle, action)),
+        ),
+      );
+  }
+
+  private shouldDispatchPublication(action: ArticleSaveAction): action is ArticlePipelineAction {
+    return action === 'publish' || action === 'unpublish';
+  }
+
+  private handlePublicationDispatchFailure(error: ArticlePublicationDispatchError): void {
+    console.error('Erro ao acionar Action de publicacao:', error.originalError);
+    this.applyPersistedArticle(error.savedArticle, error.action);
+    this.showPublicationDispatchErrorToast(error.originalError);
   }
 
   private updatePipelineFeedback(action: ArticleSaveAction, savedAt: string): void {
@@ -656,8 +723,8 @@ export class ArticleDetail implements OnInit, OnDestroy {
       type: 'info',
       title: 'Publicacao em processamento',
       messages: [
-        'O artigo entrou no fluxo de publicacao.',
-        'O status ficara como Processando ate o rebuild e o deploy terminarem.',
+        'A Action do GitHub foi acionada para rebuild e deploy do site.',
+        'O status ficara como Processando ate o deploy terminar com sucesso.',
       ],
       autoCloseMs: 0,
     };
@@ -669,8 +736,21 @@ export class ArticleDetail implements OnInit, OnDestroy {
       type: 'info',
       title: 'Remocao em processamento',
       messages: [
-        'O artigo entrou no fluxo de remocao da publicacao.',
-        'O status ficara como Processando ate o rebuild e o deploy terminarem.',
+        'A Action do GitHub foi acionada para rebuild e deploy do site.',
+        'O status ficara como Processando ate a remocao terminar com sucesso.',
+      ],
+      autoCloseMs: 0,
+    };
+  }
+
+  private showPublicationDispatchErrorToast(error: unknown): void {
+    this.toastState = {
+      kind: 'error',
+      type: 'error',
+      title: 'Action nao acionada',
+      messages: [
+        this.getPublicationDispatchErrorMessage(error),
+        'O status do artigo ficou como Processando para evitar marcar como publicado antes do deploy.',
       ],
       autoCloseMs: 0,
     };
@@ -718,6 +798,39 @@ export class ArticleDetail implements OnInit, OnDestroy {
     }
 
     return `Nao foi possivel salvar o artigo. ${parts[0]}`;
+  }
+
+  private getPublicationDispatchErrorMessage(error: unknown): string {
+    const response = (error ?? {}) as {
+      error?: string | { message?: string; details?: string; hint?: string; code?: string };
+      message?: string;
+      details?: string;
+      hint?: string;
+    };
+
+    const nested =
+      typeof response.error === 'object' && response.error !== null
+        ? response.error
+        : null;
+
+    const parts = [
+      typeof response.error === 'string' ? response.error : null,
+      response.message,
+      response.details,
+      response.hint,
+      nested?.message,
+      nested?.details,
+      nested?.hint,
+    ]
+      .filter((value): value is string => typeof value === 'string')
+      .map((value) => value.trim())
+      .filter((value) => value.length > 0);
+
+    if (parts.length === 0) {
+      return 'O artigo foi salvo, mas nao foi possivel acionar a Action do GitHub.';
+    }
+
+    return `O artigo foi salvo, mas nao foi possivel acionar a Action do GitHub. ${parts[0]}`;
   }
 
   private showValidationToast(errors: ArticleEditorValidationErrors): void {
