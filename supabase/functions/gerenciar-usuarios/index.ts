@@ -296,7 +296,7 @@ async function createPendingEmailChange(
       new_email: payload.newEmail,
       token_hash: payload.tokenHash,
       requested_by: payload.requestedBy,
-      expires_at: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
+      expires_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
     })
 
   if (error) {
@@ -1032,7 +1032,7 @@ function renderUserEmailChangeValidationEmail(
           <p style="margin:0"><strong>Novo:</strong> ${escapeHtml(newEmail)}</p>
         </div>
         <a href="${escapeHtml(actionLink)}" style="display:inline-block;background:#273F4B;color:#ffffff;text-decoration:none;border-radius:10px;padding:12px 18px;font-weight:700">Validar novo e-mail</a>
-        <p style="margin:20px 0 0;font-size:12px;line-height:1.5;color:#64748b">Se voce nao reconhece essa alteracao, ignore este e-mail e fale com o administrador.</p>
+        <p style="margin:20px 0 0;font-size:12px;line-height:1.5;color:#64748b">Este link expira em 30 minutos. Se voce nao reconhece essa alteracao, ignore este e-mail e fale com o administrador.</p>
       </div>
     </div>
   `

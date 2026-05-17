@@ -1,4 +1,10 @@
 <section class="p-8">
+    @if (feedbackMessage) {
+        <div class="mx-auto mb-6 max-w-6xl rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+            {{ feedbackMessage }}
+        </div>
+    }
+
     <app-users-list-table (userSelected)="openEditModal($event)"></app-users-list-table>
 </section>
 
@@ -10,7 +16,7 @@
                 [modalMode]="true"
                 [selectedUserId]="selectedUserId"
                 (closed)="closeEditor()"
-                (saved)="handleMutation()"
+                (saved)="handleMutation($event)"
                 (deleted)="handleMutation()"
             ></app-user-detail>
         </div>

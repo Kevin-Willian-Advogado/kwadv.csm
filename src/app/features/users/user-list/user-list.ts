@@ -4,6 +4,7 @@ import { Subscription, filter } from 'rxjs';
 
 import { UsersListTable } from '../components/users-list-table/users-list-table';
 import { UserDetail } from '../user-detail/user-detail';
+import { UserListItem } from '../../../core/users.service';
 
 @Component({
   selector: 'app-user-list',
@@ -20,6 +21,7 @@ export class UserList implements OnInit, OnDestroy {
 
   selectedUserId: number | null = null;
   isEditorOpen = false;
+  feedbackMessage = '';
 
   ngOnInit(): void {
     this.syncEditorFromUrl();
@@ -33,10 +35,12 @@ export class UserList implements OnInit, OnDestroy {
   }
 
   openCreateModal(): void {
+    this.feedbackMessage = '';
     this.router.navigate(['/usuarios/novo']);
   }
 
   openEditModal(userId: number): void {
+    this.feedbackMessage = '';
     this.router.navigate(['/usuarios', userId]);
   }
 
@@ -53,9 +57,18 @@ export class UserList implements OnInit, OnDestroy {
     this.table?.refresh();
   }
 
-  handleMutation(): void {
+  handleMutation(user?: UserListItem): void {
+    this.feedbackMessage = this.buildFeedbackMessage(user);
     this.refreshList();
     this.closeEditor();
+  }
+
+  private buildFeedbackMessage(user?: UserListItem): string {
+    if (user?.emailChangeValidationSent && user.pendingEmail) {
+      return `Enviamos um e-mail para ${user.pendingEmail}. O novo e-mail so sera liberado para login depois da validacao. O link expira em 30 minutos.`;
+    }
+
+    return user ? 'Usuario salvo com sucesso.' : '';
   }
 
   private syncEditorFromUrl(): void {
