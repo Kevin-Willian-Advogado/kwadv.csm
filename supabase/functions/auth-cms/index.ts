@@ -70,7 +70,7 @@ Deno.serve(async (req) => {
     }
 
     if (body.action === 'update-password') {
-      return await updatePassword(body)
+      return await updatePassword(adminClient, body)
     }
 
     throw new RequestError("Acao invalida. Envie 'login', 'forgot-password' ou 'update-password'.")
@@ -357,17 +357,15 @@ function escapeHtml(value: string): string {
     .replace(/'/g, '&#39;')
 }
 
-async function updatePassword(body: AuthCmsRequest): Promise<Response> {
+async function updatePassword(adminClient: SupabaseClient, body: AuthCmsRequest): Promise<Response> {
   const password = requirePassword(body.password)
-  const accessToken = normalizeText(body.accessToken) ??
-    await verifyPasswordRecoveryToken(body.tokenHash)
+  const userId = await resolvePasswordRecoveryUserId(body)
 
-  if (!accessToken) {
+  if (!userId) {
     throw new RequestError('Token de recuperacao invalido ou expirado.', 401)
   }
 
-  const client = createUserScopedClient(accessToken)
-  const { error } = await client.auth.updateUser({ password })
+  const { error } = await adminClient.auth.admin.updateUserById(userId, { password })
 
   if (error) {
     throw error
@@ -376,6 +374,15 @@ async function updatePassword(body: AuthCmsRequest): Promise<Response> {
   return jsonResponse({
     mensagem: 'Senha atualizada com sucesso.',
   })
+}
+
+async function resolvePasswordRecoveryUserId(body: AuthCmsRequest): Promise<string | null> {
+  const tokenHashUserId = await verifyPasswordRecoveryToken(body.tokenHash)
+  if (tokenHashUserId) {
+    return tokenHashUserId
+  }
+
+  return await verifyAccessTokenUserId(body.accessToken)
 }
 
 async function verifyPasswordRecoveryToken(tokenHash: unknown): Promise<string | null> {
@@ -390,11 +397,27 @@ async function verifyPasswordRecoveryToken(tokenHash: unknown): Promise<string |
     type: 'recovery',
   })
 
-  if (error || !data.session?.access_token) {
+  if (error || !data.user?.id) {
     throw error ?? new RequestError('Token de recuperacao invalido ou expirado.', 401)
   }
 
-  return data.session.access_token
+  return data.user.id
+}
+
+async function verifyAccessTokenUserId(accessToken: unknown): Promise<string | null> {
+  const token = normalizeText(accessToken)
+  if (!token) {
+    return null
+  }
+
+  const client = createAnonClient()
+  const { data, error } = await client.auth.getUser(token)
+
+  if (error || !data.user?.id) {
+    throw error ?? new RequestError('Token de recuperacao invalido ou expirado.', 401)
+  }
+
+  return data.user.id
 }
 
 async function findPublicUserByEmail(
@@ -435,20 +458,6 @@ function createAnonClient(): SupabaseClient {
     auth: {
       autoRefreshToken: false,
       persistSession: false,
-    },
-  })
-}
-
-function createUserScopedClient(accessToken: string): SupabaseClient {
-  return createClient(getSupabaseUrl(), getSupabaseAnonKey(), {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-    global: {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
     },
   })
 }
