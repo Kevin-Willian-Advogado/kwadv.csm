@@ -245,7 +245,8 @@ async function sendSmtpEmail(
   const recipients = normalizeRecipients(options.to)
   const ccRecipients = normalizeRecipients(options.cc ?? [])
   const replyTo = normalizeEmail(options.replyTo) ?? config.replyToEmail
-  const senderEmail = normalizeEmail(options.fromEmail) ?? normalizeEmail(config.fromEmail)
+  const requestedSenderEmail = normalizeEmail(options.fromEmail) ?? normalizeEmail(config.fromEmail)
+  const senderEmail = resolveSmtpSenderEmail(requestedSenderEmail, profile)
 
   if (recipients.length === 0) {
     return { sent: false, error: 'Nenhum destinatario configurado.' }
@@ -278,6 +279,40 @@ async function sendSmtpEmail(
   } finally {
     session?.close()
   }
+}
+
+export function resolveSmtpSenderEmail(
+  requestedSenderEmail: string | null,
+  profile: Pick<SmtpProfile, 'host' | 'senderEmail'>,
+): string | null {
+  if (
+    requestedSenderEmail &&
+    isResendSmtpHost(profile.host) &&
+    isPublicMailboxDomain(getEmailDomain(requestedSenderEmail))
+  ) {
+    return normalizeEmail(profile.senderEmail)
+  }
+
+  return requestedSenderEmail
+}
+
+function isResendSmtpHost(host: string): boolean {
+  return normalizeText(host)?.toLowerCase() === 'smtp.resend.com'
+}
+
+function isPublicMailboxDomain(domain: string | null): boolean {
+  return Boolean(domain && [
+    'gmail.com',
+    'googlemail.com',
+    'hotmail.com',
+    'live.com',
+    'outlook.com',
+    'yahoo.com',
+  ].includes(domain))
+}
+
+function getEmailDomain(email: string): string | null {
+  return normalizeText(email.split('@')[1])?.toLowerCase() ?? null
 }
 
 async function buildSmtpProfile(
