@@ -59,6 +59,11 @@ export class Login implements OnInit {
       return;
     }
 
+    if (this.route.snapshot.queryParamMap.get('userSetup') === '1') {
+      this.successMessage = 'E-mail validado e senha definida com sucesso. Faca login para acessar o CMS.';
+      return;
+    }
+
     if (this.route.snapshot.queryParamMap.get('emailValidated') === '1') {
       this.successMessage = 'E-mail validado com sucesso. Faca login novamente.';
     }

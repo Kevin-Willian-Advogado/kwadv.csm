@@ -18,6 +18,11 @@ export interface PasswordUpdatePayload {
   password: string;
 }
 
+export interface UserSetupCompletionPayload {
+  tokenHash: string;
+  password: string;
+}
+
 export interface EmailChangeVerificationPayload {
   tokenHash: string;
 }
@@ -85,6 +90,18 @@ export class LoginService {
         action: 'update-password',
         accessToken: payload.accessToken ?? null,
         tokenHash: payload.tokenHash ?? null,
+        password: payload.password,
+      },
+      { headers: this.getAnonymousHeaders() },
+    );
+  }
+
+  completeUserSetup(payload: UserSetupCompletionPayload): Observable<{ mensagem?: string }> {
+    return this.http.post<{ mensagem?: string }>(
+      this.AUTH_CMS_URL,
+      {
+        action: 'complete-user-setup',
+        tokenHash: payload.tokenHash,
         password: payload.password,
       },
       { headers: this.getAnonymousHeaders() },

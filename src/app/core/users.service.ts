@@ -29,6 +29,7 @@ export interface UserListItem {
   isActive: boolean | null;
   pendingEmail?: string | null;
   emailChangeValidationSent?: boolean;
+  userSetupEmailSent?: boolean;
 }
 
 export interface UserUpsertPayload {
@@ -65,6 +66,8 @@ interface ManageUserFunctionResponse {
     } | null;
     pendingEmail?: string | null;
     userEmailChangeValidationSent?: boolean | null;
+    userSetupEmailSent?: boolean | null;
+    userDefinitionEmailSent?: boolean | null;
   } | null;
   error?: string;
   erro?: string;
@@ -151,7 +154,11 @@ export class UsersService {
       isActive: payload.isActive ?? true,
       passwordRedirectTo: payload.passwordRedirectTo ?? this.getPasswordResetRedirectUrl(),
     }).pipe(
-      map((response) => this.extractUser(response.data?.publicUser, payload)),
+      map((response) => this.extractUser(response.data?.publicUser, payload, {
+        userSetupEmailSent:
+          response.data?.userSetupEmailSent === true ||
+          response.data?.userDefinitionEmailSent === true,
+      })),
       tap(() => {
         this.usersCache$ = undefined;
       }),
@@ -252,7 +259,11 @@ export class UsersService {
   private extractUser(
     row: UserLookupRow | null | undefined,
     payload: UserUpsertPayload,
-    options: { pendingEmail?: string | null; emailChangeValidationSent?: boolean } = {},
+    options: {
+      pendingEmail?: string | null;
+      emailChangeValidationSent?: boolean;
+      userSetupEmailSent?: boolean;
+    } = {},
   ): UserListItem {
     const user = this.mapUser(row ?? undefined);
 
@@ -275,6 +286,7 @@ export class UsersService {
       ...user,
       pendingEmail,
       emailChangeValidationSent: options.emailChangeValidationSent === true,
+      userSetupEmailSent: options.userSetupEmailSent === true,
     };
   }
 

@@ -68,6 +68,10 @@ export class UserList implements OnInit, OnDestroy {
       return `Enviamos um e-mail para ${user.pendingEmail}. O novo e-mail so sera liberado para login depois da validacao. O link expira em 30 minutos.`;
     }
 
+    if (user?.userSetupEmailSent) {
+      return `Usuario criado. Enviamos um e-mail para ${user.email} para validar o e-mail e definir a senha de acesso. O link expira em 24 horas.`;
+    }
+
     return user ? 'Usuario salvo com sucesso.' : '';
   }
 

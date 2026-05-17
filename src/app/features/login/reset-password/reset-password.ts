@@ -6,6 +6,8 @@ import { finalize } from 'rxjs';
 
 import { LoginService } from '../../../core/login.service';
 
+type ResetPasswordMode = 'recovery' | 'user_setup';
+
 @Component({
   selector: 'app-reset-password',
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
@@ -24,22 +26,50 @@ export class ResetPassword implements OnInit {
 
   accessToken = '';
   tokenHash = '';
+  mode: ResetPasswordMode = 'recovery';
   isSaving = false;
   errorMessage = '';
   feedbackMessage = '';
 
   ngOnInit(): void {
-    const recoveryToken = this.readRecoveryTokenFromUrl();
-    this.accessToken = recoveryToken.accessToken;
-    this.tokenHash = recoveryToken.tokenHash;
+    const actionToken = this.readActionTokenFromUrl();
+    this.accessToken = actionToken.accessToken;
+    this.tokenHash = actionToken.tokenHash;
+    this.mode = actionToken.mode;
 
     if (!this.hasRecoveryToken) {
-      this.errorMessage = 'Link de redefinicao invalido ou expirado.';
+      this.errorMessage = this.invalidLinkMessage;
     }
   }
 
   get hasRecoveryToken(): boolean {
+    if (this.mode === 'user_setup') {
+      return !!this.tokenHash;
+    }
+
     return !!this.accessToken || !!this.tokenHash;
+  }
+
+  get pageTitle(): string {
+    return this.mode === 'user_setup' ? 'Definir senha' : 'Redefinir senha';
+  }
+
+  get pageDescription(): string {
+    return this.mode === 'user_setup'
+      ? 'Valide seu e-mail e crie sua senha de acesso'
+      : 'Crie uma nova senha de acesso';
+  }
+
+  get passwordLabel(): string {
+    return this.mode === 'user_setup' ? 'Senha de acesso' : 'Nova senha';
+  }
+
+  get submitLabel(): string {
+    return this.mode === 'user_setup' ? 'Validar e definir senha' : 'Atualizar senha';
+  }
+
+  get savingLabel(): string {
+    return this.mode === 'user_setup' ? 'Validando...' : 'Atualizando...';
   }
 
   get passwordsDoNotMatch(): boolean {
@@ -52,7 +82,7 @@ export class ResetPassword implements OnInit {
     this.form.markAllAsTouched();
 
     if (!this.hasRecoveryToken) {
-      this.errorMessage = 'Link de redefinicao invalido ou expirado.';
+      this.errorMessage = this.invalidLinkMessage;
       return;
     }
 
@@ -65,35 +95,63 @@ export class ResetPassword implements OnInit {
 
     this.isSaving = true;
 
-    this.loginService
-      .updatePassword({
+    const password = this.form.controls.password.value.trim();
+    const request = this.mode === 'user_setup'
+      ? this.loginService.completeUserSetup({
+        tokenHash: this.tokenHash,
+        password,
+      })
+      : this.loginService.updatePassword({
         accessToken: this.accessToken || undefined,
         tokenHash: this.tokenHash || undefined,
-        password: this.form.controls.password.value.trim(),
-      })
+        password,
+      });
+
+    request
       .pipe(finalize(() => {
         this.isSaving = false;
       }))
       .subscribe({
         next: (response) => {
-          this.feedbackMessage = response.mensagem ?? 'Senha atualizada com sucesso.';
+          this.feedbackMessage = response.mensagem ?? (
+            this.mode === 'user_setup'
+              ? 'E-mail validado e senha definida com sucesso.'
+              : 'Senha atualizada com sucesso.'
+          );
           this.form.reset();
           this.loginService.clearSession();
           this.router.navigate(['/login'], {
-            queryParams: { passwordUpdated: '1' },
+            queryParams: this.mode === 'user_setup'
+              ? { userSetup: '1' }
+              : { passwordUpdated: '1' },
             replaceUrl: true,
           });
         },
         error: (error: unknown) => {
-          this.errorMessage = this.extractErrorMessage(error) || 'Nao foi possivel atualizar a senha.';
+          this.errorMessage = this.extractErrorMessage(error) || this.genericErrorMessage;
           console.error('Erro ao atualizar senha:', error);
         },
       });
   }
 
-  private readRecoveryTokenFromUrl(): { accessToken: string; tokenHash: string } {
+  private get invalidLinkMessage(): string {
+    return this.mode === 'user_setup'
+      ? 'Link de criacao de usuario invalido ou expirado.'
+      : 'Link de redefinicao invalido ou expirado.';
+  }
+
+  private get genericErrorMessage(): string {
+    return this.mode === 'user_setup'
+      ? 'Nao foi possivel validar o e-mail e definir a senha.'
+      : 'Nao foi possivel atualizar a senha.';
+  }
+
+  private readActionTokenFromUrl(): { accessToken: string; tokenHash: string; mode: ResetPasswordMode } {
     const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
     const queryParams = new URLSearchParams(window.location.search);
+    const type = queryParams.get('type')?.trim() ||
+      hashParams.get('type')?.trim() ||
+      '';
 
     return {
       accessToken: hashParams.get('access_token')?.trim() ||
@@ -104,6 +162,7 @@ export class ResetPassword implements OnInit {
         hashParams.get('token_hash')?.trim() ||
         hashParams.get('token')?.trim() ||
         '',
+      mode: type === 'user_setup' ? 'user_setup' : 'recovery',
     };
   }
 

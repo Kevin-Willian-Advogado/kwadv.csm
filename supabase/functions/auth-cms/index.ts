@@ -1,7 +1,7 @@
 import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js@2'
 import { sendTransactionalEmail, type EmailDeliveryConfig, type EmailProvider, type SmtpSecurity } from '../_shared/email-delivery.ts'
 
-type AuthCmsAction = 'login' | 'forgot-password' | 'update-password' | 'verify-email-change'
+type AuthCmsAction = 'login' | 'forgot-password' | 'update-password' | 'complete-user-setup' | 'verify-email-change'
 
 interface AuthCmsRequest {
   action?: AuthCmsAction | null
@@ -29,6 +29,14 @@ interface PendingEmailChangeRow {
   expires_at?: string | null
 }
 
+interface PendingUserSetupRow {
+  id?: number | null
+  public_user_id?: number | string | null
+  auth_user_id?: string | null
+  email?: string | null
+  expires_at?: string | null
+}
+
 interface SiteSettingsRow {
   password_recovery_sender_email?: string | null
   email_provider?: EmailProvider | null
@@ -50,6 +58,8 @@ class RequestError extends Error {
     super(message)
   }
 }
+
+const passwordHashMarker = 'supabase-auth'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -82,11 +92,15 @@ Deno.serve(async (req) => {
       return await updatePassword(adminClient, body)
     }
 
+    if (body.action === 'complete-user-setup') {
+      return await completeUserSetup(adminClient, body)
+    }
+
     if (body.action === 'verify-email-change') {
       return await verifyEmailChange(adminClient, body)
     }
 
-    throw new RequestError("Acao invalida. Envie 'login', 'forgot-password', 'update-password' ou 'verify-email-change'.")
+    throw new RequestError("Acao invalida. Envie 'login', 'forgot-password', 'update-password', 'complete-user-setup' ou 'verify-email-change'.")
   } catch (error) {
     const message = extractErrorMessage(error)
     const status = error instanceof RequestError ? error.status : extractErrorStatus(error) ?? 400
@@ -393,6 +407,128 @@ async function updatePassword(adminClient: SupabaseClient, body: AuthCmsRequest)
   })
 }
 
+async function completeUserSetup(adminClient: SupabaseClient, body: AuthCmsRequest): Promise<Response> {
+  const password = requirePassword(body.password)
+  const token = normalizeText(body.tokenHash)
+
+  if (!token) {
+    throw new RequestError('Link de criacao de usuario invalido ou expirado.', 401)
+  }
+
+  const pendingSetup = await resolvePendingUserSetup(adminClient, token)
+  const { error: authError } = await adminClient.auth.admin.updateUserById(pendingSetup.authUserId, {
+    password,
+    email_confirm: true,
+  })
+
+  if (authError) {
+    throw authError
+  }
+
+  await syncPublicUserAfterSetup(
+    adminClient,
+    pendingSetup.publicUserId,
+    pendingSetup.authUserId,
+    pendingSetup.email,
+  )
+  await consumePendingUserSetup(adminClient, pendingSetup.id)
+
+  return jsonResponse({
+    mensagem: 'E-mail validado e senha definida com sucesso.',
+  })
+}
+
+async function resolvePendingUserSetup(
+  supabase: SupabaseClient,
+  token: string,
+): Promise<{ id: number; publicUserId: number; authUserId: string; email: string }> {
+  const tokenHash = await hashActionToken(token)
+  const { data, error } = await supabase
+    .from('pending_user_setups')
+    .select('id,public_user_id,auth_user_id,email,expires_at')
+    .eq('token_hash', tokenHash)
+    .is('consumed_at', null)
+    .maybeSingle()
+
+  if (error) {
+    throw error
+  }
+
+  if (!data) {
+    throw new RequestError('Link de criacao de usuario invalido ou expirado.', 401)
+  }
+
+  const pendingSetup = data as PendingUserSetupRow
+  const pendingSetupId = parsePositiveInteger(pendingSetup.id)
+  const publicUserId = parsePositiveInteger(pendingSetup.public_user_id)
+  const authUserId = normalizeText(pendingSetup.auth_user_id)
+  const email = normalizeEmail(pendingSetup.email)
+  const expiresAt = Date.parse(pendingSetup.expires_at ?? '')
+
+  if (pendingSetupId === null || publicUserId === null || !authUserId || !email) {
+    throw new RequestError('Link de criacao de usuario invalido ou expirado.', 401)
+  }
+
+  if (!Number.isFinite(expiresAt) || expiresAt <= Date.now()) {
+    await consumePendingUserSetup(supabase, pendingSetupId)
+    throw new RequestError('Link de criacao de usuario expirado. Solicite um novo convite ao administrador.', 401)
+  }
+
+  const publicUser = await findPublicUserByEmail(supabase, email)
+  const publicUserOwnerId = parsePositiveInteger(publicUser?.id)
+  if (publicUserOwnerId !== publicUserId) {
+    throw new RequestError('Usuario do CMS nao encontrado para concluir o acesso.', 404)
+  }
+
+  return {
+    id: pendingSetupId,
+    publicUserId,
+    authUserId,
+    email,
+  }
+}
+
+async function syncPublicUserAfterSetup(
+  supabase: SupabaseClient,
+  publicUserId: number,
+  authUserId: string,
+  email: string,
+): Promise<void> {
+  const { data, error } = await supabase
+    .from('users')
+    .update({
+      auth_user_id: authUserId,
+      email,
+      password_hash: passwordHashMarker,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', publicUserId)
+    .select('id,email')
+    .maybeSingle()
+
+  if (error) {
+    throw error
+  }
+
+  if (!data) {
+    throw new RequestError('Usuario do CMS nao encontrado para concluir o acesso.', 404)
+  }
+}
+
+async function consumePendingUserSetup(
+  supabase: SupabaseClient,
+  pendingSetupId: number,
+): Promise<void> {
+  const { error } = await supabase
+    .from('pending_user_setups')
+    .update({ consumed_at: new Date().toISOString() })
+    .eq('id', pendingSetupId)
+
+  if (error) {
+    throw error
+  }
+}
+
 async function resolvePasswordRecoveryUserId(body: AuthCmsRequest): Promise<string | null> {
   const tokenHashUserId = await verifyPasswordRecoveryToken(body.tokenHash)
   if (tokenHashUserId) {
@@ -474,7 +610,7 @@ async function verifyPendingEmailChange(
   supabase: SupabaseClient,
   token: string,
 ): Promise<boolean> {
-  const tokenHash = await hashEmailChangeToken(token)
+  const tokenHash = await hashActionToken(token)
   const { data, error } = await supabase
     .from('pending_email_changes')
     .select('id,public_user_id,auth_user_id,previous_email,new_email,expires_at')
@@ -710,7 +846,7 @@ function requirePassword(value: unknown): string {
   return password
 }
 
-async function hashEmailChangeToken(token: string): Promise<string> {
+async function hashActionToken(token: string): Promise<string> {
   const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(token) as BufferSource)
   return bytesToHex(new Uint8Array(digest))
 }

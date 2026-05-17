@@ -63,6 +63,8 @@ class RequestError extends Error {
 
 const passwordHashMarker = 'supabase-auth'
 const fallbackActorId = 10447
+const emailChangeTokenDurationMs = 30 * 60 * 1000
+const userSetupTokenDurationMs = 24 * 60 * 60 * 1000
 const publicUserBaseSelect = 'id,auth_user_id,email,password_hash,created_at,created_by,updated_at,updated_by'
 const publicUserProfileSelect = `${publicUserBaseSelect},name,status`
 
@@ -156,8 +158,14 @@ async function createUser(
     supabase,
     publicUser,
     displayName,
+    authUser?.id ?? null,
+    actorId,
     body.passwordRedirectTo,
   )
+
+  if (!definitionEmail.sent) {
+    throw new RequestError(definitionEmail.error ?? 'Nao foi possivel enviar o convite de validacao do usuario.', 502)
+  }
 
   return jsonResponse({
     mensagem: 'Usuario criado com sucesso.',
@@ -167,6 +175,8 @@ async function createUser(
         email: authUser?.email ?? email,
       },
       publicUser,
+      userSetupEmailSent: definitionEmail.sent,
+      userSetupEmailError: definitionEmail.error,
       userDefinitionEmailSent: definitionEmail.sent,
       userDefinitionEmailError: definitionEmail.error,
     },
@@ -177,6 +187,8 @@ async function sendUserDefinitionEmail(
   supabase: SupabaseClient,
   publicUser: PublicUserRow,
   displayName: string,
+  authUserId: string | null,
+  requestedBy: number,
   requestedRedirectTo?: string | null,
 ): Promise<{ sent: boolean; error: string | null }> {
   const email = normalizeEmail(publicUser.email)
@@ -184,20 +196,26 @@ async function sendUserDefinitionEmail(
     return { sent: false, error: 'Usuario sem e-mail valido.' }
   }
 
+  const publicUserId = parsePositiveInteger(publicUser.id)
+  if (publicUserId === null || !authUserId) {
+    return { sent: false, error: 'Usuario do Auth nao encontrado para validar o acesso.' }
+  }
+
+  let tokenHash: string | null = null
+
   try {
-    const { data, error } = await supabase.auth.admin.generateLink({
-      type: 'recovery',
+    const token = generateSecureActionToken()
+    tokenHash = await hashActionToken(token)
+
+    await createPendingUserSetup(supabase, {
+      publicUserId,
+      authUserId,
       email,
-      options: {
-        redirectTo: getUserPasswordRedirectUrl(requestedRedirectTo),
-      },
+      tokenHash,
+      requestedBy,
     })
 
-    if (error) {
-      throw error
-    }
-
-    const actionLink = buildPasswordResetLink(getUserPasswordRedirectUrl(requestedRedirectTo), data)
+    const actionLink = buildUserSetupLink(getUserPasswordRedirectUrl(requestedRedirectTo), token)
     const settings = await getSiteSettings(supabase)
     const emailConfig = buildEmailDeliveryConfig(settings)
 
@@ -205,16 +223,66 @@ async function sendUserDefinitionEmail(
       fromEmail: resolveUserCreationSenderEmail(settings, emailConfig),
       fromName: normalizeText(emailConfig.fromName) ?? 'KW Advocacia',
       to: [email],
-      subject: 'Definicao de senha do CMS',
+      subject: 'Valide seu e-mail e defina sua senha',
       html: renderUserDefinitionEmail(displayName, actionLink),
     }, emailConfig)
 
     return { sent: true, error: null }
   } catch (error) {
+    if (tokenHash) {
+      await discardPendingUserSetup(supabase, tokenHash)
+    }
+
     const message = extractErrorMessage(error)
-    console.warn('Nao foi possivel enviar e-mail de definicao de senha:', message)
+    console.warn('Nao foi possivel enviar e-mail de validacao e definicao de senha:', message)
     return { sent: false, error: message }
   }
+}
+
+async function createPendingUserSetup(
+  supabase: SupabaseClient,
+  payload: {
+    publicUserId: number
+    authUserId: string
+    email: string
+    tokenHash: string
+    requestedBy: number
+  },
+): Promise<void> {
+  const { error: consumeError } = await supabase
+    .from('pending_user_setups')
+    .update({ consumed_at: new Date().toISOString() })
+    .eq('public_user_id', payload.publicUserId)
+    .is('consumed_at', null)
+
+  if (consumeError) {
+    throw consumeError
+  }
+
+  const { error } = await supabase
+    .from('pending_user_setups')
+    .insert({
+      public_user_id: payload.publicUserId,
+      auth_user_id: payload.authUserId,
+      email: payload.email,
+      token_hash: payload.tokenHash,
+      requested_by: payload.requestedBy,
+      expires_at: new Date(Date.now() + userSetupTokenDurationMs).toISOString(),
+    })
+
+  if (error) {
+    throw error
+  }
+}
+
+async function discardPendingUserSetup(
+  supabase: SupabaseClient,
+  tokenHash: string,
+): Promise<void> {
+  await supabase
+    .from('pending_user_setups')
+    .delete()
+    .eq('token_hash', tokenHash)
 }
 
 async function sendUserEmailChangeValidationEmail(
@@ -230,8 +298,8 @@ async function sendUserEmailChangeValidationEmail(
   let tokenHash: string | null = null
 
   try {
-    const token = generateEmailChangeToken()
-    tokenHash = await hashEmailChangeToken(token)
+    const token = generateSecureActionToken()
+    tokenHash = await hashActionToken(token)
 
     await createPendingEmailChange(supabase, {
       publicUserId,
@@ -296,7 +364,7 @@ async function createPendingEmailChange(
       new_email: payload.newEmail,
       token_hash: payload.tokenHash,
       requested_by: payload.requestedBy,
-      expires_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+      expires_at: new Date(Date.now() + emailChangeTokenDurationMs).toISOString(),
     })
 
   if (error) {
@@ -472,7 +540,7 @@ async function createOrFindAuthUser(
   const { data, error } = await supabase.auth.admin.createUser({
     email,
     password: generateTemporaryPassword(),
-    email_confirm: true,
+    email_confirm: false,
     user_metadata: buildUserMetadata(displayName),
   })
 
@@ -903,12 +971,19 @@ function buildEmailChangeValidationLink(redirectTo: string, token: string): stri
   return url.toString()
 }
 
-function generateEmailChangeToken(): string {
+function buildUserSetupLink(redirectTo: string, token: string): string {
+  const url = new URL(redirectTo)
+  url.searchParams.set('token', token)
+  url.searchParams.set('type', 'user_setup')
+  return url.toString()
+}
+
+function generateSecureActionToken(): string {
   const bytes = crypto.getRandomValues(new Uint8Array(32))
   return bytesToBase64Url(bytes)
 }
 
-async function hashEmailChangeToken(token: string): Promise<string> {
+async function hashActionToken(token: string): Promise<string> {
   const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(token) as BufferSource)
   return bytesToHex(new Uint8Array(digest))
 }
@@ -1011,9 +1086,9 @@ function renderUserDefinitionEmail(displayName: string, actionLink: string): str
       <div style="max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:14px;padding:28px">
         <h1 style="margin:0 0 14px;color:#273F4B;font-size:22px">Acesso ao CMS</h1>
         <p style="margin:0 0 12px;line-height:1.6">Ola, ${escapeHtml(displayName)}.</p>
-        <p style="margin:0 0 20px;line-height:1.6">Seu usuario foi preparado. Defina sua senha para acessar o painel administrativo.</p>
-        <a href="${escapeHtml(actionLink)}" style="display:inline-block;background:#273F4B;color:#ffffff;text-decoration:none;border-radius:10px;padding:12px 18px;font-weight:700">Definir senha</a>
-        <p style="margin:20px 0 0;font-size:12px;line-height:1.5;color:#64748b">Se voce nao esperava este acesso, ignore este e-mail.</p>
+        <p style="margin:0 0 20px;line-height:1.6">Seu usuario foi criado. Valide este e-mail e defina sua senha para acessar o painel administrativo.</p>
+        <a href="${escapeHtml(actionLink)}" style="display:inline-block;background:#273F4B;color:#ffffff;text-decoration:none;border-radius:10px;padding:12px 18px;font-weight:700">Validar e definir senha</a>
+        <p style="margin:20px 0 0;font-size:12px;line-height:1.5;color:#64748b">Este link expira em 24 horas. Se voce nao esperava este acesso, ignore este e-mail.</p>
       </div>
     </div>
   `
