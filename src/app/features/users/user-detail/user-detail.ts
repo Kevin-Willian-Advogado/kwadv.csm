@@ -26,8 +26,6 @@ export class UserDetail implements OnInit, OnChanges {
     displayName: ['', [Validators.required, Validators.maxLength(200)]],
     email: ['', [Validators.required, Validators.email, Validators.maxLength(180)]],
     status: ['active' as UserStatusOption],
-    password: [''],
-    passwordConfirmation: [''],
     authorId: [null as number | null],
   });
   readonly newAuthorForm = this.formBuilder.nonNullable.group({
@@ -88,15 +86,6 @@ export class UserDetail implements OnInit, OnChanges {
     return authors.filter((author) =>
       this.normalizeForSearch(`${author.name} ${author.headline} ${author.id}`).includes(search),
     );
-  }
-
-  get isPasswordInvalid(): boolean {
-    return this.isCreating && this.form.controls.password.value.trim().length < 6;
-  }
-
-  get isPasswordConfirmationInvalid(): boolean {
-    return this.isCreating &&
-      this.form.controls.password.value.trim() !== this.form.controls.passwordConfirmation.value.trim();
   }
 
   get isActive(): boolean {
@@ -200,23 +189,12 @@ export class UserDetail implements OnInit, OnChanges {
       return;
     }
 
-    if (this.isPasswordInvalid) {
-      this.errorMessage = 'Informe uma senha com pelo menos 6 caracteres.';
-      return;
-    }
-
-    if (this.isPasswordConfirmationInvalid) {
-      this.errorMessage = 'A confirmacao de senha precisa ser igual a senha.';
-      return;
-    }
-
     this.isSaving = true;
 
     const payload: UserUpsertPayload = {
       email: this.form.controls.email.value.trim(),
       displayName: this.form.controls.displayName.value.trim(),
       isActive: this.mapStatusControlToValue(this.form.controls.status.value),
-      password: this.isCreating ? this.form.controls.password.value.trim() : null,
     };
 
     const request$ = this.isCreating || this.userId === null
@@ -324,8 +302,6 @@ export class UserDetail implements OnInit, OnChanges {
             displayName: user?.displayName ?? '',
             email: user?.email ?? '',
             status: this.isCreating ? 'active' : this.mapUserStatusToControl(user?.isActive ?? true),
-            password: '',
-            passwordConfirmation: '',
             authorId: this.currentLinkedAuthorId,
           });
         },

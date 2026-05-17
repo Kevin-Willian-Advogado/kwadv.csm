@@ -1,0 +1,243 @@
+<section class="messages-shell box-border overflow-hidden p-6 lg:p-8" (document:keydown.escape)="selectedMessage = null">
+    <div class="flex h-full min-h-0 flex-col gap-4">
+        @if (errorMessage) {
+            <div class="shrink-0 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                {{ errorMessage }}
+            </div>
+        }
+
+        <div class="grid h-full min-h-0 gap-5 xl:grid-cols-[25rem_minmax(0,1fr)]">
+            <section class="flex min-h-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                <div class="shrink-0 border-b border-slate-200 bg-slate-50/70 p-4">
+                    
+
+                    <div class="flex items-center gap-2">
+                        <label class="relative min-w-0 flex-1">
+                            <span class="sr-only">Buscar mensagens</span>
+                            <svg class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" />
+                            </svg>
+                            <input
+                                type="search"
+                                [ngModel]="searchTerm"
+                                (ngModelChange)="setSearchTerm($event)"
+                                [disabled]="isLoading"
+                                class="h-11 w-full rounded-lg border border-slate-200 bg-white pl-10 pr-3 text-sm font-medium text-slate-900 outline-none transition focus:border-(--color-3) focus:ring-4 focus:ring-slate-100 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
+                                placeholder="Buscar contato..."
+                            />
+                        </label>
+
+                        <button
+                            type="button"
+                            (click)="toggleUnreadFilter()"
+                            [disabled]="isLoading"
+                            class="inline-flex h-11 shrink-0 items-center gap-2 rounded-lg border px-3 text-xs font-bold uppercase tracking-wider transition disabled:cursor-not-allowed disabled:opacity-50"
+                            [ngClass]="filterUnread ? 'border-(--color-1) bg-(--color-1) text-white shadow-sm' : 'border-slate-200 bg-white text-(--color-3) hover:bg-slate-50 hover:text-(--color-1)'"
+                        >
+                            <span class="hidden sm:inline">Nao lidos</span>
+                            <span class="sm:hidden">Nao lidos</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="messages-scrollbar min-h-0 flex-1 overflow-y-auto bg-slate-50/60 p-3">
+                    @if (isLoading) {
+                        <div class="space-y-3">
+                            @for (row of [1, 2, 3, 4, 5]; track row) {
+                                <div class="h-28 rounded-lg border border-slate-200 bg-white p-4">
+                                    <div class="h-4 w-2/3 rounded bg-slate-100 animate-pulse"></div>
+                                    <div class="mt-3 h-3 w-1/2 rounded bg-slate-100 animate-pulse"></div>
+                                    <div class="mt-6 h-8 rounded bg-slate-100 animate-pulse"></div>
+                                </div>
+                            }
+                        </div>
+                    } @else {
+                        <div class="space-y-2">
+                            @for (message of visibleMessages; track message.id) {
+                                <article
+                                    (click)="selectMessage(message)"
+                                    class="group cursor-pointer rounded-lg border bg-white px-4 py-3 transition"
+                                    [ngClass]="selectedMessage?.id === message.id ? 'border-(--color-1) shadow-sm ring-1 ring-(--color-1)/10' : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50/80'"
+                                >
+                                    <div class="flex items-start gap-3">
+                                        
+
+                                        <div class="min-w-0 flex-1">
+                                            <div class="flex items-start justify-between gap-3">
+                                                <div class="min-w-0">
+                                                    <h2 class="truncate text-sm text-slate-900" [class.font-extrabold]="message.status === 'unread'" [class.font-semibold]="message.status !== 'unread'">
+                                                        {{ message.name }}
+                                                    </h2>
+                                                    <p class="mt-0.5 truncate text-xs text-(--color-3)" [class.font-bold]="message.status === 'unread'" [class.font-medium]="message.status !== 'unread'">{{ message.email }}</p>
+                                                </div>
+                                                <time class="shrink-0 text-[11px] text-slate-400" [class.font-bold]="message.status === 'unread'" [class.font-medium]="message.status !== 'unread'">{{ message.createdAt | date:'dd/MM HH:mm' }}</time>
+                                            </div>
+
+                                            <p class="mt-3 line-clamp-2 text-xs leading-5" [ngClass]="message.status === 'unread' ? 'font-semibold text-slate-700' : 'font-normal text-slate-500'">{{ message.message }}</p>
+
+                                            <div class="mt-3 flex items-center justify-between gap-2">
+                                                <span [class]="getStatusClasses(message)">
+                                                    {{ getStatusLabel(message) }}
+                                                </span>
+
+                                                <div class="flex shrink-0 items-center gap-1.5">
+                                                    @if (message.status === 'unread') {
+                                                        <button type="button" (click)="markAsRead(message, $event)" [disabled]="isUpdating" class="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-(--color-3) transition hover:bg-slate-50 disabled:opacity-50">Lida</button>
+                                                    } @else if (message.status === 'archived') {
+                                                        <button type="button" (click)="restoreMessage(message, $event)" [disabled]="isUpdating" class="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-(--color-3) transition hover:bg-slate-50 disabled:opacity-50">Restaurar</button>
+                                                    } @else {
+                                                        <button type="button" (click)="markAsUnread(message, $event)" [disabled]="isUpdating" class="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-(--color-3) transition hover:bg-slate-50 disabled:opacity-50">Nao lida</button>
+                                                    }
+
+                                                    @if (message.status !== 'archived') {
+                                                        <button type="button" (click)="archiveMessage(message, $event)" [disabled]="isUpdating" class="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-(--color-3) transition hover:bg-slate-50 disabled:opacity-50">Arquivar</button>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            } @empty {
+                                <div class="flex h-full min-h-[18rem] flex-col items-center justify-center rounded-lg border border-dashed border-slate-200 bg-white px-6 text-center">
+                                    <svg class="h-10 w-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                                    </svg>
+                                    <p class="mt-3 text-sm font-semibold text-slate-700">Nenhuma mensagem encontrada.</p>
+                                    <p class="mt-1 text-xs font-medium text-slate-400">Ajuste a busca ou remova o filtro atual.</p>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </section>
+
+            <section class="flex min-h-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                @if (selectedMessage) {
+                    <div class="shrink-0 border-b border-slate-200 bg-white px-6 py-5 lg:px-8">
+                        <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                            <div class="min-w-0">
+                                <div class="mb-2 flex flex-wrap items-center gap-2">
+                                    <time class="text-xs font-medium text-slate-400">{{ selectedMessage.createdAt | date:'dd/MM/yyyy HH:mm' }}</time>
+                                </div>
+                                <h2 class="truncate text-2xl font-bold tracking-tight text-slate-900">{{ selectedMessage.name }}</h2>
+                            </div>
+
+                            <div class="flex shrink-0 items-center gap-2">
+                                @if (selectedMessage.status === 'unread') {
+                                    <button type="button" (click)="markAsRead(selectedMessage)" [disabled]="isUpdating" class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold uppercase tracking-wider text-(--color-3) transition hover:bg-slate-50 disabled:opacity-50">Marcar lida</button>
+                                } @else if (selectedMessage.status === 'archived') {
+                                    <button type="button" (click)="restoreMessage(selectedMessage)" [disabled]="isUpdating" class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold uppercase tracking-wider text-(--color-3) transition hover:bg-slate-50 disabled:opacity-50">Restaurar</button>
+                                } @else {
+                                    <button type="button" (click)="markAsUnread(selectedMessage)" [disabled]="isUpdating" class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold uppercase tracking-wider text-(--color-3) transition hover:bg-slate-50 disabled:opacity-50">Marcar nao lida</button>
+                                }
+
+                                @if (selectedMessage.status !== 'archived') {
+                                    <button type="button" (click)="archiveMessage(selectedMessage)" [disabled]="isUpdating" class="rounded-lg bg-(--color-1) px-3 py-2 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-(--color-3) disabled:opacity-50">Arquivar</button>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="mt-4 grid gap-2 lg:grid-cols-2">
+                            <div class="flex min-w-0 items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50/70 px-4 py-3">
+                                <div class="min-w-0">
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">E-mail</p>
+                                    <a [href]="'mailto:' + selectedMessage.email" class="mt-1 block truncate text-sm font-semibold text-slate-900 transition hover:text-(--color-1) hover:underline">{{ selectedMessage.email }}</a>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    (click)="copyToClipboard(selectedMessage.email, $event)"
+                                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1)"
+                                    title="Copiar e-mail"
+                                    aria-label="Copiar e-mail"
+                                >
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <rect x="8" y="8" width="12" height="12" rx="2" stroke-width="2" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 4H6a2 2 0 0 0-2 2v10" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div class="flex min-w-0 items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50/70 px-4 py-3">
+                                <div class="min-w-0">
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Telefone</p>
+                                    <p class="mt-1 truncate text-sm font-semibold text-slate-900">{{ selectedMessage.phone || 'Nao informado' }}</p>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    (click)="copyToClipboard(selectedMessage.phone, $event)"
+                                    [disabled]="!selectedMessage.phone"
+                                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1) disabled:cursor-not-allowed disabled:opacity-40"
+                                    title="Copiar telefone"
+                                    aria-label="Copiar telefone"
+                                >
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <rect x="8" y="8" width="12" height="12" rx="2" stroke-width="2" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 4H6a2 2 0 0 0-2 2v10" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="messages-scrollbar min-h-0 flex-1 overflow-y-auto px-6 py-6 lg:px-8">
+                        <section>
+                            <div class="mb-3 flex items-center justify-between gap-3">
+                                <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-400">Conteudo da mensagem</h3>
+                            </div>
+                            <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+                                <p class="whitespace-pre-line text-sm leading-7 text-slate-800">{{ selectedMessage.message }}</p>
+                            </div>
+                        </section>
+
+                        <details class="mt-5 rounded-lg border border-slate-200 bg-slate-50/70">
+                            <summary class="cursor-pointer px-4 py-3 text-sm font-semibold text-(--color-3) transition hover:bg-slate-100">
+                                Roteamento e logs do sistema
+                            </summary>
+
+                            <div class="border-t border-slate-200 p-4">
+                                <div class="grid gap-4 md:grid-cols-2">
+                                    <div>
+                                        <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Confirmacao ao cliente</p>
+                                        <p class="mt-2 text-sm font-semibold text-slate-700">
+                                            Status: {{ selectedMessage.emailConfirmationSent ? 'Enviada' : 'Nao enviada' }}
+                                        </p>
+                                        <p class="mt-1 break-all text-xs font-medium text-slate-500">Destino: {{ selectedMessage.confirmationRecipientEmail || selectedMessage.email }}</p>
+                                    </div>
+
+                                    <div>
+                                        <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Notificacao interna</p>
+                                        <p class="mt-2 text-sm font-semibold text-slate-700">
+                                            Status: {{ selectedMessage.emailNotificationSent ? 'Enviada' : 'Nao enviada' }}
+                                        </p>
+                                        <p class="mt-1 break-all text-xs font-medium text-slate-500">Destino: {{ selectedMessage.notificationRecipientEmails.join(', ') || 'Nao definido' }}</p>
+                                        @if (selectedMessage.notificationCcEmails.length > 0) {
+                                            <p class="mt-1 break-all text-xs font-medium text-slate-500">CC: {{ selectedMessage.notificationCcEmails.join(', ') }}</p>
+                                        }
+                                    </div>
+                                </div>
+
+                                @if (selectedMessage.emailDeliveryError) {
+                                    <div class="mt-4 border-t border-slate-200 pt-4">
+                                        <p class="rounded-md border border-red-100 bg-red-50 p-3 font-mono text-xs leading-6 text-red-600">
+                                            Erro: {{ selectedMessage.emailDeliveryError }}
+                                        </p>
+                                    </div>
+                                }
+                            </div>
+                        </details>
+                    </div>
+                } @else {
+                    <div class="flex h-full min-h-0 flex-col items-center justify-center px-6 text-center text-slate-400">
+                        <svg class="h-12 w-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                        </svg>
+                        <p class="mt-4 text-sm font-semibold text-slate-700">Selecione uma mensagem</p>
+                        <p class="mt-1 max-w-sm text-xs font-medium leading-5 text-slate-400">Os detalhes do contato aparecem aqui, mantendo a lista fixa ao lado.</p>
+                    </div>
+                }
+            </section>
+        </div>
+    </div>
+</section>

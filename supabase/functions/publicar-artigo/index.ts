@@ -7,6 +7,9 @@ interface PublishArticleRequest {
   action?: ArticlePublicationAction | null
   actorId?: number | string | null
   updatedAt?: string | null
+  entityType?: string | null
+  entityId?: number | string | null
+  operation?: string | null
 }
 
 class RequestError extends Error {
@@ -42,12 +45,19 @@ Deno.serve(async (req) => {
     requireAuthenticatedRequest(req)
 
     const body = await readRequestBody(req)
-    const articleId = requirePositiveInteger(body.articleId)
+    const articleId = parsePositiveInteger(body.articleId)
     const articleSlug = normalizeText(body.articleSlug) ?? normalizeText(body.slug) ?? ''
     const action = normalizePublicationAction(body.action)
     const actorId = parsePositiveInteger(body.actorId)
     const updatedAt = normalizeText(body.updatedAt) ?? ''
+    const entityType = normalizeText(body.entityType) ?? 'article'
+    const entityId = parsePositiveInteger(body.entityId) ?? articleId
+    const operation = normalizeText(body.operation) ?? action
     const githubConfig = getGithubConfig()
+
+    if (action === 'unpublish' && articleId === null) {
+      throw new RequestError('Informe um articleId valido para remover a publicacao.')
+    }
 
     await dispatchGithubWorkflow(githubConfig, {
       articleId,
@@ -55,6 +65,9 @@ Deno.serve(async (req) => {
       action,
       actorId,
       updatedAt,
+      entityType,
+      entityId,
+      operation,
     })
 
     return jsonResponse({
@@ -63,6 +76,9 @@ Deno.serve(async (req) => {
         articleId,
         articleSlug,
         action,
+        entityType,
+        entityId,
+        operation,
         workflow: githubConfig.workflowId,
         ref: githubConfig.ref,
       },
@@ -84,11 +100,14 @@ interface GithubConfig {
 }
 
 interface GithubDispatchPayload {
-  articleId: number
+  articleId: number | null
   articleSlug: string
   action: ArticlePublicationAction
   actorId: number | null
   updatedAt: string
+  entityType: string
+  entityId: number | null
+  operation: string
 }
 
 function getGithubConfig(): GithubConfig {
@@ -127,7 +146,7 @@ async function dispatchGithubWorkflow(
     body: JSON.stringify({
       ref: config.ref,
       inputs: {
-        article_id: String(payload.articleId),
+        article_id: payload.articleId === null ? '' : String(payload.articleId),
         article_slug: payload.articleSlug,
         article_updated_at: payload.updatedAt,
         publication_action: payload.action,
@@ -152,16 +171,6 @@ async function readRequestBody(req: Request): Promise<PublishArticleRequest> {
   } catch {
     throw new RequestError('JSON invalido na requisicao.')
   }
-}
-
-function requirePositiveInteger(value: unknown): number {
-  const parsed = parsePositiveInteger(value)
-
-  if (parsed === null) {
-    throw new RequestError('Informe um articleId valido.')
-  }
-
-  return parsed
 }
 
 function parsePositiveInteger(value: unknown): number | null {

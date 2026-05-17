@@ -18,8 +18,12 @@ export class ArticlesListTable implements OnInit, OnDestroy {
   private articlesService = inject(ArticlesService);
   private router = inject(Router);
   private readonly publishedStatus = 1;
+  private readonly processingStatus = 0;
   private readonly draftStatuses = 2;
+  private readonly statusRefreshIntervalMs = 15_000;
   private loadingIndicatorTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  private statusRefreshIntervalId: ReturnType<typeof setInterval> | null = null;
+  private isRefreshingStatuses = false;
   public readonly itemsPerPage = 50;
   public readonly skeletonRows = [0, 1, 2, 3, 4];
 
@@ -39,6 +43,7 @@ export class ArticlesListTable implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.clearLoadingIndicatorDelay();
+    this.clearStatusRefreshPolling();
   }
 
   public setStatusFilter(filter: ArticleStatusFilter): void {
@@ -194,25 +199,42 @@ export class ArticlesListTable implements OnInit, OnDestroy {
       }))
       .subscribe({
         next: (data) => {
-          this.articles = data.map((item: ArticleListItem) => ({
-            title: this.normalizeText(item.title, 'Sem titulo'),
-            subtitle: this.normalizeText(item.subtitle),
-            slug: this.normalizeText(item.slug),
-            category: this.normalizeText(item.categories?.name, 'Sem categoria'),
-            views: this.normalizeViews(item.views),
-            publishedAt: item.published_at ?? item.created_at ?? '',
-            updatedAt: item.updated_at ?? '',
-            status: this.normalizeStatus(item.status),
-          }));
+          this.articles = this.mapArticles(data);
 
           this.applyFilters();
+          this.syncStatusRefreshPolling();
           this.hasLoadedOnce = true;
         },
         error: (err) => {
           this.errorMessage = 'Nao foi possivel carregar a tabela de artigos.';
           this.hasLoadedOnce = true;
+          this.clearStatusRefreshPolling();
           console.error('Erro ao buscar artigos:', err);
         }
+      });
+  }
+
+  private refreshArticleStatuses(): void {
+    if (this.isLoading || this.isRefreshingStatuses) {
+      return;
+    }
+
+    this.isRefreshingStatuses = true;
+
+    this.articlesService
+      .getArticlesForListing(true)
+      .pipe(finalize(() => {
+        this.isRefreshingStatuses = false;
+      }))
+      .subscribe({
+        next: (data) => {
+          this.articles = this.mapArticles(data);
+          this.applyFilters();
+          this.syncStatusRefreshPolling();
+        },
+        error: (error: unknown) => {
+          console.error('Erro ao atualizar status dos artigos:', error);
+        },
       });
   }
 
@@ -236,6 +258,48 @@ export class ArticlesListTable implements OnInit, OnDestroy {
     }
 
     this.showLoadingState = false;
+  }
+
+  private syncStatusRefreshPolling(): void {
+    const hasProcessingArticles = this.articles.some((article) => article.status === this.processingStatus);
+
+    if (!hasProcessingArticles) {
+      this.clearStatusRefreshPolling();
+      return;
+    }
+
+    if (this.statusRefreshIntervalId !== null) {
+      return;
+    }
+
+    this.statusRefreshIntervalId = setInterval(() => {
+      this.refreshArticleStatuses();
+    }, this.statusRefreshIntervalMs);
+  }
+
+  private clearStatusRefreshPolling(): void {
+    if (this.statusRefreshIntervalId === null) {
+      return;
+    }
+
+    clearInterval(this.statusRefreshIntervalId);
+    this.statusRefreshIntervalId = null;
+  }
+
+  private mapArticles(data: ArticleListItem[]): ArticlesListTableInterface[] {
+    return data
+      .map((item: ArticleListItem) => ({
+        id: this.normalizeId(item.id),
+        title: this.normalizeText(item.title, 'Sem titulo'),
+        subtitle: this.normalizeText(item.subtitle),
+        slug: this.normalizeText(item.slug),
+        category: this.normalizeText(item.categories?.name, 'Sem categoria'),
+        views: this.normalizeViews(item.views),
+        publishedAt: item.published_at ?? item.created_at ?? '',
+        updatedAt: item.updated_at ?? '',
+        status: this.normalizeStatus(item.status),
+      }))
+      .sort((left, right) => right.id - left.id);
   }
 
   private applyFilters(): void {
@@ -286,6 +350,14 @@ export class ArticlesListTable implements OnInit, OnDestroy {
   }
 
   private normalizeViews(value: number | null | undefined): number {
+    if (typeof value !== 'number' || Number.isNaN(value)) {
+      return 0;
+    }
+
+    return value;
+  }
+
+  private normalizeId(value: number | null | undefined): number {
     if (typeof value !== 'number' || Number.isNaN(value)) {
       return 0;
     }

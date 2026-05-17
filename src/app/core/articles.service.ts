@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, of, shareReplay, switchMap, tap, throwError } from 'rxjs';
 
+import { ArticlePublicationService } from './article-publication.service';
 import { LoginService } from './login.service';
 
 export interface ArticleEditorAuthor {
@@ -115,6 +116,7 @@ export class ArticlesService {
   constructor(
     private http: HttpClient,
     private readonly loginService: LoginService,
+    private readonly articlePublicationService: ArticlePublicationService,
   ) {}
 
   private getAuthHeaders(): HttpHeaders {
@@ -131,7 +133,7 @@ export class ArticlesService {
 
     const params = new HttpParams()
       .set('select', this.ARTICLE_DETAILS_SELECT)
-      .set('order', 'published_at.desc');
+      .set('order', 'id.desc');
 
     return this.http.get<any[]>(this.API_URL, { headers, params });
   }
@@ -149,7 +151,7 @@ export class ArticlesService {
     const headers = this.getAuthHeaders();
     const params = new HttpParams()
       .set('select', this.ARTICLE_LIST_SELECT)
-      .set('order', 'published_at.desc');
+      .set('order', 'id.desc');
 
     this.listArticlesCache$ = this.http.get<ArticleListItem[]>(this.API_URL, { headers, params }).pipe(
       tap(() => {
@@ -353,7 +355,27 @@ export class ArticlesService {
 
     return this.http
       .patch<null>(this.API_URL, { highlights: highlight }, { headers, params })
-      .pipe(tap(() => this.invalidateArticlesCache()));
+      .pipe(
+        switchMap(() => this.queueArticleRefresh(articleId)),
+        tap(() => this.invalidateArticlesCache()),
+        map(() => null),
+      );
+  }
+
+  private queueArticleRefresh(articleId: number | null): Observable<void> {
+    return this.articlePublicationService
+      .dispatchContentRefresh({
+        entityType: 'article',
+        entityId: articleId,
+        operation: 'update',
+        updatedAt: new Date().toISOString(),
+      })
+      .pipe(
+        catchError((error: unknown) => {
+          console.warn('Nao foi possivel acionar a Action apos alterar artigo:', error);
+          return of(void 0);
+        }),
+      );
   }
 
   private extractArticleId(rows: unknown): number {

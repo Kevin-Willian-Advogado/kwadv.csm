@@ -7,6 +7,7 @@
         <p class="text-gray-500 text-sm mt-1">Digite suas credenciais de acesso</p>
       </div>
 
+      @if (!isRecoveryMode) {
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-full flex flex-col gap-5">
         <div class="flex flex-col gap-1.5">
           <label class="text-gray-700 text-xs font-bold uppercase tracking-wider ml-1">E-mail</label>
@@ -26,7 +27,7 @@
         <div class="flex flex-col gap-1.5">
           <label class="text-gray-700 text-xs font-bold uppercase tracking-wider ml-1">Senha</label>
           <div class="relative group">
-            <input [type]="isPasswordVisible ? 'text' : 'password'" formControlName="senha" id="passwordInput" required maxlength="10" placeholder="P@ssW0rd" class="w-full bg-white border border-slate-400 placeholder-gray-400 rounded-xl p-3.5 pl-4 pr-12">
+            <input [type]="isPasswordVisible ? 'text' : 'password'" formControlName="senha" id="passwordInput" required placeholder="P@ssW0rd" class="w-full bg-white border border-slate-400 placeholder-gray-400 rounded-xl p-3.5 pl-4 pr-12">
             <button type="button" (click)="togglePassword()" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#273F4B] outline-none">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 @if (!isPasswordVisible) {
@@ -52,9 +53,8 @@
         <div class="flex justify-end -mt-2">
           <button
             type="button"
-            disabled
-            title="Recuperacao de senha em breve"
-            class="text-xs text-[#273F4B] font-semibold opacity-60 cursor-not-allowed"
+            (click)="openRecovery()"
+            class="text-xs text-[#273F4B] font-semibold hover:text-[#1e323c]"
           >
             Esqueceu sua senha?
           </button>
@@ -75,6 +75,50 @@
           }
         </button>
       </form>
+      } @else {
+      <form [formGroup]="recoveryForm" (ngSubmit)="sendRecoveryEmail()" class="w-full flex flex-col gap-5">
+        <div class="text-center -mt-2">
+          <h2 class="text-lg font-bold text-gray-800">Recuperar senha</h2>
+          <p class="text-gray-500 text-sm mt-1">Informe o e-mail cadastrado no CMS</p>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-gray-700 text-xs font-bold uppercase tracking-wider ml-1">E-mail</label>
+          <input type="email" formControlName="email" required maxlength="200" placeholder="email@exemplo.com" class="w-full bg-white border border-slate-400 placeholder-gray-400 rounded-xl p-3.5 pl-4">
+
+          @if (recoveryForm.get('email')?.errors?.['required'] && recoveryForm.get('email')?.touched) {
+            <span class="text-red-500 text-[10px] ml-1">E-mail obrigatorio.</span>
+          }
+
+          @if (recoveryForm.get('email')?.errors?.['email'] && recoveryForm.get('email')?.touched) {
+            <span class="text-red-500 text-[10px] ml-1">E-mail invalido.</span>
+          }
+        </div>
+
+        @if (errorMessage) {
+          <p class="text-red-500 text-xs text-center -mt-2">{{ errorMessage }}</p>
+        }
+
+        @if (recoveryMessage) {
+          <p class="text-green-700 text-xs text-center -mt-2">{{ recoveryMessage }}</p>
+        }
+
+        <button type="submit" [disabled]="recoveryForm.invalid || isSendingRecovery" class="relative w-full bg-[#273F4B] text-white py-4 rounded-xl font-bold hover:bg-[#1e323c] active:scale-[0.97] transition-all shadow-lg flex items-center justify-center gap-3 disabled:opacity-50">
+          @if (!isSendingRecovery) {
+            <span>Enviar link de redefinicao</span>
+          }
+
+          @if (isSendingRecovery) {
+            <div class="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+            <span>Enviando...</span>
+          }
+        </button>
+
+        <button type="button" (click)="closeRecovery()" class="text-xs text-[#273F4B] font-semibold hover:text-[#1e323c]">
+          Voltar para o login
+        </button>
+      </form>
+      }
     </div>
   </section>
 </main>

@@ -8,9 +8,10 @@ const loadArticleDetail = () => import('./features/articles/pages/article-detail
 const loadAuthorList = () => import('./features/authors/pages/author-list/author-list').then((m) => m.AuthorList);
 const loadCategoryList = () => import('./features/categories/pages/category-list/category-list').then((m) => m.CategoryList);
 const loadUserList = () => import('./features/users/user-list/user-list').then((m) => m.UserList);
-const loadFeaturePlaceholder = () =>
-  import('./shared/feature-placeholder/feature-placeholder').then((m) => m.FeaturePlaceholder);
+const loadSettings = () => import('./features/settings/settings').then((m) => m.Settings);
+const loadMessages = () => import('./features/messages/messages').then((m) => m.Messages);
 const loadLogin = () => import('./features/login/login/login').then((m) => m.Login);
+const loadResetPassword = () => import('./features/login/reset-password/reset-password').then((m) => m.ResetPassword);
 
 export const routes: Routes = [
   {
@@ -22,6 +23,10 @@ export const routes: Routes = [
     path: 'login',
     canActivate: [guestGuard],
     loadComponent: loadLogin,
+  },
+  {
+    path: 'redefinir-senha',
+    loadComponent: loadResetPassword,
   },
   {
     path: 'artigos/novo',
@@ -78,11 +83,7 @@ export const routes: Routes = [
       },
       {
         path: 'mensagens',
-        loadComponent: loadFeaturePlaceholder,
-        data: {
-          title: 'Mensagens',
-          description: 'A area de mensagens ainda nao esta conectada aos dados reais do CMS.',
-        },
+        loadComponent: loadMessages,
       },
       {
         path: 'usuarios/novo',
@@ -95,6 +96,10 @@ export const routes: Routes = [
       {
         path: 'usuarios',
         loadComponent: loadUserList,
+      },
+      {
+        path: 'configuracoes',
+        loadComponent: loadSettings,
       },
     ],
   },

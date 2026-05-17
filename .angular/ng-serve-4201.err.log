@@ -1,0 +1,182 @@
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2341: Property 'loadedSettings' is private and only accessible within class 'Settings'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/settings/settings.html:349:33:
+[37m      349 │ ...                      @if ([32mloadedSettings[37m?.emailLastTestStatus) {
+          ╵                               [32m~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Settings.
+
+    src/app/features/settings/settings.ts:24:15:
+[37m      24 │   templateUrl: [32m'./settings.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2341: Property 'loadedSettings' is private and only accessible within class 'Settings'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/settings/settings.html:352:47:
+[37m      352 │ ...             [ngClass]="[32mloadedSettings[37m?.emailLastTestStatus ==...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Settings.
+
+    src/app/features/settings/settings.ts:24:15:
+[37m      24 │   templateUrl: [32m'./settings.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2341: Property 'loadedSettings' is private and only accessible within class 'Settings'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/settings/settings.html:354:41:
+[37m      354 │ ...                   @if ([32mloadedSettings[37m?.emailLastTestStatus ==...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Settings.
+
+    src/app/features/settings/settings.ts:24:15:
+[37m      24 │   templateUrl: [32m'./settings.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2341: Property 'loadedSettings' is private and only accessible within class 'Settings'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/settings/settings.html:357:43:
+[37m      357 │ ...                     {{ [32mloadedSettings[37m?.emailLastTestError || ...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Settings.
+
+    src/app/features/settings/settings.ts:24:15:
+[37m      24 │   templateUrl: [32m'./settings.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'setFilter' does not exist on type 'Messages'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/messages/messages.html:10:47:
+[37m      10 │ ...ton type="button" (click)="[32msetFilter[37m('all')" class="rounded-lg ...
+         ╵                               [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component Messages.
+
+    src/app/features/messages/messages.ts:15:15:
+[37m      15 │   templateUrl: [32m'./messages.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'activeFilter' does not exist on type 'Messages'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/messages/messages.html:10:138:
+[37m      10 │ ...ld transition" [ngClass]="[32mactiveFilter[37m === 'all' ? 'bg-(--color...
+         ╵                              [32m~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Messages.
+
+    src/app/features/messages/messages.ts:15:15:
+[37m      15 │   templateUrl: [32m'./messages.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'setFilter' does not exist on type 'Messages'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/messages/messages.html:13:47:
+[37m      13 │ ...ton type="button" (click)="[32msetFilter[37m('unread')" class="rounded-...
+         ╵                               [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component Messages.
+
+    src/app/features/messages/messages.ts:15:15:
+[37m      15 │   templateUrl: [32m'./messages.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'activeFilter' does not exist on type 'Messages'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/messages/messages.html:13:141:
+[37m      13 │ ...ld transition" [ngClass]="[32mactiveFilter[37m === 'unread' ? 'bg-(--co...
+         ╵                              [32m~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Messages.
+
+    src/app/features/messages/messages.ts:15:15:
+[37m      15 │   templateUrl: [32m'./messages.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'unreadCount' does not exist on type 'Messages'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/messages/messages.html:14:33:
+[37m      14 │                     Nao lidas {{ [32munreadCount[37m }}
+         ╵                                  [32m~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Messages.
+
+    src/app/features/messages/messages.ts:15:15:
+[37m      15 │   templateUrl: [32m'./messages.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'setFilter' does not exist on type 'Messages'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/messages/messages.html:16:47:
+[37m      16 │ ...ton type="button" (click)="[32msetFilter[37m('failed')" class="rounded-...
+         ╵                               [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component Messages.
+
+    src/app/features/messages/messages.ts:15:15:
+[37m      15 │   templateUrl: [32m'./messages.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'activeFilter' does not exist on type 'Messages'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/messages/messages.html:16:141:
+[37m      16 │ ...ld transition" [ngClass]="[32mactiveFilter[37m === 'failed' ? 'bg-(--co...
+         ╵                              [32m~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Messages.
+
+    src/app/features/messages/messages.ts:15:15:
+[37m      15 │   templateUrl: [32m'./messages.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'failedEmailCount' does not exist on type 'Messages'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/messages/messages.html:17:30:
+[37m      17 │                     E-mail {{ [32mfailedEmailCount[37m }}
+         ╵                               [32m~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Messages.
+
+    src/app/features/messages/messages.ts:15:15:
+[37m      15 │   templateUrl: [32m'./messages.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'setFilter' does not exist on type 'Messages'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/messages/messages.html:19:47:
+[37m      19 │ ...ton type="button" (click)="[32msetFilter[37m('archived')" class="rounde...
+         ╵                               [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component Messages.
+
+    src/app/features/messages/messages.ts:15:15:
+[37m      15 │   templateUrl: [32m'./messages.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'activeFilter' does not exist on type 'Messages'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/messages/messages.html:19:143:
+[37m      19 │ ...ld transition" [ngClass]="[32mactiveFilter[37m === 'archived' ? 'bg-(--...
+         ╵                              [32m~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Messages.
+
+    src/app/features/messages/messages.ts:15:15:
+[37m      15 │   templateUrl: [32m'./messages.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m

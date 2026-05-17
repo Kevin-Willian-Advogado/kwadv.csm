@@ -10,12 +10,12 @@ import {
 } from '../../../../core/articles.service';
 import { ArticlePublicationService } from '../../../../core/article-publication.service';
 import { AuthorsService, CurrentAuthorContext } from '../../../../core/authors.service';
+import { ImageStorageService } from '../../../../core/image-storage.service';
 import {
   ArticleEditorFormData,
   ArticleEditorValidationErrors,
   ARTICLE_STATUS_DRAFT,
   ARTICLE_STATUS_PROCESSING,
-  ARTICLE_STATUS_PUBLISHED,
   createEmptyArticleEditorFormData,
 } from '../../article-editor.models';
 import { ArticleForm } from '../../componentes/article-form/article-form';
@@ -59,6 +59,7 @@ export class ArticleDetail implements OnInit, OnDestroy {
   private readonly articlesService = inject(ArticlesService);
   private readonly articlePublicationService = inject(ArticlePublicationService);
   private readonly authorsService = inject(AuthorsService);
+  private readonly imageStorageService = inject(ImageStorageService);
   private readonly destroy$ = new Subject<void>();
   private readonly slugValidation$ = new Subject<{ slug: string; articleId: number | null }>();
   private readonly fallbackUpdatedBy = 10447;
@@ -73,6 +74,7 @@ export class ArticleDetail implements OnInit, OnDestroy {
   isLoadingCategories = false;
   isLoadingCurrentAuthor = false;
   isSaving = false;
+  isUploadingCoverImage = false;
   isCreating = true;
   isDirty = false;
   pendingPipelineAction: ArticlePipelineAction | null = null;
@@ -84,6 +86,9 @@ export class ArticleDetail implements OnInit, OnDestroy {
   slugValidationMessage = '';
   private hasAttemptedSave = false;
   private lastValidatedSlug = '';
+  private draftUploadedCoverImageUrls = new Set<string>();
+  private persistedCoverImageUrlsToDeleteOnSave = new Set<string>();
+  private isDestroyed = false;
 
   ngOnInit(): void {
     this.listenSlugValidation();
@@ -93,6 +98,9 @@ export class ArticleDetail implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.isDestroyed = true;
+    this.deleteDraftCoverImagesExcept('');
+    this.persistedCoverImageUrlsToDeleteOnSave.clear();
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -102,7 +110,7 @@ export class ArticleDetail implements OnInit, OnDestroy {
   }
 
   onSave(action: ArticleSaveAction): void {
-    if (this.isSaving || this.isLoading) {
+    if (this.isSaving || this.isLoading || this.isUploadingCoverImage) {
       return;
     }
 
@@ -150,7 +158,10 @@ export class ArticleDetail implements OnInit, OnDestroy {
   }
 
   onFormDataChange(data: ArticleEditorFormData): void {
+    const previousCoverImageUrl = this.article.coverImageUrl;
     this.article = { ...this.article, ...data };
+    this.handleReplacedCoverImage(previousCoverImageUrl, this.article.coverImageUrl);
+
     if (!this.isLoading && !this.isSaving) {
       this.isDirty = true;
     }
@@ -168,6 +179,41 @@ export class ArticleDetail implements OnInit, OnDestroy {
     this.revalidateForm();
   }
 
+  onCoverImageFileSelected(file: File): void {
+    if (this.isSaving || this.isLoading || this.isUploadingCoverImage) {
+      return;
+    }
+
+    this.dismissToast();
+    this.isUploadingCoverImage = true;
+    const previousCoverImageUrl = this.article.coverImageUrl.trim();
+
+    this.imageStorageService
+      .uploadArticleCoverImage(file, this.article.id)
+      .pipe(finalize(() => (this.isUploadingCoverImage = false)))
+      .subscribe({
+        next: (imageUrl) => {
+          if (this.isDestroyed) {
+            this.deleteStorageImage(imageUrl, 'rascunho');
+            return;
+          }
+
+          this.article = {
+            ...this.article,
+            coverImageUrl: imageUrl,
+          };
+          this.isDirty = true;
+          this.draftUploadedCoverImageUrls.add(imageUrl);
+          this.handleReplacedCoverImage(previousCoverImageUrl, imageUrl);
+          this.revalidateForm();
+        },
+        error: (error: unknown) => {
+          console.error('Erro ao enviar capa do artigo:', error);
+          this.showErrorToast(this.getImageUploadErrorMessage(error));
+        },
+      });
+  }
+
   dismissToast(): void {
     this.toastState = null;
   }
@@ -179,6 +225,8 @@ export class ArticleDetail implements OnInit, OnDestroy {
         slug !== null && this.normalizeSlug(this.article.slug) === this.normalizeSlug(slug);
 
       if (!slug) {
+        this.deleteDraftCoverImagesExcept('');
+        this.persistedCoverImageUrlsToDeleteOnSave.clear();
         this.isCreating = true;
         this.article = createEmptyArticleEditorFormData();
         this.isDirty = false;
@@ -238,6 +286,8 @@ export class ArticleDetail implements OnInit, OnDestroy {
   }
 
   private loadArticle(slug: string, preserveToast = false): void {
+    this.deleteDraftCoverImagesExcept('');
+    this.persistedCoverImageUrlsToDeleteOnSave.clear();
     this.isLoadingArticle = true;
     if (!preserveToast) {
       this.dismissToast();
@@ -531,6 +581,7 @@ export class ArticleDetail implements OnInit, OnDestroy {
     const savedAt = savedArticle.updatedAt ?? new Date().toISOString();
 
     this.article = this.mapToFormData(savedArticle);
+    this.commitCoverImageChanges(savedArticle.coverImageUrl);
     this.isCreating = false;
     this.isDirty = false;
     this.lastSavedAt = savedAt;
@@ -564,24 +615,28 @@ export class ArticleDetail implements OnInit, OnDestroy {
     savedArticle: ArticleEditorData,
     action: ArticleSaveAction,
   ): Observable<ArticleEditorData> {
-    if (!this.shouldDispatchPublication(action)) {
-      return of(savedArticle);
-    }
+    const dispatch$ = this.shouldDispatchPublication(action)
+      ? this.articlePublicationService.dispatchPublication({
+          articleId: savedArticle.id,
+          articleSlug: savedArticle.slug,
+          action,
+          actorId: this.currentUserId,
+          updatedAt: savedArticle.updatedAt,
+        })
+      : this.articlePublicationService.dispatchContentRefresh({
+          entityType: 'article',
+          entityId: savedArticle.id,
+          operation: this.article.id ? 'update' : 'create',
+          actorId: this.currentUserId,
+          updatedAt: savedArticle.updatedAt,
+        });
 
-    return this.articlePublicationService
-      .dispatchPublication({
-        articleId: savedArticle.id,
-        articleSlug: savedArticle.slug,
-        action,
-        actorId: this.currentUserId,
-        updatedAt: savedArticle.updatedAt,
-      })
-      .pipe(
-        map(() => savedArticle),
-        catchError((error: unknown) =>
-          throwError(() => new ArticlePublicationDispatchError(error, savedArticle, action)),
-        ),
-      );
+    return dispatch$.pipe(
+      map(() => savedArticle),
+      catchError((error: unknown) =>
+        throwError(() => new ArticlePublicationDispatchError(error, savedArticle, action)),
+      ),
+    );
   }
 
   private shouldDispatchPublication(action: ArticleSaveAction): action is ArticlePipelineAction {
@@ -591,7 +646,7 @@ export class ArticleDetail implements OnInit, OnDestroy {
   private handlePublicationDispatchFailure(error: ArticlePublicationDispatchError): void {
     console.error('Erro ao acionar Action de publicacao:', error.originalError);
     this.applyPersistedArticle(error.savedArticle, error.action);
-    this.showPublicationDispatchErrorToast(error.originalError);
+    this.showPublicationDispatchErrorToast(error);
   }
 
   private updatePipelineFeedback(action: ArticleSaveAction, savedAt: string): void {
@@ -630,7 +685,80 @@ export class ArticleDetail implements OnInit, OnDestroy {
       return;
     }
 
-    this.showSuccessToast('Artigo salvo como rascunho com sucesso.');
+    this.showSuccessToast('Artigo salvo como rascunho e Action acionada para atualizar o site.');
+  }
+
+  private handleReplacedCoverImage(previousImageUrl: string, newImageUrl: string): void {
+    const normalizedPreviousUrl = previousImageUrl.trim();
+    const normalizedNewUrl = newImageUrl.trim();
+
+    if (!normalizedPreviousUrl || normalizedPreviousUrl === normalizedNewUrl) {
+      return;
+    }
+
+    if (this.draftUploadedCoverImageUrls.has(normalizedPreviousUrl)) {
+      this.deleteDraftCoverImage(normalizedPreviousUrl);
+      return;
+    }
+
+    this.queuePersistedCoverImageDeletion(normalizedPreviousUrl);
+  }
+
+  private queuePersistedCoverImageDeletion(imageUrl: string): void {
+    const normalizedImageUrl = imageUrl.trim();
+    if (!normalizedImageUrl) {
+      return;
+    }
+
+    this.persistedCoverImageUrlsToDeleteOnSave.add(normalizedImageUrl);
+  }
+
+  private commitCoverImageChanges(currentImageUrl: string): void {
+    this.deleteDraftCoverImagesExcept(currentImageUrl);
+    this.deletePersistedCoverImagesExcept(currentImageUrl);
+  }
+
+  private deletePersistedCoverImagesExcept(currentImageUrl: string): void {
+    const normalizedCurrentUrl = currentImageUrl.trim();
+    const urlsToDelete = Array.from(this.persistedCoverImageUrlsToDeleteOnSave)
+      .map((imageUrl) => imageUrl.trim())
+      .filter((imageUrl) => imageUrl && imageUrl !== normalizedCurrentUrl);
+
+    this.persistedCoverImageUrlsToDeleteOnSave.clear();
+
+    for (const imageUrl of urlsToDelete) {
+      this.deleteStorageImage(imageUrl, 'persistida');
+    }
+  }
+
+  private deleteDraftCoverImagesExcept(currentImageUrl: string): void {
+    const normalizedCurrentUrl = currentImageUrl.trim();
+    const urlsToDelete = Array.from(this.draftUploadedCoverImageUrls)
+      .map((imageUrl) => imageUrl.trim())
+      .filter((imageUrl) => imageUrl && imageUrl !== normalizedCurrentUrl);
+
+    this.draftUploadedCoverImageUrls.clear();
+
+    for (const imageUrl of urlsToDelete) {
+      this.deleteStorageImage(imageUrl, 'rascunho');
+    }
+  }
+
+  private deleteDraftCoverImage(imageUrl: string): void {
+    const normalizedImageUrl = imageUrl.trim();
+    if (!normalizedImageUrl || !this.draftUploadedCoverImageUrls.delete(normalizedImageUrl)) {
+      return;
+    }
+
+    this.deleteStorageImage(normalizedImageUrl, 'rascunho');
+  }
+
+  private deleteStorageImage(imageUrl: string, imageState: 'persistida' | 'rascunho'): void {
+    this.imageStorageService.deleteImageByPublicUrl(imageUrl).subscribe({
+      error: (error: unknown) => {
+        console.warn(`Nao foi possivel remover a imagem ${imageState} do artigo:`, error);
+      },
+    });
   }
 
   private setSlugValidationState(status: SlugValidationStatus, slug: string, message: string): void {
@@ -743,15 +871,19 @@ export class ArticleDetail implements OnInit, OnDestroy {
     };
   }
 
-  private showPublicationDispatchErrorToast(error: unknown): void {
+  private showPublicationDispatchErrorToast(error: ArticlePublicationDispatchError): void {
+    const messages = [
+      this.getPublicationDispatchErrorMessage(error.originalError),
+      error.action === 'draft'
+        ? 'O artigo foi mantido salvo no CMS, mas o rebuild do site nao foi enfileirado.'
+        : 'O status do artigo ficou como Processando para evitar marcar como publicado antes do deploy.',
+    ];
+
     this.toastState = {
       kind: 'error',
       type: 'error',
       title: 'Action nao acionada',
-      messages: [
-        this.getPublicationDispatchErrorMessage(error),
-        'O status do artigo ficou como Processando para evitar marcar como publicado antes do deploy.',
-      ],
+      messages,
       autoCloseMs: 0,
     };
   }
@@ -798,6 +930,31 @@ export class ArticleDetail implements OnInit, OnDestroy {
     }
 
     return `Nao foi possivel salvar o artigo. ${parts[0]}`;
+  }
+
+  private getImageUploadErrorMessage(error: unknown): string {
+    if (error instanceof Error && error.message.trim()) {
+      return error.message;
+    }
+
+    if (error && typeof error === 'object') {
+      const record = error as Record<string, unknown>;
+      const errorBody = record['error'];
+
+      if (errorBody && typeof errorBody === 'object') {
+        const message = (errorBody as Record<string, unknown>)['message'];
+        if (typeof message === 'string' && message.trim()) {
+          return message.trim();
+        }
+      }
+
+      const message = record['message'];
+      if (typeof message === 'string' && message.trim()) {
+        return message.trim();
+      }
+    }
+
+    return 'Nao foi possivel enviar a capa do artigo.';
   }
 
   private getPublicationDispatchErrorMessage(error: unknown): string {

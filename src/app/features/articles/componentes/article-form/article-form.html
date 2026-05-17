@@ -104,12 +104,18 @@
               </svg>
             </div>
             <p class="text-sm text-slate-600">
-              <span class="text-(--color-1) font-semibold">Clique para upload</span> ou arraste a imagem
+              <span class="text-(--color-1) font-semibold">
+                {{ isUploadingCoverImage ? 'Enviando imagem...' : 'Clique para upload' }}
+              </span>
+              @if (!isUploadingCoverImage) {
+                ou arraste a imagem
+              }
             </p>
             <p class="text-xs text-slate-400 mt-1">PNG, JPG ou WEBP (Recomendado: 1200x630px)</p>
             <input
               type="file"
-              accept="image/*"
+              [accept]="acceptedImageTypes"
+              [disabled]="isSaving || isUploadingCoverImage"
               class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               (change)="onCoverImageFileSelected($event)"
             />
@@ -117,10 +123,13 @@
           <ng-container *ngIf="formData.coverImageUrl">
             <img [src]="formData.coverImageUrl" class="w-full h-full object-cover max-h-[300px]" alt="Capa do artigo" />
             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <span class="text-white font-medium bg-black/50 px-4 py-2 rounded-full text-sm">Alterar Imagem</span>
+              <span class="text-white font-medium bg-black/50 px-4 py-2 rounded-full text-sm">
+                {{ isUploadingCoverImage ? 'Enviando...' : 'Alterar Imagem' }}
+              </span>
               <input
                 type="file"
-                accept="image/*"
+                [accept]="acceptedImageTypes"
+                [disabled]="isSaving || isUploadingCoverImage"
                 class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 (change)="onCoverImageFileSelected($event)"
               />
@@ -128,6 +137,7 @@
             <button
               type="button"
               (click)="clearCoverImage()"
+              [disabled]="isSaving || isUploadingCoverImage"
               class="absolute top-2 right-2 p-1.5 text-slate-300 transition rounded-full hover:bg-black/50"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

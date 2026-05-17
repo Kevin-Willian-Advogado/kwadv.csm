@@ -1,7 +1,7 @@
 <div class="bg-slate-50 text-slate-900 h-dvh min-h-screen flex flex-col overflow-hidden">
   <app-article-topbar
     [status]="article.status"
-    [isSaving]="isSaving"
+    [isSaving]="isSaving || isUploadingCoverImage"
     [isLoading]="isLoading"
     [isCreating]="isCreating"
     [articleTitle]="article.title"
@@ -32,16 +32,18 @@
       [categories]="categories"
       [currentAuthor]="currentAuthor"
       [isSaving]="isSaving || isLoading"
+      [isUploadingCoverImage]="isUploadingCoverImage"
       [validationErrors]="validationErrors"
       [slugValidationStatus]="slugValidationStatus"
       [slugValidationMessage]="slugValidationMessage"
       (formDataChange)="onFormDataChange($event)"
+      (coverImageFileSelected)="onCoverImageFileSelected($event)"
     ></app-article-form>
 
     <app-article-text-editor
       class="h-full flex-1 min-w-0"
       [content]="article.content"
-      [isSaving]="isSaving || isLoading"
+      [isSaving]="isSaving || isLoading || isUploadingCoverImage"
       (contentChange)="onContentChange($event)"
     ></app-article-text-editor>
   </main>

@@ -46,7 +46,7 @@
 
         @if (isCreating) {
             <div class="rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-700">
-                Ao salvar, o CMS cria o login no Supabase Auth e tambem cria o registro ativo em public.users.
+                Ao salvar, o CMS envia um e-mail para o usuario definir a propria senha.
             </div>
         }
 
@@ -85,36 +85,6 @@
                                 <p class="mt-2 text-xs text-red-600">Informe um e-mail valido.</p>
                             }
                         </div>
-
-                        @if (isCreating) {
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-900 mb-2" for="user-password">Senha</label>
-                                <input
-                                    id="user-password"
-                                    type="password"
-                                    formControlName="password"
-                                    class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
-                                    placeholder="Minimo 6 caracteres"
-                                />
-                                @if (form.controls.password.touched && isPasswordInvalid) {
-                                    <p class="mt-2 text-xs text-red-600">Informe uma senha com pelo menos 6 caracteres.</p>
-                                }
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-900 mb-2" for="user-password-confirmation">Confirmar senha</label>
-                                <input
-                                    id="user-password-confirmation"
-                                    type="password"
-                                    formControlName="passwordConfirmation"
-                                    class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
-                                    placeholder="Repita a senha"
-                                />
-                                @if (form.controls.passwordConfirmation.touched && isPasswordConfirmationInvalid) {
-                                    <p class="mt-2 text-xs text-red-600">A confirmacao precisa ser igual a senha.</p>
-                                }
-                            </div>
-                        }
 
                         @if (!isCreating) {
                             <div class="md:col-span-2">
@@ -178,7 +148,7 @@
 
                     <div class="flex items-center justify-between gap-3 pt-2">
                         <div class="text-xs text-slate-500">
-                            Nome, e-mail e status ficam no cadastro do usuario; o vinculo editorial fica em authors.user_id.
+                            A senha e definida pelo proprio usuario pelo link recebido por e-mail.
                         </div>
 
                         <div class="flex items-center gap-3">

@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, of, shareReplay, switchMap, tap } from 'rxjs';
 
+import { ArticlePublicationService, ContentRefreshOperation } from './article-publication.service';
 import { LoginService } from './login.service';
+import { UsersService } from './users.service';
 
 interface CategoryLookupRow {
   id?: number | null;
@@ -13,11 +15,6 @@ interface CategoryLookupRow {
   created_by?: number | null;
   updated_at?: string | null;
   updated_by?: number | null;
-}
-
-interface UserLookupRow {
-  id?: number | null;
-  email?: string | null;
 }
 
 type CategoryDescriptionField = 'description' | 'descricao' | null;
@@ -37,7 +34,6 @@ export interface CategoryUpsertPayload {
   providedIn: 'root',
 })
 export class CategoriesService {
-  private readonly USERS_URL = 'https://wwwntzwmvjvivputmlqg.supabase.co/rest/v1/users';
   private readonly CATEGORIES_URL = 'https://wwwntzwmvjvivputmlqg.supabase.co/rest/v1/categories';
   private readonly ANON_KEY = 'sb_publishable_EREcwSKRXkRIRknqHOMh0g_FyIU7He0';
   private readonly FALLBACK_ACTOR_ID = 10447;
@@ -48,6 +44,8 @@ export class CategoriesService {
   constructor(
     private readonly http: HttpClient,
     private readonly loginService: LoginService,
+    private readonly usersService: UsersService,
+    private readonly articlePublicationService: ArticlePublicationService,
   ) {}
 
   getCategories(forceRefresh = false): Observable<CategoryListItem[]> {
@@ -107,6 +105,7 @@ export class CategoriesService {
         );
       }),
       map((rows) => this.extractCategory(rows)),
+      switchMap((category) => this.queueCategoryRefresh('create', category.id).pipe(map(() => category))),
       tap(() => {
         this.categoriesCache$ = undefined;
       }),
@@ -130,6 +129,7 @@ export class CategoriesService {
         );
       }),
       map((rows) => this.extractCategory(rows)),
+      switchMap((category) => this.queueCategoryRefresh('update', category.id).pipe(map(() => category))),
       tap(() => {
         this.categoriesCache$ = undefined;
       }),
@@ -141,11 +141,28 @@ export class CategoriesService {
     const params = new HttpParams().set('id', `eq.${categoryId}`);
 
     return this.http.delete<null>(this.CATEGORIES_URL, { headers, params }).pipe(
+      switchMap(() => this.queueCategoryRefresh('delete', categoryId)),
       tap(() => {
         this.categoriesCache$ = undefined;
       }),
       map(() => void 0),
     );
+  }
+
+  private queueCategoryRefresh(operation: ContentRefreshOperation, categoryId: number | null): Observable<void> {
+    return this.articlePublicationService
+      .dispatchContentRefresh({
+        entityType: 'category',
+        entityId: categoryId,
+        operation,
+        updatedAt: new Date().toISOString(),
+      })
+      .pipe(
+        catchError((error: unknown) => {
+          console.warn('Nao foi possivel acionar a Action apos alterar categoria:', error);
+          return of(void 0);
+        }),
+      );
   }
 
   private getAuthHeaders(): HttpHeaders {
@@ -245,24 +262,7 @@ export class CategoriesService {
   }
 
   private getCurrentActorId(): Observable<number> {
-    const currentEmail = this.loginService.getCurrentUserEmail();
-    if (!currentEmail) {
-      return of(this.FALLBACK_ACTOR_ID);
-    }
-
-    const headers = this.getAuthHeaders();
-    const params = new HttpParams()
-      .set('select', 'id,email')
-      .set('email', `eq.${currentEmail}`)
-      .set('limit', '1');
-
-    return this.http.get<UserLookupRow[]>(this.USERS_URL, { headers, params }).pipe(
-      map((rows) => {
-        const [row] = Array.isArray(rows) ? rows : [];
-        return this.parseNumber(row?.id) ?? this.FALLBACK_ACTOR_ID;
-      }),
-      catchError(() => of(this.FALLBACK_ACTOR_ID)),
-    );
+    return this.usersService.getCurrentUserId(this.FALLBACK_ACTOR_ID);
   }
 
   private extractCategory(rows: CategoryLookupRow[] | null | undefined): CategoryListItem {

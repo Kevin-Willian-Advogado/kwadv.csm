@@ -17,14 +17,17 @@ export class ArticleForm implements OnChanges {
   @Input() categories: ArticleEditorCategory[] = [];
   @Input() currentAuthor: ArticleEditorAuthor | null = null;
   @Input() isSaving = false;
+  @Input() isUploadingCoverImage = false;
   @Input() validationErrors: ArticleEditorValidationErrors = {};
   @Input() slugValidationStatus: 'idle' | 'checking' | 'available' | 'unavailable' | 'error' = 'idle';
   @Input() slugValidationMessage = '';
   @Output() formDataChange = new EventEmitter<ArticleEditorFormData>();
+  @Output() coverImageFileSelected = new EventEmitter<File>();
   @ViewChild('categoryContainer') private categoryContainer?: ElementRef<HTMLElement>;
 
   readonly fallbackCoverImageUrl = 'https://placehold.co/1200x630/e2e8f0/64748b?text=Sem+Imagem';
   readonly fallbackRelatedArticleImageUrl = this.fallbackCoverImageUrl;
+  readonly acceptedImageTypes = 'image/png,image/jpeg,image/webp,image/gif';
   categoryOpen = false;
   isAuthorModalOpen = false;
   isRelatedArticleModalOpen = false;
@@ -94,27 +97,16 @@ export class ArticleForm implements OnChanges {
   onCoverImageFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement | null;
     const file = input?.files?.[0];
-    if (!file || !file.type.startsWith('image/')) {
-      if (input) {
-        input.value = '';
-      }
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result !== 'string' || !reader.result.trim()) {
-        return;
-      }
-
-      this.formData.coverImageUrl = reader.result;
-      this.emitChange();
-    };
-    reader.readAsDataURL(file);
 
     if (input) {
       input.value = '';
     }
+
+    if (!file || this.isSaving || this.isUploadingCoverImage) {
+      return;
+    }
+
+    this.coverImageFileSelected.emit(file);
   }
 
   onSlugChange(value: string): void {
@@ -184,6 +176,10 @@ export class ArticleForm implements OnChanges {
   }
 
   clearCoverImage(): void {
+    if (this.isSaving || this.isUploadingCoverImage) {
+      return;
+    }
+
     this.formData.coverImageUrl = '';
     this.emitChange();
   }

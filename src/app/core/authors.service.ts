@@ -2,12 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, of, shareReplay, switchMap, tap } from 'rxjs';
 import { ArticleEditorAuthor } from './articles.service';
+import { ArticlePublicationService, ContentRefreshOperation } from './article-publication.service';
 import { CurrentAuthIdentity, LoginService } from './login.service';
-
-interface UserLookupRow {
-  id?: number | null;
-  email?: string | null;
-}
+import { UsersService } from './users.service';
 
 interface AuthorLookupRow {
   id?: number | null;
@@ -51,7 +48,6 @@ export interface CurrentAuthorContext {
   providedIn: 'root',
 })
 export class AuthorsService {
-  private readonly USERS_URL = 'https://wwwntzwmvjvivputmlqg.supabase.co/rest/v1/users';
   private readonly AUTHORS_URL = 'https://wwwntzwmvjvivputmlqg.supabase.co/rest/v1/authors';
   private readonly ARTICLE_AUTHORS_URL = 'https://wwwntzwmvjvivputmlqg.supabase.co/rest/v1/article_author';
   private readonly ANON_KEY = 'sb_publishable_EREcwSKRXkRIRknqHOMh0g_FyIU7He0';
@@ -62,6 +58,8 @@ export class AuthorsService {
   constructor(
     private readonly http: HttpClient,
     private readonly loginService: LoginService,
+    private readonly usersService: UsersService,
+    private readonly articlePublicationService: ArticlePublicationService,
   ) {}
 
   getAuthors(forceRefresh = false): Observable<ArticleEditorAuthor[]> {
@@ -151,6 +149,7 @@ export class AuthorsService {
         );
       }),
       map((rows) => this.extractAuthor(rows)),
+      switchMap((author) => this.queueAuthorRefresh('create', author.id).pipe(map(() => author))),
       tap(() => {
         this.authorsCache$ = undefined;
         this.authorsListCache$ = undefined;
@@ -175,6 +174,7 @@ export class AuthorsService {
         );
       }),
       map((rows) => this.extractAuthor(rows)),
+      switchMap((author) => this.queueAuthorRefresh('update', author.id).pipe(map(() => author))),
       tap(() => {
         this.authorsCache$ = undefined;
         this.authorsListCache$ = undefined;
@@ -187,12 +187,29 @@ export class AuthorsService {
     const params = new HttpParams().set('id', `eq.${authorId}`);
 
     return this.http.delete<null>(this.AUTHORS_URL, { headers, params }).pipe(
+      switchMap(() => this.queueAuthorRefresh('delete', authorId)),
       tap(() => {
         this.authorsCache$ = undefined;
         this.authorsListCache$ = undefined;
       }),
       map(() => void 0),
     );
+  }
+
+  private queueAuthorRefresh(operation: ContentRefreshOperation, authorId: number | null): Observable<void> {
+    return this.articlePublicationService
+      .dispatchContentRefresh({
+        entityType: 'author',
+        entityId: authorId,
+        operation,
+        updatedAt: new Date().toISOString(),
+      })
+      .pipe(
+        catchError((error: unknown) => {
+          console.warn('Nao foi possivel acionar a Action apos alterar autor:', error);
+          return of(void 0);
+        }),
+      );
   }
 
   setAuthorUserLink(authorId: number, userId: number | null): Observable<void> {
@@ -244,7 +261,8 @@ export class AuthorsService {
       return of({ userId: null, author: null });
     }
 
-    return this.getUserIdByEmail(identity.email).pipe(
+    return this.usersService.getUserByEmail(identity.email).pipe(
+      map((user) => user?.id ?? null),
       switchMap((userId) =>
         this.resolveCurrentAuthor(userId, identity).pipe(
           map((author) => ({
@@ -279,24 +297,6 @@ export class AuthorsService {
             );
           }),
         );
-      }),
-    );
-  }
-
-  private getUserIdByEmail(email: string): Observable<number | null> {
-    const headers = this.getAuthHeaders();
-    const params = new HttpParams()
-      .set('select', 'id,email')
-      .set('email', `eq.${email}`)
-      .set('limit', '1');
-
-    return this.http.get<UserLookupRow[]>(this.USERS_URL, { headers, params }).pipe(
-      map((rows) => {
-        if (!Array.isArray(rows) || rows.length === 0) {
-          return null;
-        }
-
-        return this.parseNumber(rows[0]?.id);
       }),
     );
   }
@@ -418,24 +418,7 @@ export class AuthorsService {
   }
 
   private getCurrentActorId(): Observable<number> {
-    const currentEmail = this.loginService.getCurrentUserEmail();
-    if (!currentEmail) {
-      return of(this.FALLBACK_ACTOR_ID);
-    }
-
-    const headers = this.getAuthHeaders();
-    const params = new HttpParams()
-      .set('select', 'id,email')
-      .set('email', `eq.${currentEmail}`)
-      .set('limit', '1');
-
-    return this.http.get<UserLookupRow[]>(this.USERS_URL, { headers, params }).pipe(
-      map((rows) => {
-        const [row] = Array.isArray(rows) ? rows : [];
-        return this.parseNumber(row?.id) ?? this.FALLBACK_ACTOR_ID;
-      }),
-      catchError(() => of(this.FALLBACK_ACTOR_ID)),
-    );
+    return this.usersService.getCurrentUserId(this.FALLBACK_ACTOR_ID);
   }
 
   private findBestAuthorMatch(

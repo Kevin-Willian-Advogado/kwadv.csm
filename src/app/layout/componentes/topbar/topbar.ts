@@ -88,6 +88,13 @@ export class Topbar implements OnDestroy {
       return;
     }
 
+    if (normalizedUrl === '/configuracoes') {
+      this.pageTitle = 'Configuracoes';
+      this.pageDescription = 'Ajuste contatos, e-mails operacionais e controles do site.';
+      this.showPrimaryAction = false;
+      return;
+    }
+
     if (normalizedUrl === '/artigos/novo' || /^\/artigos\/[^/]+$/.test(normalizedUrl)) {
       this.pageTitle = 'Editor de Artigo';
       this.pageDescription = 'Edite conteudo, autores, SEO e fluxo de publicacao.';

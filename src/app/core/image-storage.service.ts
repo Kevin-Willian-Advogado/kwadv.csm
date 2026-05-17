@@ -39,6 +39,21 @@ export class ImageStorageService {
     );
   }
 
+  uploadArticleCoverImage(file: File, articleId: number | null): Observable<string> {
+    const validationMessage = this.validateImageFile(file);
+    if (validationMessage) {
+      return throwError(() => new Error(validationMessage));
+    }
+
+    const storagePath = this.buildArticleCoverImagePath(file, articleId);
+    const uploadUrl = `${this.SUPABASE_URL}/storage/v1/object/${this.BUCKET_NAME}/${this.encodeStoragePath(storagePath)}`;
+    const headers = this.getUploadHeaders(file);
+
+    return this.http.post<unknown>(uploadUrl, file, { headers }).pipe(
+      map(() => this.getPublicImageUrl(storagePath)),
+    );
+  }
+
   deleteImageByPublicUrl(imageUrl: string): Observable<void> {
     const storagePath = this.extractStoragePathFromUrl(imageUrl);
     if (!storagePath) {
@@ -89,6 +104,17 @@ export class ImageStorageService {
     ].join('-');
 
     return `authors/${ownerFolder}/${fileName}.${this.getExtension(file.type)}`;
+  }
+
+  private buildArticleCoverImagePath(file: File, articleId: number | null): string {
+    const ownerFolder = typeof articleId === 'number' && articleId > 0 ? String(articleId) : 'rascunhos';
+    const fileName = [
+      this.createTimestamp(),
+      this.createUniqueSuffix(),
+      this.sanitizeBaseName(file.name),
+    ].join('-');
+
+    return `articles/${ownerFolder}/cover/${fileName}.${this.getExtension(file.type)}`;
   }
 
   private getPublicImageUrl(storagePath: string): string {

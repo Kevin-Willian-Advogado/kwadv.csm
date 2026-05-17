@@ -80,7 +80,7 @@
                         <td colspan="6" class="px-6 py-8 text-sm text-slate-500 text-center">Nenhum artigo encontrado para os filtros atuais.</td>
                     </tr>
                 } @else {
-                    @for (article of paginatedArticles; track article.slug) {
+                    @for (article of paginatedArticles; track article.id) {
                         <tr class="hover:bg-slate-50/70 transition-colors group cursor-pointer" (click)="openArticle(article.slug)">
                             <td class="px-6 py-4">
                                 <div class="font-semibold text-slate-900 truncate max-w-[24rem]">{{ article.title }}</div>

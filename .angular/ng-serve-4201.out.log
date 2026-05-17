@@ -1,0 +1,1600 @@
+
+> kwadv.csm@0.0.0 start
+> ng serve --host 127.0.0.1 --port 4201
+
+[33m>[39m Building...
+[32m√[39m Building...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [5.428 seconds] - 2026-05-11T23:45:14.250Z
+
+Watch mode enabled. Watching for file changes...
+NOTE: Raw file sizes do not reflect development server per-request transformations.
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m4201[22m/[39m
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.119 seconds] - 2026-05-11T23:51:21.892Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.197 seconds] - 2026-05-12T02:03:22.980Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.123 seconds] - 2026-05-12T02:03:30.163Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.114 seconds] - 2026-05-12T02:03:39.879Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.099 seconds] - 2026-05-12T02:03:44.675Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.078 seconds] - 2026-05-12T02:03:53.473Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.081 seconds] - 2026-05-12T02:03:57.879Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.107 seconds] - 2026-05-12T02:23:45.096Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.086 seconds] - 2026-05-12T02:24:12.619Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.107 seconds] - 2026-05-12T02:24:21.040Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.110 seconds] - 2026-05-12T02:24:37.483Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.086 seconds] - 2026-05-12T02:24:47.539Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.097 seconds] - 2026-05-12T02:25:31.640Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.104 seconds] - 2026-05-12T02:25:44.798Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.089 seconds] - 2026-05-12T02:26:02.918Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.094 seconds] - 2026-05-12T02:26:16.334Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.098 seconds] - 2026-05-12T02:26:25.729Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.088 seconds] - 2026-05-12T02:26:37.730Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.082 seconds] - 2026-05-12T02:26:54.581Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.091 seconds] - 2026-05-12T02:27:11.833Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.096 seconds] - 2026-05-12T02:27:18.552Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.085 seconds] - 2026-05-12T02:27:31.498Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.084 seconds] - 2026-05-12T02:27:49.614Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.100 seconds] - 2026-05-12T02:28:00.784Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.061 seconds] - 2026-05-12T02:28:11.700Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.074 seconds] - 2026-05-12T02:28:27.815Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m62.69 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.54 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-CTXVFXML.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m61.24 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.081 seconds] - 2026-05-12T02:28:45.688Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m    [2m | [22m [36m5.67 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mchunk-KYEHHDVD.js[39m  [2m | [22m[2msettings[22m[2m | [22m[36m63.16 kB[39m[2m | [22m
+
+Application bundle generation complete. [2.359 seconds] - 2026-05-12T02:29:16.586Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m    [2m | [22m [36m5.67 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mchunk-VC2FZB7L.js[39m  [2m | [22m[2msettings[22m[2m | [22m[36m68.53 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.609 seconds] - 2026-05-12T02:29:58.665Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.812 seconds] - 2026-05-12T02:31:13.374Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m63.11 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m75.96 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-A5CL2GAJ.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m87.20 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-ZJTNWBGD.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m32.73 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.745 seconds] - 2026-05-12T02:31:23.389Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m    [2m | [22m [36m5.67 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mchunk-EF4TELSF.js[39m  [2m | [22m[2mmessages[22m[2m | [22m[36m34.33 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.374 seconds] - 2026-05-12T02:31:42.847Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m    [2m | [22m [36m5.67 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mchunk-7XWHO3N3.js[39m  [2m | [22m[2mmessages[22m[2m | [22m[36m34.45 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.354 seconds] - 2026-05-12T02:31:49.832Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m  [2m | [22m[36m63.85 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m    [2m | [22m [36m5.67 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mchunk-4QCKQB5B.js[39m  [2m | [22m[2mmessages[22m[2m | [22m[36m39.43 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.472 seconds] - 2026-05-12T02:32:37.053Z
+
+Stylesheet update sent to client(s).
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m63.85 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m76.70 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-A5CL2GAJ.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m87.20 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-4QCKQB5B.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m39.43 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.080 seconds] - 2026-05-12T02:40:45.713Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m63.85 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m76.70 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-A5CL2GAJ.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m87.20 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-4QCKQB5B.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m39.43 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.074 seconds] - 2026-05-12T02:40:52.865Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m63.85 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m76.70 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-A5CL2GAJ.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m87.20 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-4QCKQB5B.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m39.43 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.074 seconds] - 2026-05-12T02:41:01.283Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m63.85 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m76.70 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-A5CL2GAJ.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m87.20 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-4QCKQB5B.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m39.43 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.089 seconds] - 2026-05-12T02:41:09.931Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m63.85 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m76.70 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-A5CL2GAJ.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m87.20 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-4QCKQB5B.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m39.43 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.070 seconds] - 2026-05-12T02:41:14.622Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m63.85 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m76.70 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-A5CL2GAJ.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m87.20 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-4QCKQB5B.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m39.43 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.080 seconds] - 2026-05-12T02:41:19.133Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m    [2m | [22m [36m5.67 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mchunk-SBIALR6U.js[39m  [2m | [22m[2msettings[22m[2m | [22m[36m87.33 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.514 seconds] - 2026-05-12T02:41:27.042Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m    [2m | [22m [36m5.67 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mchunk-5KJLBT2O.js[39m  [2m | [22m[2msettings[22m[2m | [22m[36m87.66 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.621 seconds] - 2026-05-12T02:41:36.059Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m  [2m | [22m[36m63.96 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m    [2m | [22m [36m5.67 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mchunk-QWJ2SZ3L.js[39m  [2m | [22m[2msettings[22m[2m | [22m[36m96.85 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.611 seconds] - 2026-05-12T02:42:03.195Z
+
+Stylesheet update sent to client(s).
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m63.96 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m76.81 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-QWJ2SZ3L.js[39m  [2m | [22m[2msettings[22m      [2m | [22m [36m96.85 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-4QCKQB5B.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m39.43 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.084 seconds] - 2026-05-12T02:44:55.322Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m   [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m    [2m | [22m  [36m5.67 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m   [2m | [22m [1mRaw size[22m
+[32mchunk-MVV5ENSX.js[39m  [2m | [22m[2msettings[22m[2m | [22m[36m100.84 kB[39m[2m | [22m
+
+Application bundle generation complete. [1.648 seconds] - 2026-05-12T04:56:21.290Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m   [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m  [2m | [22m [36m64.08 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m    [2m | [22m  [36m5.67 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m   [2m | [22m [1mRaw size[22m
+[32mchunk-HBSKHUPS.js[39m  [2m | [22m[2msettings[22m[2m | [22m[36m105.51 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.960 seconds] - 2026-05-12T04:56:42.277Z
+
+Stylesheet update sent to client(s).
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m   [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m  [2m | [22m [36m64.19 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m    [2m | [22m  [36m5.67 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m   [2m | [22m [1mRaw size[22m
+[32mchunk-XKWPHRNS.js[39m  [2m | [22m[2msettings[22m[2m | [22m[36m110.44 kB[39m[2m | [22m
+
+Application bundle generation complete. [1.233 seconds] - 2026-05-12T04:57:24.088Z
+
+Stylesheet update sent to client(s).
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.949 seconds] - 2026-05-12T04:57:47.577Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m64.72 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m77.58 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-XKWPHRNS.js[39m  [2m | [22m[2msettings[22m      [2m | [22m[36m110.44 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-DOUQLD6L.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m45.99 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.704 seconds] - 2026-05-12T04:58:25.151Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m    [2m | [22m [36m5.67 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m   [2m | [22m[1mRaw size[22m
+[32mchunk-ASDDHHPQ.js[39m  [2m | [22m[2mmessages[22m[2m | [22m[36m43.90 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.671 seconds] - 2026-05-12T04:58:35.594Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m64.72 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m77.58 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-XKWPHRNS.js[39m  [2m | [22m[2msettings[22m      [2m | [22m[36m110.44 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-ASDDHHPQ.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m43.90 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.151 seconds] - 2026-05-12T04:59:00.864Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m64.72 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m77.58 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-XKWPHRNS.js[39m  [2m | [22m[2msettings[22m      [2m | [22m[36m110.44 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-ASDDHHPQ.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m43.90 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.106 seconds] - 2026-05-12T04:59:11.092Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m64.72 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m77.58 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-XKWPHRNS.js[39m  [2m | [22m[2msettings[22m      [2m | [22m[36m110.44 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-ASDDHHPQ.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m43.90 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.100 seconds] - 2026-05-12T04:59:54.756Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m64.72 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m77.58 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-XKWPHRNS.js[39m  [2m | [22m[2msettings[22m      [2m | [22m[36m110.44 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-ASDDHHPQ.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m43.90 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.105 seconds] - 2026-05-12T05:00:03.213Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m64.72 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m77.58 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-XKWPHRNS.js[39m  [2m | [22m[2msettings[22m      [2m | [22m[36m110.44 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-ASDDHHPQ.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m43.90 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.133 seconds] - 2026-05-12T05:00:11.908Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m64.72 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m77.58 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-XKWPHRNS.js[39m  [2m | [22m[2msettings[22m      [2m | [22m[36m110.44 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-ASDDHHPQ.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m43.90 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.101 seconds] - 2026-05-12T05:00:18.697Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m64.72 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m77.58 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-XKWPHRNS.js[39m  [2m | [22m[2msettings[22m      [2m | [22m[36m110.44 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-ASDDHHPQ.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m43.90 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.103 seconds] - 2026-05-12T05:00:30.527Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m64.72 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m77.58 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-XKWPHRNS.js[39m  [2m | [22m[2msettings[22m      [2m | [22m[36m110.44 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-ASDDHHPQ.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m43.90 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.121 seconds] - 2026-05-12T05:00:51.116Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m   [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m    [2m | [22m  [36m5.67 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m   [2m | [22m [1mRaw size[22m
+[32mchunk-FSL6QMJG.js[39m  [2m | [22m[2msettings[22m[2m | [22m[36m110.56 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.909 seconds] - 2026-05-12T05:03:45.114Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m   [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m    [2m | [22m  [36m5.67 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m   [2m | [22m [1mRaw size[22m
+[32mchunk-Y2ZEIWBG.js[39m  [2m | [22m[2msettings[22m[2m | [22m[36m110.57 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.849 seconds] - 2026-05-12T05:03:50.965Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m   [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m    [2m | [22m  [36m5.67 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m   [2m | [22m [1mRaw size[22m
+[32mchunk-GBSR7COD.js[39m  [2m | [22m[2msettings[22m[2m | [22m[36m111.12 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.808 seconds] - 2026-05-12T05:03:59.771Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m64.72 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m77.58 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-GBSR7COD.js[39m  [2m | [22m[2msettings[22m      [2m | [22m[36m111.12 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-ASDDHHPQ.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m43.90 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.096 seconds] - 2026-05-12T05:04:03.567Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m        [2m | [22m [36m64.72 kB[39m[2m | [22m
+[32mchunk-RH6FOBMA.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.09 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m          [2m | [22m  [36m5.67 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m     [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m [2m | [22m [1m77.58 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m         [2m | [22m [1mRaw size[22m
+[32mchunk-CH4AKWVS.js[39m  [2m | [22m[2marticle-detail[22m[2m | [22m[36m214.65 kB[39m[2m | [22m
+[32mchunk-GBSR7COD.js[39m  [2m | [22m[2msettings[22m      [2m | [22m[36m111.12 kB[39m[2m | [22m
+[32mchunk-N7YFPBXB.js[39m  [2m | [22m[2marticles-list[22m [2m | [22m[36m106.00 kB[39m[2m | [22m
+[32mchunk-C34SMPMR.js[39m  [2m | [22m[2muser-list[22m     [2m | [22m[36m104.04 kB[39m[2m | [22m
+[32mchunk-7B5I4ASI.js[39m  [2m | [22m[2mauthor-list[22m   [2m | [22m [36m81.86 kB[39m[2m | [22m
+[32mchunk-VV3FGWXB.js[39m  [2m | [22m[2mcategory-list[22m [2m | [22m [36m71.13 kB[39m[2m | [22m
+[32mchunk-ASDDHHPQ.js[39m  [2m | [22m[2mmessages[22m      [2m | [22m [36m43.90 kB[39m[2m | [22m
+[32mchunk-KA5H5XN3.js[39m  [2m | [22m[2mlayout[22m        [2m | [22m [36m30.21 kB[39m[2m | [22m
+[32mchunk-PLL56D2K.js[39m  [2m | [22m[2mlogin[22m         [2m | [22m [36m28.88 kB[39m[2m | [22m
+[32mchunk-ZTI5U4UU.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.54 kB[39m[2m | [22m
+[32mchunk-YJIA74LC.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m16.51 kB[39m[2m | [22m
+[32mchunk-HTHZ57M7.js[39m  [2m | [22m[2mreset-password[22m[2m | [22m [36m15.39 kB[39m[2m | [22m
+[32mchunk-NZ25DVWH.js[39m  [2m | [22m[2m-[22m             [2m | [22m [36m13.44 kB[39m[2m | [22m
+[32mchunk-PWYAW7GX.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m7.57 kB[39m[2m | [22m
+[32mchunk-JTMRLDV3.js[39m  [2m | [22m[2m-[22m             [2m | [22m  [36m6.51 kB[39m[2m | [22m
+[2m...and 1 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.089 seconds] - 2026-05-12T05:04:49.081Z
+

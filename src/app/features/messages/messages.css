@@ -1,0 +1,21 @@
+.messages-shell {
+  height: calc(100vh - 5.5rem);
+}
+
+.messages-scrollbar {
+  scrollbar-color: var(--color-5) transparent;
+  scrollbar-width: thin;
+}
+
+.messages-scrollbar::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.messages-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-5);
+  border-radius: 999px;
+}
+
+.messages-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}

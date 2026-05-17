@@ -5,6 +5,8 @@ import { Observable, map } from 'rxjs';
 import { LoginService } from './login.service';
 
 export type ArticlePublicationAction = 'publish' | 'unpublish';
+export type ContentRefreshEntityType = 'article' | 'author' | 'category';
+export type ContentRefreshOperation = 'create' | 'update' | 'delete' | 'draft';
 
 export interface ArticlePublicationRequest {
   articleId: number;
@@ -12,6 +14,14 @@ export interface ArticlePublicationRequest {
   action: ArticlePublicationAction;
   actorId: number | null;
   updatedAt: string | null;
+}
+
+export interface ContentRefreshRequest {
+  entityType: ContentRefreshEntityType;
+  entityId: number | null;
+  operation: ContentRefreshOperation;
+  actorId?: number | null;
+  updatedAt?: string | null;
 }
 
 interface ArticlePublicationResponse {
@@ -40,6 +50,25 @@ export class ArticlePublicationService {
 
     return this.http
       .post<ArticlePublicationResponse>(this.FUNCTION_URL, request, { headers })
+      .pipe(map(() => void 0));
+  }
+
+  dispatchContentRefresh(request: ContentRefreshRequest): Observable<void> {
+    const headers = this.getAuthHeaders().set('Content-Type', 'application/json');
+
+    return this.http
+      .post<ArticlePublicationResponse>(
+        this.FUNCTION_URL,
+        {
+          action: 'publish',
+          entityType: request.entityType,
+          entityId: request.entityId,
+          operation: request.operation,
+          actorId: request.actorId ?? null,
+          updatedAt: request.updatedAt ?? new Date().toISOString(),
+        },
+        { headers },
+      )
       .pipe(map(() => void 0));
   }
 

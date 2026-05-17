@@ -1,0 +1,563 @@
+<section class="p-8">
+    <div class="mx-auto max-w-6xl space-y-6">
+        @if (errorMessage) {
+            <div class="flex items-center justify-between gap-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                <span>{{ errorMessage }}</span>
+                @if (canRetryLoad && !isSaving) {
+                    <button type="button" (click)="retryLoad()" class="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-semibold text-red-700 hover:bg-red-100">
+                        Recarregar
+                    </button>
+                }
+            </div>
+        }
+
+        @if (feedbackMessage) {
+            <div class="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+                {{ feedbackMessage }}
+            </div>
+        }
+
+        @if (isLoading) {
+            <div class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+                <div class="h-[32rem] rounded-lg bg-slate-100 animate-pulse"></div>
+            </div>
+        } @else {
+            <form [formGroup]="form" class="space-y-6">
+                <section class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+                    <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Status do blog</p>
+                            <h2 class="mt-2 text-lg font-bold text-slate-950">Publicacao de artigos</h2>
+                            <p class="mt-1 text-sm text-slate-500">Status atual: {{ articlesEnabled ? 'ativo' : 'inativo' }}.</p>
+                        </div>
+
+                        <button
+                            type="button"
+                            role="switch"
+                            [attr.aria-checked]="articlesEnabled"
+                            [disabled]="isSaving"
+                            (click)="requestArticlesToggle()"
+                            class="flex w-full items-center justify-between gap-4 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-left transition hover:border-slate-300 disabled:cursor-not-allowed disabled:opacity-60 sm:w-[24rem]"
+                        >
+                            <span>
+                                <span class="block text-sm font-semibold text-slate-900">
+                                    {{ articlesEnabled ? 'Blog ativo' : 'Blog inativo' }}
+                                </span>
+                                <span class="mt-1 block text-xs text-slate-500">
+                                    {{ articlesEnabled ? 'Clique para desativar.' : 'Clique para ativar.' }}
+                                </span>
+                            </span>
+                            <span
+                                class="relative h-7 w-12 shrink-0 rounded-full transition"
+                                [ngClass]="articlesEnabled ? 'bg-emerald-500' : 'bg-slate-300'"
+                            >
+                                <span
+                                    class="absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all"
+                                    [class.left-6]="articlesEnabled"
+                                    [class.left-1]="!articlesEnabled"
+                                ></span>
+                            </span>
+                        </button>
+                    </div>
+                </section>
+
+                <section class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+                    <button
+                        type="button"
+                        class="flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition hover:bg-slate-50"
+                        [attr.aria-expanded]="isContactInfoOpen"
+                        (click)="toggleContactInfo()"
+                    >
+                        <span>
+                            <span class="block text-xs font-bold uppercase tracking-widest text-slate-400">Informacoes de contato</span>
+                            <span class="mt-2 block text-lg font-bold text-slate-950">Dados publicos do site</span>
+                        </span>
+                        <svg class="h-5 w-5 shrink-0 text-slate-500 transition-transform" [class.rotate-180]="isContactInfoOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6"></path>
+                        </svg>
+                    </button>
+
+                    @if (isContactInfoOpen) {
+                        <div class="border-t border-slate-100 px-6 py-6">
+                            <div class="grid gap-5 md:grid-cols-2">
+                                <div>
+                                    <label class="mb-2 block text-sm font-semibold text-slate-900" for="contact-phone">Telefone / WhatsApp</label>
+                                    <input
+                                        id="contact-phone"
+                                        type="text"
+                                        formControlName="contactPhoneWhatsapp"
+                                        maxlength="40"
+                                        class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                        placeholder="+55 11 99999-9999"
+                                    />
+                                    @if (form.controls.contactPhoneWhatsapp.touched && form.controls.contactPhoneWhatsapp.hasError('phone')) {
+                                        <p class="mt-2 text-xs text-red-600">Use apenas numeros, espacos, parenteses, hifen e sinal de +.</p>
+                                    }
+                                </div>
+
+                                <div>
+                                    <label class="mb-2 block text-sm font-semibold text-slate-900" for="contact-email">E-mail publico</label>
+                                    <input
+                                        id="contact-email"
+                                        type="email"
+                                        formControlName="contactEmail"
+                                        maxlength="180"
+                                        class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                        placeholder="contato@dominio.com"
+                                    />
+                                    @if (form.controls.contactEmail.touched && form.controls.contactEmail.invalid) {
+                                        <p class="mt-2 text-xs text-red-600">Informe um e-mail valido.</p>
+                                    }
+                                </div>
+
+                                <div>
+                                    <label class="mb-2 block text-sm font-semibold text-slate-900" for="contact-instagram">Instagram</label>
+                                    <input
+                                        id="contact-instagram"
+                                        type="text"
+                                        formControlName="instagramUrl"
+                                        maxlength="300"
+                                        class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                        placeholder="@seuperfil ou https://instagram.com/seuperfil"
+                                    />
+                                    @if (form.controls.instagramUrl.touched && form.controls.instagramUrl.invalid) {
+                                        <p class="mt-2 text-xs text-red-600">Informe uma URL valida ou um @usuario.</p>
+                                    }
+                                </div>
+
+                                <div>
+                                    <label class="mb-2 block text-sm font-semibold text-slate-900" for="contact-linkedin">LinkedIn</label>
+                                    <input
+                                        id="contact-linkedin"
+                                        type="url"
+                                        formControlName="linkedinUrl"
+                                        maxlength="300"
+                                        class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                        placeholder="https://linkedin.com/in/seuperfil"
+                                    />
+                                    @if (form.controls.linkedinUrl.touched && form.controls.linkedinUrl.invalid) {
+                                        <p class="mt-2 text-xs text-red-600">Informe uma URL iniciando com http:// ou https://.</p>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="mt-6 flex justify-end">
+                                <button type="button" (click)="requestSave('contact')" [disabled]="isSaving" class="inline-flex items-center justify-center rounded-lg bg-(--color-1) px-4 py-2.5 text-sm font-semibold text-white hover:bg-(--color-3) disabled:opacity-50">
+                                    Salvar contato
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </section>
+
+                <section class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+                    <button
+                        type="button"
+                        class="flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition hover:bg-slate-50"
+                        [attr.aria-expanded]="isEmailConfigOpen"
+                        (click)="toggleEmailConfig()"
+                    >
+                        <span>
+                            <span class="block text-xs font-bold uppercase tracking-widest text-slate-400">Configuração de e-mails</span>
+                            <span class="mt-2 block text-lg font-bold text-slate-950">Envio transacional</span>
+                            <span class="mt-1 block text-sm leading-6 text-slate-500">
+                                Conta ativa: {{ activeSenderLabel }}
+                            </span>
+                        </span>
+
+                        <span class="flex shrink-0 items-center gap-3">
+                            <span
+                                class="inline-flex w-fit items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide"
+                                [ngClass]="activeProviderStatusClasses"
+                            >
+                                {{ activeProviderStatusLabel }}
+                            </span>
+                            <svg class="h-5 w-5 text-slate-500 transition-transform" [class.rotate-180]="isEmailConfigOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </span>
+                    </button>
+
+                    @if (isEmailConfigOpen) {
+                    <div class="border-t border-slate-100 px-6 py-6">
+
+                    <div class="mt-5 grid gap-2 rounded-lg border border-slate-200 bg-slate-50 p-1 sm:grid-cols-2 xl:grid-cols-4" role="radiogroup" aria-label="Metodo de envio de e-mails">
+                        @for (provider of emailProviders; track provider.value) {
+                            <button
+                                type="button"
+                                role="radio"
+                                [attr.aria-checked]="selectedEmailProvider === provider.value"
+                                (click)="selectEmailProvider(provider.value)"
+                                class="rounded-md px-4 py-3 text-left transition focus:outline-none focus:ring-2 focus:ring-slate-400"
+                                [ngClass]="selectedEmailProvider === provider.value ? 'bg-white text-slate-950 shadow-sm ring-1 ring-(--color-1)' : 'text-slate-600 hover:bg-white/70'"
+                            >
+                                <span class="block text-sm font-bold">{{ provider.label }}</span>
+                                <span class="mt-1 block text-xs leading-5">{{ provider.description }}</span>
+                            </button>
+                        }
+                    </div>
+
+                    @if (isEmailDisabled) {
+                        <div class="mt-6 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+                            O envio de e-mails está desativado. Nenhum e-mail transacional será enviado.
+                        </div>
+                    } @else {
+                        <div class="mt-6 grid gap-5 md:grid-cols-2">
+                            <div>
+                                <label class="mb-2 block text-sm font-semibold text-slate-900" for="email-from-name">
+                                    {{ usesCustomSmtp ? 'Nome do remetente padrão' : 'Nome do remetente' }}
+                                </label>
+                                <input
+                                    id="email-from-name"
+                                    type="text"
+                                    formControlName="emailFromName"
+                                    maxlength="120"
+                                    class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                />
+                                @if (form.controls.emailFromName.touched && form.controls.emailFromName.invalid) {
+                                    <p class="mt-2 text-xs text-red-600">Informe um nome com ate 120 caracteres.</p>
+                                }
+                            </div>
+
+                            <div>
+                                <label class="mb-2 block text-sm font-semibold text-slate-900" for="email-from-address">{{ providerAccountLabel }}</label>
+                                <input
+                                    id="email-from-address"
+                                    type="email"
+                                    formControlName="emailFromAddress"
+                                    maxlength="180"
+                                    (input)="syncKnownProviderSender()"
+                                    class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                />
+                                @if (form.controls.emailFromAddress.touched && form.controls.emailFromAddress.invalid) {
+                                    <p class="mt-2 text-xs text-red-600">Informe um e-mail valido.</p>
+                                }
+                            </div>
+
+                            @if (usesCustomSmtp) {
+                                <div>
+                                    <label class="mb-2 block text-sm font-semibold text-slate-900" for="smtp-host">Host SMTP</label>
+                                    <input
+                                        id="smtp-host"
+                                        type="text"
+                                        formControlName="emailSmtpHost"
+                                        maxlength="180"
+                                        class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                        placeholder="smtp.dominio.com"
+                                    />
+                                </div>
+
+                                <div class="grid grid-cols-[1fr_9rem] gap-3">
+                                    <div>
+                                        <label class="mb-2 block text-sm font-semibold text-slate-900" for="smtp-security">Segurança / TLS</label>
+                                        <select
+                                            id="smtp-security"
+                                            formControlName="emailSmtpSecurity"
+                                            class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                        >
+                                            <option value="starttls">STARTTLS</option>
+                                            <option value="ssl">SSL/TLS</option>
+                                            <option value="none">Nenhuma</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label class="mb-2 block text-sm font-semibold text-slate-900" for="smtp-port">Porta</label>
+                                        <input
+                                            id="smtp-port"
+                                            type="number"
+                                            formControlName="emailSmtpPort"
+                                            min="1"
+                                            max="65535"
+                                            class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="mb-2 block text-sm font-semibold text-slate-900" for="smtp-username">Usuário</label>
+                                    <input
+                                        id="smtp-username"
+                                        type="text"
+                                        formControlName="emailSmtpUsername"
+                                        maxlength="180"
+                                        class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                    />
+                                </div>
+                            }
+
+                            <div>
+                                <label class="mb-2 block text-sm font-semibold text-slate-900" for="smtp-password">{{ providerPasswordLabel }}</label>
+                                <input
+                                    id="smtp-password"
+                                    type="password"
+                                    formControlName="emailSmtpPassword"
+                                    maxlength="300"
+                                    autocomplete="new-password"
+                                    class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                    [placeholder]="emailPasswordConfigured ? 'Senha já configurada' : ''"
+                                />
+                                @if (emailPasswordConfigured && !form.controls.emailSmtpPassword.value) {
+                                    <p class="mt-2 text-xs leading-5 text-slate-500">Senha já configurada</p>
+                                } @else {
+                                    <p class="mt-2 text-xs leading-5 text-slate-500">{{ providerPasswordHelp }}</p>
+                                }
+                            </div>
+
+                            <div>
+                                <label class="mb-2 block text-sm font-semibold text-slate-900" for="email-reply-to">Reply-to opcional</label>
+                                <input
+                                    id="email-reply-to"
+                                    type="email"
+                                    formControlName="emailReplyToEmail"
+                                    maxlength="180"
+                                    class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                />
+                                @if (form.controls.emailReplyToEmail.touched && form.controls.emailReplyToEmail.invalid) {
+                                    <p class="mt-2 text-xs text-red-600">Informe um e-mail valido.</p>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    @if (usesCustomSmtp) {
+                    <div class="mt-6 divide-y divide-slate-100 border-y border-slate-100">
+                        <div>
+                            <button
+                                type="button"
+                                class="flex w-full items-center justify-between gap-4 py-4 text-left transition hover:text-slate-700"
+                                [attr.aria-expanded]="openEmailAliasFlow === 'userCreation'"
+                                (click)="toggleEmailAliasFlow('userCreation')"
+                            >
+                                <span>
+                                    <span class="block text-sm font-bold text-slate-950">Criacao de usuario</span>
+                                    <span class="mt-1 block text-xs text-slate-500">E-mail com link para definicao de senha.</span>
+                                </span>
+                                <svg class="h-5 w-5 shrink-0 text-slate-500 transition-transform" [class.rotate-180]="openEmailAliasFlow === 'userCreation'" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6"></path>
+                                </svg>
+                            </button>
+
+                            @if (openEmailAliasFlow === 'userCreation') {
+                                <div class="grid gap-5 pb-5 md:grid-cols-2">
+                                    <div>
+                                        <label class="mb-2 block text-sm font-semibold text-slate-900" for="user-validation-email">Remetente</label>
+                                        <input
+                                            id="user-validation-email"
+                                            type="email"
+                                            formControlName="userValidationSenderEmail"
+                                            maxlength="180"
+                                            placeholder="suporte@dominio.com"
+                                            class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                        />
+                                        @if (form.controls.userValidationSenderEmail.touched && form.controls.userValidationSenderEmail.invalid) {
+                                            <p class="mt-2 text-xs text-red-600">Informe um e-mail valido ou deixe vazio para usar a conta global.</p>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div>
+                            <button
+                                type="button"
+                                class="flex w-full items-center justify-between gap-4 py-4 text-left transition hover:text-slate-700"
+                                [attr.aria-expanded]="openEmailAliasFlow === 'passwordChange'"
+                                (click)="toggleEmailAliasFlow('passwordChange')"
+                            >
+                                <span>
+                                    <span class="block text-sm font-bold text-slate-950">Alteracao de senha</span>
+                                    <span class="mt-1 block text-xs text-slate-500">E-mail enviado pelo fluxo esqueci a senha.</span>
+                                </span>
+                                <svg class="h-5 w-5 shrink-0 text-slate-500 transition-transform" [class.rotate-180]="openEmailAliasFlow === 'passwordChange'" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6"></path>
+                                </svg>
+                            </button>
+
+                            @if (openEmailAliasFlow === 'passwordChange') {
+                                <div class="grid gap-5 pb-5 md:grid-cols-2">
+                                    <div>
+                                        <label class="mb-2 block text-sm font-semibold text-slate-900" for="password-recovery-email">Remetente</label>
+                                        <input
+                                            id="password-recovery-email"
+                                            type="email"
+                                            formControlName="passwordRecoverySenderEmail"
+                                            maxlength="180"
+                                            placeholder="no-reply@dominio.com"
+                                            class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                        />
+                                        @if (form.controls.passwordRecoverySenderEmail.touched && form.controls.passwordRecoverySenderEmail.invalid) {
+                                            <p class="mt-2 text-xs text-red-600">Informe um e-mail valido ou deixe vazio para usar a conta global.</p>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div>
+                            <button
+                                type="button"
+                                class="flex w-full items-center justify-between gap-4 py-4 text-left transition hover:text-slate-700"
+                                [attr.aria-expanded]="openEmailAliasFlow === 'emailChange'"
+                                (click)="toggleEmailAliasFlow('emailChange')"
+                            >
+                                <span>
+                                    <span class="block text-sm font-bold text-slate-950">Alteracao de e-mail</span>
+                                    <span class="mt-1 block text-xs text-slate-500">E-mail com link para validar o novo endereco.</span>
+                                </span>
+                                <svg class="h-5 w-5 shrink-0 text-slate-500 transition-transform" [class.rotate-180]="openEmailAliasFlow === 'emailChange'" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6"></path>
+                                </svg>
+                            </button>
+
+                            @if (openEmailAliasFlow === 'emailChange') {
+                                <div class="grid gap-5 pb-5 md:grid-cols-2">
+                                    <div>
+                                        <label class="mb-2 block text-sm font-semibold text-slate-900" for="email-change-email">Remetente</label>
+                                        <input
+                                            id="email-change-email"
+                                            type="email"
+                                            formControlName="emailChangeSenderEmail"
+                                            maxlength="180"
+                                            placeholder="validacao@dominio.com"
+                                            class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                        />
+                                        @if (form.controls.emailChangeSenderEmail.touched && form.controls.emailChangeSenderEmail.invalid) {
+                                            <p class="mt-2 text-xs text-red-600">Informe um e-mail valido ou deixe vazio para usar a conta global.</p>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div>
+                            <button
+                                type="button"
+                                class="flex w-full items-center justify-between gap-4 py-4 text-left transition hover:text-slate-700"
+                                [attr.aria-expanded]="openEmailAliasFlow === 'contactClient'"
+                                (click)="toggleEmailAliasFlow('contactClient')"
+                            >
+                                <span>
+                                    <span class="block text-sm font-bold text-slate-950">Contato de cliente</span>
+                                    <span class="mt-1 block text-xs text-slate-500">Confirmacao ao cliente e aviso interno.</span>
+                                </span>
+                                <svg class="h-5 w-5 shrink-0 text-slate-500 transition-transform" [class.rotate-180]="openEmailAliasFlow === 'contactClient'" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9 6 6 6-6"></path>
+                                </svg>
+                            </button>
+
+                            @if (openEmailAliasFlow === 'contactClient') {
+                                <div class="grid gap-5 pb-5 md:grid-cols-2">
+                                    <div>
+                                        <label class="mb-2 block text-sm font-semibold text-slate-900" for="contact-form-email">Remetente</label>
+                                        <input
+                                            id="contact-form-email"
+                                            type="email"
+                                            formControlName="contactFormSenderEmail"
+                                            maxlength="180"
+                                            placeholder="contato@dominio.com"
+                                            class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                        />
+                                        @if (form.controls.contactFormSenderEmail.touched && form.controls.contactFormSenderEmail.invalid) {
+                                            <p class="mt-2 text-xs text-red-600">Informe um e-mail valido ou deixe vazio para usar a conta global.</p>
+                                        }
+                                    </div>
+
+                                    <div>
+                                        <label class="mb-2 block text-sm font-semibold text-slate-900" for="notification-recipients">Destinatario interno</label>
+                                        <textarea
+                                            id="notification-recipients"
+                                            formControlName="contactNotificationRecipients"
+                                            rows="3"
+                                            maxlength="1200"
+                                            class="w-full resize-y rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                        ></textarea>
+                                        @if (form.controls.contactNotificationRecipients.touched && form.controls.contactNotificationRecipients.hasError('required')) {
+                                            <p class="mt-2 text-xs text-red-600">Informe pelo menos um destinatario.</p>
+                                        }
+                                        @if (form.controls.contactNotificationRecipients.touched && form.controls.contactNotificationRecipients.hasError('emailList')) {
+                                            <p class="mt-2 text-xs text-red-600">Separe apenas e-mails validos por linha, virgula ou ponto e virgula.</p>
+                                        }
+                                    </div>
+
+                                    <div>
+                                        <label class="mb-2 block text-sm font-semibold text-slate-900" for="notification-cc">Copia interna</label>
+                                        <textarea
+                                            id="notification-cc"
+                                            formControlName="contactNotificationCcRecipients"
+                                            rows="3"
+                                            maxlength="1200"
+                                            class="w-full resize-y rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                        ></textarea>
+                                        @if (form.controls.contactNotificationCcRecipients.touched && form.controls.contactNotificationCcRecipients.hasError('emailList')) {
+                                            <p class="mt-2 text-xs text-red-600">Separe apenas e-mails validos por linha, virgula ou ponto e virgula.</p>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    }
+
+                    <div class="mt-6 border-t border-slate-100 pt-5">
+                        @if (!isEmailDisabled) {
+                            <div class="grid gap-2 sm:grid-cols-[1fr_auto] sm:items-end">
+                                <div>
+                                    <label class="mb-2 block text-xs font-bold uppercase tracking-widest text-slate-400" for="email-test-recipient">Teste de envio</label>
+                                    <input
+                                        id="email-test-recipient"
+                                        type="email"
+                                        formControlName="emailTestRecipient"
+                                        maxlength="180"
+                                        class="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm text-slate-900 outline-none focus:border-slate-400"
+                                        placeholder="destinatario@dominio.com"
+                                    />
+                                </div>
+
+                                <button type="button" (click)="testEmailSettings()" [disabled]="!canSendEmailTest" class="inline-flex items-center justify-center rounded-lg border border-slate-200 px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50">
+                                    {{ isTestingEmail ? 'Enviando...' : 'Enviar teste' }}
+                                </button>
+                            </div>
+
+                            @if (form.controls.emailTestRecipient.touched && form.controls.emailTestRecipient.invalid) {
+                                <p class="mt-2 text-xs text-red-600">Informe um e-mail valido.</p>
+                            }
+
+                            @if (emailTestFeedbackMessage) {
+                                <p class="mt-2 text-xs font-semibold text-emerald-700">{{ emailTestFeedbackMessage }}</p>
+                            }
+
+                            @if (emailTestErrorMessage) {
+                                <p class="mt-2 text-xs font-semibold text-orange-700">{{ emailTestErrorMessage }}</p>
+                            }
+                        }
+
+                        <div class="mt-5 flex justify-end">
+                            <button type="button" (click)="requestSave('email')" [disabled]="isSaving || isTestingEmail" class="inline-flex items-center justify-center rounded-lg bg-(--color-1) px-4 py-2.5 text-sm font-semibold text-white hover:bg-(--color-3) disabled:opacity-50">
+                                Salvar configurações
+                            </button>
+                        </div>
+                    </div>
+                    </div>
+                    }
+                </section>
+
+                <p class="px-1 text-xs text-slate-500">
+                    @if (lastUpdatedAt) {
+                        Ultima atualizacao: {{ lastUpdatedAt }}
+                    } @else {
+                        Nenhuma atualizacao registrada.
+                    }
+                </p>
+            </form>
+        }
+    </div>
+</section>
+
+<app-action-confirmation-modal
+    [isOpen]="!!pendingSaveSection"
+    [isBusy]="isSaving"
+    [config]="confirmationConfig"
+    (closed)="closeConfirmation()"
+    (confirmed)="confirmSave()"
+></app-action-confirmation-modal>

@@ -7,6 +7,16 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface PasswordResetRequestPayload {
+  email: string;
+  redirectTo?: string;
+}
+
+export interface PasswordUpdatePayload {
+  accessToken: string;
+  password: string;
+}
+
 export interface SupabaseAuthResponse {
   access_token: string;
   expires_at: number;
@@ -33,21 +43,46 @@ export class LoginService {
   private readonly ACCESS_TOKEN_KEY = 'access_token';
   private readonly AUTH_USER_KEY = 'auth_user';
   private readonly EXPIRES_AT_KEY = 'auth_expires_at';
-  private readonly AUTH_URL =
-    'https://wwwntzwmvjvivputmlqg.supabase.co/auth/v1/token?grant_type=password';
-
+  private readonly AUTH_CMS_URL =
+    'https://wwwntzwmvjvivputmlqg.supabase.co/functions/v1/auth-cms';
   private readonly API_KEY = 'sb_publishable_EREcwSKRXkRIRknqHOMh0g_FyIU7He0';
 
   constructor(private readonly http: HttpClient) {}
 
   login(payload: LoginPayload): Observable<SupabaseAuthResponse> {
-    const headers = new HttpHeaders({
-      apikey: this.API_KEY,
-      Authorization: `Bearer ${this.API_KEY}`,
-      'Content-Type': 'application/json',
-    });
+    return this.http.post<SupabaseAuthResponse>(
+      this.AUTH_CMS_URL,
+      {
+        action: 'login',
+        email: payload.email,
+        password: payload.password,
+      },
+      { headers: this.getAnonymousHeaders() },
+    );
+  }
 
-    return this.http.post<SupabaseAuthResponse>(this.AUTH_URL, payload, { headers });
+  requestPasswordReset(payload: PasswordResetRequestPayload): Observable<{ mensagem?: string }> {
+    return this.http.post<{ mensagem?: string }>(
+      this.AUTH_CMS_URL,
+      {
+        action: 'forgot-password',
+        email: payload.email,
+        redirectTo: payload.redirectTo ?? this.getPasswordResetRedirectUrl(),
+      },
+      { headers: this.getAnonymousHeaders() },
+    );
+  }
+
+  updatePassword(payload: PasswordUpdatePayload): Observable<{ mensagem?: string }> {
+    return this.http.post<{ mensagem?: string }>(
+      this.AUTH_CMS_URL,
+      {
+        action: 'update-password',
+        accessToken: payload.accessToken,
+        password: payload.password,
+      },
+      { headers: this.getAnonymousHeaders() },
+    );
   }
 
   persistSession(response: SupabaseAuthResponse): void {
@@ -120,6 +155,22 @@ export class LoginService {
     } catch {
       return null;
     }
+  }
+
+  private getAnonymousHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      apikey: this.API_KEY,
+      Authorization: `Bearer ${this.API_KEY}`,
+      'Content-Type': 'application/json',
+    });
+  }
+
+  private getPasswordResetRedirectUrl(): string {
+    if (typeof window === 'undefined' || !window.location?.origin) {
+      return 'https://admin.washingtonlopes.com/redefinir-senha';
+    }
+
+    return `${window.location.origin}/redefinir-senha`;
   }
 
   private decodeAccessTokenPayload(): Record<string, unknown> | null {
