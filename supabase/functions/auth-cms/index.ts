@@ -8,6 +8,7 @@ interface AuthCmsRequest {
   email?: string | null
   password?: string | null
   accessToken?: string | null
+  tokenHash?: string | null
   redirectTo?: string | null
 }
 
@@ -140,7 +141,7 @@ async function requestPasswordReset(adminClient: SupabaseClient, body: AuthCmsRe
       throw error
     }
 
-    const actionLink = extractActionLink(data)
+    const actionLink = buildPasswordResetLink(redirectTo, data)
     const settings = await getSiteSettings(adminClient)
     const emailConfig = buildEmailDeliveryConfig(settings)
     await sendEmail({
@@ -245,6 +246,58 @@ function normalizeSmtpPort(value: unknown): number {
   return 587
 }
 
+function buildPasswordResetLink(redirectTo: string, data: unknown): string {
+  const tokenHash = extractRecoveryTokenHash(data)
+  if (tokenHash) {
+    const url = new URL(redirectTo)
+    url.searchParams.set('token_hash', tokenHash)
+    url.searchParams.set('type', 'recovery')
+    return url.toString()
+  }
+
+  return extractActionLink(data)
+}
+
+function extractRecoveryTokenHash(data: unknown): string | null {
+  if (!data || typeof data !== 'object') {
+    return null
+  }
+
+  const record = data as Record<string, unknown>
+  const properties = record['properties']
+  if (properties && typeof properties === 'object') {
+    const propertiesRecord = properties as Record<string, unknown>
+    const directToken = normalizeText(propertiesRecord['hashed_token']) ??
+      normalizeText(propertiesRecord['token_hash'])
+
+    if (directToken) {
+      return directToken
+    }
+
+    const actionLink = normalizeText(propertiesRecord['action_link'])
+    const tokenFromLink = extractRecoveryTokenHashFromActionLink(actionLink)
+    if (tokenFromLink) {
+      return tokenFromLink
+    }
+  }
+
+  return null
+}
+
+function extractRecoveryTokenHashFromActionLink(actionLink: string | null): string | null {
+  if (!actionLink) {
+    return null
+  }
+
+  try {
+    const url = new URL(actionLink)
+    return normalizeText(url.searchParams.get('token_hash')) ??
+      normalizeText(url.searchParams.get('token'))
+  } catch {
+    return null
+  }
+}
+
 function extractActionLink(data: unknown): string {
   if (!data || typeof data !== 'object') {
     throw new RequestError('Nao foi possivel gerar o link de recuperacao.', 500)
@@ -305,8 +358,9 @@ function escapeHtml(value: string): string {
 }
 
 async function updatePassword(body: AuthCmsRequest): Promise<Response> {
-  const accessToken = normalizeText(body.accessToken)
   const password = requirePassword(body.password)
+  const accessToken = normalizeText(body.accessToken) ??
+    await verifyPasswordRecoveryToken(body.tokenHash)
 
   if (!accessToken) {
     throw new RequestError('Token de recuperacao invalido ou expirado.', 401)
@@ -322,6 +376,25 @@ async function updatePassword(body: AuthCmsRequest): Promise<Response> {
   return jsonResponse({
     mensagem: 'Senha atualizada com sucesso.',
   })
+}
+
+async function verifyPasswordRecoveryToken(tokenHash: unknown): Promise<string | null> {
+  const token = normalizeText(tokenHash)
+  if (!token) {
+    return null
+  }
+
+  const client = createAnonClient()
+  const { data, error } = await client.auth.verifyOtp({
+    token_hash: token,
+    type: 'recovery',
+  })
+
+  if (error || !data.session?.access_token) {
+    throw error ?? new RequestError('Token de recuperacao invalido ou expirado.', 401)
+  }
+
+  return data.session.access_token
 }
 
 async function findPublicUserByEmail(

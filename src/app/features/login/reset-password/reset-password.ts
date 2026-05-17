@@ -22,16 +22,23 @@ export class ResetPassword implements OnInit {
   });
 
   accessToken = '';
+  tokenHash = '';
   isSaving = false;
   errorMessage = '';
   feedbackMessage = '';
 
   ngOnInit(): void {
-    this.accessToken = this.readTokenFromUrl();
+    const recoveryToken = this.readRecoveryTokenFromUrl();
+    this.accessToken = recoveryToken.accessToken;
+    this.tokenHash = recoveryToken.tokenHash;
 
-    if (!this.accessToken) {
+    if (!this.hasRecoveryToken) {
       this.errorMessage = 'Link de redefinicao invalido ou expirado.';
     }
+  }
+
+  get hasRecoveryToken(): boolean {
+    return !!this.accessToken || !!this.tokenHash;
   }
 
   get passwordsDoNotMatch(): boolean {
@@ -43,7 +50,7 @@ export class ResetPassword implements OnInit {
     this.feedbackMessage = '';
     this.form.markAllAsTouched();
 
-    if (!this.accessToken) {
+    if (!this.hasRecoveryToken) {
       this.errorMessage = 'Link de redefinicao invalido ou expirado.';
       return;
     }
@@ -59,7 +66,8 @@ export class ResetPassword implements OnInit {
 
     this.loginService
       .updatePassword({
-        accessToken: this.accessToken,
+        accessToken: this.accessToken || undefined,
+        tokenHash: this.tokenHash || undefined,
         password: this.form.controls.password.value.trim(),
       })
       .pipe(finalize(() => {
@@ -78,13 +86,20 @@ export class ResetPassword implements OnInit {
       });
   }
 
-  private readTokenFromUrl(): string {
+  private readRecoveryTokenFromUrl(): { accessToken: string; tokenHash: string } {
     const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
     const queryParams = new URLSearchParams(window.location.search);
 
-    return hashParams.get('access_token')?.trim() ||
-      queryParams.get('access_token')?.trim() ||
-      '';
+    return {
+      accessToken: hashParams.get('access_token')?.trim() ||
+        queryParams.get('access_token')?.trim() ||
+        '',
+      tokenHash: queryParams.get('token_hash')?.trim() ||
+        queryParams.get('token')?.trim() ||
+        hashParams.get('token_hash')?.trim() ||
+        hashParams.get('token')?.trim() ||
+        '',
+    };
   }
 
   private extractErrorMessage(error: unknown): string {

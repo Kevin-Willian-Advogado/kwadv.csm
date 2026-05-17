@@ -40,6 +40,7 @@ jobs:
         run: |
           for route in \
             login \
+            redefinir-senha \
             artigos \
             artigos/novo \
             autores \

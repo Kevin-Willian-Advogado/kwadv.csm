@@ -197,7 +197,7 @@ async function sendUserDefinitionEmail(
       throw error
     }
 
-    const actionLink = extractActionLink(data)
+    const actionLink = buildPasswordResetLink(getUserPasswordRedirectUrl(requestedRedirectTo), data)
     const settings = await getSiteSettings(supabase)
     const emailConfig = buildEmailDeliveryConfig(settings)
 
@@ -811,6 +811,58 @@ function resolveAllowedRedirectUrl(value: unknown, expectedPath: '/redefinir-sen
     const isLocalhost = url.protocol === 'http:' && ['localhost', '127.0.0.1'].includes(url.hostname)
 
     return isExpectedPath && (isProductionCms || isLocalhost) ? url.toString() : null
+  } catch {
+    return null
+  }
+}
+
+function buildPasswordResetLink(redirectTo: string, data: unknown): string {
+  const tokenHash = extractRecoveryTokenHash(data)
+  if (tokenHash) {
+    const url = new URL(redirectTo)
+    url.searchParams.set('token_hash', tokenHash)
+    url.searchParams.set('type', 'recovery')
+    return url.toString()
+  }
+
+  return extractActionLink(data)
+}
+
+function extractRecoveryTokenHash(data: unknown): string | null {
+  if (!data || typeof data !== 'object') {
+    return null
+  }
+
+  const record = data as Record<string, unknown>
+  const properties = record['properties']
+  if (properties && typeof properties === 'object') {
+    const propertiesRecord = properties as Record<string, unknown>
+    const directToken = normalizeText(propertiesRecord['hashed_token']) ??
+      normalizeText(propertiesRecord['token_hash'])
+
+    if (directToken) {
+      return directToken
+    }
+
+    const actionLink = normalizeText(propertiesRecord['action_link'])
+    const tokenFromLink = extractRecoveryTokenHashFromActionLink(actionLink)
+    if (tokenFromLink) {
+      return tokenFromLink
+    }
+  }
+
+  return null
+}
+
+function extractRecoveryTokenHashFromActionLink(actionLink: string | null): string | null {
+  if (!actionLink) {
+    return null
+  }
+
+  try {
+    const url = new URL(actionLink)
+    return normalizeText(url.searchParams.get('token_hash')) ??
+      normalizeText(url.searchParams.get('token'))
   } catch {
     return null
   }

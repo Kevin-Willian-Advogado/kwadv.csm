@@ -13,7 +13,8 @@ export interface PasswordResetRequestPayload {
 }
 
 export interface PasswordUpdatePayload {
-  accessToken: string;
+  accessToken?: string;
+  tokenHash?: string;
   password: string;
 }
 
@@ -78,7 +79,8 @@ export class LoginService {
       this.AUTH_CMS_URL,
       {
         action: 'update-password',
-        accessToken: payload.accessToken,
+        accessToken: payload.accessToken ?? null,
+        tokenHash: payload.tokenHash ?? null,
         password: payload.password,
       },
       { headers: this.getAnonymousHeaders() },
