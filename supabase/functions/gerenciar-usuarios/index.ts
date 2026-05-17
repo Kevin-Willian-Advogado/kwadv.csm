@@ -219,26 +219,30 @@ async function sendUserDefinitionEmail(
 
 async function sendUserEmailChangeValidationEmail(
   supabase: SupabaseClient,
+  publicUserId: number,
+  authUserId: string,
   previousEmail: string,
   newEmail: string,
   displayName: string,
+  requestedBy: number,
   requestedRedirectTo?: string | null,
 ): Promise<{ sent: boolean; error: string | null }> {
+  let tokenHash: string | null = null
+
   try {
-    const { data, error } = await supabase.auth.admin.generateLink({
-      type: 'email_change_new',
-      email: previousEmail,
+    const token = generateEmailChangeToken()
+    tokenHash = await hashEmailChangeToken(token)
+
+    await createPendingEmailChange(supabase, {
+      publicUserId,
+      authUserId,
+      previousEmail,
       newEmail,
-      options: {
-        redirectTo: getEmailChangeRedirectUrl(requestedRedirectTo),
-      },
+      tokenHash,
+      requestedBy,
     })
 
-    if (error) {
-      throw error
-    }
-
-    const actionLink = buildEmailChangeValidationLink(getEmailChangeRedirectUrl(requestedRedirectTo), data)
+    const actionLink = buildEmailChangeValidationLink(getEmailChangeRedirectUrl(requestedRedirectTo), token)
     const settings = await getSiteSettings(supabase)
     const emailConfig = buildEmailDeliveryConfig(settings)
 
@@ -252,10 +256,62 @@ async function sendUserEmailChangeValidationEmail(
 
     return { sent: true, error: null }
   } catch (error) {
+    if (tokenHash) {
+      await discardPendingEmailChange(supabase, tokenHash)
+    }
+
     const message = extractErrorMessage(error)
     console.warn('Nao foi possivel enviar e-mail de validacao de novo e-mail:', message)
     return { sent: false, error: message }
   }
+}
+
+async function createPendingEmailChange(
+  supabase: SupabaseClient,
+  payload: {
+    publicUserId: number
+    authUserId: string
+    previousEmail: string
+    newEmail: string
+    tokenHash: string
+    requestedBy: number
+  },
+): Promise<void> {
+  const { error: consumeError } = await supabase
+    .from('pending_email_changes')
+    .update({ consumed_at: new Date().toISOString() })
+    .eq('public_user_id', payload.publicUserId)
+    .is('consumed_at', null)
+
+  if (consumeError) {
+    throw consumeError
+  }
+
+  const { error } = await supabase
+    .from('pending_email_changes')
+    .insert({
+      public_user_id: payload.publicUserId,
+      auth_user_id: payload.authUserId,
+      previous_email: payload.previousEmail,
+      new_email: payload.newEmail,
+      token_hash: payload.tokenHash,
+      requested_by: payload.requestedBy,
+      expires_at: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
+    })
+
+  if (error) {
+    throw error
+  }
+}
+
+async function discardPendingEmailChange(
+  supabase: SupabaseClient,
+  tokenHash: string,
+): Promise<void> {
+  await supabase
+    .from('pending_email_changes')
+    .delete()
+    .eq('token_hash', tokenHash)
 }
 
 async function editUser(
@@ -293,6 +349,10 @@ async function editUser(
   }
 
   if (emailChanged) {
+    if (!authUserId) {
+      throw new RequestError('Usuario do Auth nao encontrado para validar a alteracao de e-mail.', 404)
+    }
+
     const existingEmailOwner = await findPublicUserByEmail(supabase, email)
     const existingEmailOwnerId = parsePositiveInteger(existingEmailOwner?.id)
 
@@ -304,9 +364,12 @@ async function editUser(
   const emailChangeValidation = emailChanged
     ? await sendUserEmailChangeValidationEmail(
       supabase,
+      publicUserId,
+      authUserId as string,
       currentEmail,
       email,
       displayName ?? normalizeText(publicUser.name) ?? email.split('@')[0] ?? 'Usuario',
+      actorId,
       body.emailChangeRedirectTo,
     )
     : { sent: false, error: null }
@@ -829,16 +892,39 @@ function buildPasswordResetLink(redirectTo: string, data: unknown): string {
   return extractActionLink(data)
 }
 
-function buildEmailChangeValidationLink(redirectTo: string, data: unknown): string {
-  const tokenHash = extractActionTokenHash(data)
-  if (tokenHash) {
-    const url = new URL(redirectTo)
-    url.searchParams.set('token_hash', tokenHash)
-    url.searchParams.set('type', 'email_change')
-    return url.toString()
+function buildEmailChangeValidationLink(redirectTo: string, token: string): string {
+  const url = new URL(redirectTo)
+  url.searchParams.set('token', token)
+  url.searchParams.set('type', 'email_change')
+  return url.toString()
+}
+
+function generateEmailChangeToken(): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(32))
+  return bytesToBase64Url(bytes)
+}
+
+async function hashEmailChangeToken(token: string): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(token) as BufferSource)
+  return bytesToHex(new Uint8Array(digest))
+}
+
+function bytesToBase64Url(bytes: Uint8Array): string {
+  let binary = ''
+  for (const byte of bytes) {
+    binary += String.fromCharCode(byte)
   }
 
-  return extractActionLink(data)
+  return btoa(binary)
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/g, '')
+}
+
+function bytesToHex(bytes: Uint8Array): string {
+  return Array.from(bytes)
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('')
 }
 
 function extractActionTokenHash(data: unknown): string | null {

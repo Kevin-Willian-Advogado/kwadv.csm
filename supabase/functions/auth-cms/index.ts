@@ -20,6 +20,15 @@ interface PublicUserRow {
   auth_user_id?: string | null
 }
 
+interface PendingEmailChangeRow {
+  id?: number | null
+  public_user_id?: number | string | null
+  auth_user_id?: string | null
+  previous_email?: string | null
+  new_email?: string | null
+  expires_at?: string | null
+}
+
 interface SiteSettingsRow {
   password_recovery_sender_email?: string | null
   email_provider?: EmailProvider | null
@@ -425,14 +434,21 @@ async function verifyAccessTokenUserId(accessToken: unknown): Promise<string | n
 }
 
 async function verifyEmailChange(adminClient: SupabaseClient, body: AuthCmsRequest): Promise<Response> {
-  const tokenHash = normalizeText(body.tokenHash)
-  if (!tokenHash) {
+  const token = normalizeText(body.tokenHash)
+  if (!token) {
     throw new RequestError('Link de validacao invalido ou expirado.', 401)
+  }
+
+  const customTokenVerified = await verifyPendingEmailChange(adminClient, token)
+  if (customTokenVerified) {
+    return jsonResponse({
+      mensagem: 'E-mail validado com sucesso.',
+    })
   }
 
   const client = createAnonClient()
   const { data, error } = await client.auth.verifyOtp({
-    token_hash: tokenHash,
+    token_hash: token,
     type: 'email_change',
   })
 
@@ -448,6 +464,103 @@ async function verifyEmailChange(adminClient: SupabaseClient, body: AuthCmsReque
   return jsonResponse({
     mensagem: 'E-mail validado com sucesso.',
   })
+}
+
+async function verifyPendingEmailChange(
+  supabase: SupabaseClient,
+  token: string,
+): Promise<boolean> {
+  const tokenHash = await hashEmailChangeToken(token)
+  const { data, error } = await supabase
+    .from('pending_email_changes')
+    .select('id,public_user_id,auth_user_id,previous_email,new_email,expires_at')
+    .eq('token_hash', tokenHash)
+    .is('consumed_at', null)
+    .maybeSingle()
+
+  if (error) {
+    throw error
+  }
+
+  if (!data) {
+    return false
+  }
+
+  const pendingChange = data as PendingEmailChangeRow
+  const pendingChangeId = parsePositiveInteger(pendingChange.id)
+  const publicUserId = parsePositiveInteger(pendingChange.public_user_id)
+  const authUserId = normalizeText(pendingChange.auth_user_id)
+  const newEmail = normalizeEmail(pendingChange.new_email)
+  const expiresAt = Date.parse(pendingChange.expires_at ?? '')
+
+  if (pendingChangeId === null || publicUserId === null || !authUserId || !newEmail) {
+    throw new RequestError('Link de validacao invalido ou expirado.', 401)
+  }
+
+  if (!Number.isFinite(expiresAt) || expiresAt <= Date.now()) {
+    await consumePendingEmailChange(supabase, pendingChangeId)
+    throw new RequestError('Link de validacao expirado. Solicite uma nova alteracao de e-mail.', 401)
+  }
+
+  const existingEmailOwner = await findPublicUserByEmail(supabase, newEmail)
+  const existingEmailOwnerId = parsePositiveInteger(existingEmailOwner?.id)
+  if (existingEmailOwnerId !== null && existingEmailOwnerId !== publicUserId) {
+    throw new RequestError('Ja existe outro usuario com este e-mail.', 409)
+  }
+
+  const { error: authError } = await supabase.auth.admin.updateUserById(authUserId, {
+    email: newEmail,
+    email_confirm: true,
+  })
+
+  if (authError) {
+    throw authError
+  }
+
+  await syncPublicUserEmailById(supabase, publicUserId, authUserId, newEmail)
+  await consumePendingEmailChange(supabase, pendingChangeId)
+
+  return true
+}
+
+async function syncPublicUserEmailById(
+  supabase: SupabaseClient,
+  publicUserId: number,
+  authUserId: string,
+  email: string,
+): Promise<void> {
+  const { data, error } = await supabase
+    .from('users')
+    .update({
+      auth_user_id: authUserId,
+      email,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', publicUserId)
+    .select('id,email')
+    .maybeSingle()
+
+  if (error) {
+    throw error
+  }
+
+  if (!data) {
+    throw new RequestError('Usuario do CMS nao encontrado para sincronizar o e-mail.', 404)
+  }
+}
+
+async function consumePendingEmailChange(
+  supabase: SupabaseClient,
+  pendingChangeId: number,
+): Promise<void> {
+  const { error } = await supabase
+    .from('pending_email_changes')
+    .update({ consumed_at: new Date().toISOString() })
+    .eq('id', pendingChangeId)
+
+  if (error) {
+    throw error
+  }
 }
 
 async function syncPublicUserEmail(
@@ -591,6 +704,30 @@ function requirePassword(value: unknown): string {
   }
 
   return password
+}
+
+async function hashEmailChangeToken(token: string): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(token) as BufferSource)
+  return bytesToHex(new Uint8Array(digest))
+}
+
+function bytesToHex(bytes: Uint8Array): string {
+  return Array.from(bytes)
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('')
+}
+
+function parsePositiveInteger(value: unknown): number | null {
+  if (typeof value === 'number' && Number.isInteger(value) && value > 0) {
+    return value
+  }
+
+  if (typeof value === 'string') {
+    const parsed = Number(value)
+    return Number.isInteger(parsed) && parsed > 0 ? parsed : null
+  }
+
+  return null
 }
 
 function normalizeEmail(value: unknown): string | null {
