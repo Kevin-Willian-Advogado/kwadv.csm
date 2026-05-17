@@ -207,7 +207,7 @@ function resolvePasswordRecoverySenderEmail(
 ): string {
   const provider = normalizeEmailProvider(settings.email_provider)
 
-  if (provider === 'smtp') {
+  if (usesFeatureSenderAliases(provider)) {
     return normalizeEmail(settings.password_recovery_sender_email) ??
       normalizeEmail(config.fromEmail) ??
       'washingtonlopes2003@gmail.com'
@@ -216,6 +216,10 @@ function resolvePasswordRecoverySenderEmail(
   return normalizeEmail(config.fromEmail) ??
     normalizeEmail(settings.password_recovery_sender_email) ??
     'washingtonlopes2003@gmail.com'
+}
+
+function usesFeatureSenderAliases(provider: EmailProvider): boolean {
+  return provider === 'smtp' || provider === 'resend'
 }
 
 function normalizeEmailProvider(value: unknown): EmailProvider {

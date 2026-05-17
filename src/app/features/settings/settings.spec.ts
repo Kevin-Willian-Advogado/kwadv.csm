@@ -113,6 +113,31 @@ describe('Settings e-mail configuration', () => {
     expect(settingsService.lastSavePayload?.contactNotificationSenderEmail).toBe('global@example.com');
   });
 
+  it('keeps feature aliases on save for alias-capable providers', () => {
+    renderWithSettings({
+      ...buildSettings(),
+      emailProvider: 'resend',
+      passwordRecoverySenderEmail: 'senha@example.com',
+      userValidationSenderEmail: 'usuarios@example.com',
+      emailChangeSenderEmail: 'validacao@example.com',
+      contactFormSenderEmail: 'contato@example.com',
+      contactNotificationRecipients: ['interno@example.com'],
+    }, true);
+
+    component.form.patchValue({
+      emailTestRecipient: 'tester@example.com',
+    });
+    component.requestSave('email');
+    component.confirmSave();
+
+    expect(settingsService.saveSettings).toHaveBeenCalled();
+    expect(settingsService.lastSavePayload?.passwordRecoverySenderEmail).toBe('senha@example.com');
+    expect(settingsService.lastSavePayload?.userValidationSenderEmail).toBe('usuarios@example.com');
+    expect(settingsService.lastSavePayload?.emailChangeSenderEmail).toBe('validacao@example.com');
+    expect(settingsService.lastSavePayload?.contactFormSenderEmail).toBe('contato@example.com');
+    expect(settingsService.lastSavePayload?.contactNotificationRecipients).toEqual(['interno@example.com']);
+  });
+
   it('requires an app password for Gmail when no password is already configured', () => {
     settingsService.settings = {
       ...buildSettings(),

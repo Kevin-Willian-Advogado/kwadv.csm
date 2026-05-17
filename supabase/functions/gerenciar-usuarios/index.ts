@@ -780,7 +780,7 @@ function resolveUserCreationSenderEmail(
 ): string {
   const provider = normalizeEmailProvider(settings.email_provider)
 
-  if (provider === 'smtp') {
+  if (usesFeatureSenderAliases(provider)) {
     return normalizeEmail(settings.user_validation_sender_email) ??
       normalizeEmail(config.fromEmail) ??
       'washingtonlopes2003@gmail.com'
@@ -797,7 +797,7 @@ function resolveEmailChangeSenderEmail(
 ): string {
   const provider = normalizeEmailProvider(settings.email_provider)
 
-  if (provider === 'smtp') {
+  if (usesFeatureSenderAliases(provider)) {
     return normalizeEmail(settings.email_change_sender_email) ??
       normalizeEmail(config.fromEmail) ??
       'washingtonlopes2003@gmail.com'
@@ -806,6 +806,10 @@ function resolveEmailChangeSenderEmail(
   return normalizeEmail(config.fromEmail) ??
     normalizeEmail(settings.email_change_sender_email) ??
     'washingtonlopes2003@gmail.com'
+}
+
+function usesFeatureSenderAliases(provider: EmailProvider): boolean {
+  return provider === 'smtp' || provider === 'resend'
 }
 
 function normalizeEmailProvider(value: unknown): EmailProvider {

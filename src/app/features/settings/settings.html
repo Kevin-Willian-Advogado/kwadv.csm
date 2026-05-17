@@ -205,7 +205,7 @@
                         <div class="mt-6 grid gap-5 md:grid-cols-2">
                             <div>
                                 <label class="mb-2 block text-sm font-semibold text-slate-900" for="email-from-name">
-                                    {{ usesCustomSmtp ? 'Nome do remetente padrão' : 'Nome do remetente' }}
+                                    {{ usesFeatureSenderAliases ? 'Nome do remetente padrão' : 'Nome do remetente' }}
                                 </label>
                                 <input
                                     id="email-from-name"
@@ -320,7 +320,7 @@
                         </div>
                     }
 
-                    @if (usesCustomSmtp) {
+                    @if (usesFeatureSenderAliases) {
                     <div class="mt-6 divide-y divide-slate-100 border-y border-slate-100">
                         <div>
                             <button

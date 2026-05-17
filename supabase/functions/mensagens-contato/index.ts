@@ -416,11 +416,15 @@ function resolveContactSenderEmail(settings: SiteSettingsRow): string {
     normalizeEmail(settings.email_sender_address) ??
     'washingtonlopes2003@gmail.com'
 
-  if (provider === 'smtp') {
+  if (usesFeatureSenderAliases(provider)) {
     return featureSender ?? globalSender
   }
 
   return globalSender
+}
+
+function usesFeatureSenderAliases(provider: EmailProvider): boolean {
+  return provider === 'smtp' || provider === 'resend'
 }
 
 function buildEmailDeliveryConfig(settings: SiteSettingsRow): EmailDeliveryConfig {

@@ -125,6 +125,10 @@ export class Settings implements OnInit {
     return this.selectedEmailProvider === 'smtp';
   }
 
+  get usesFeatureSenderAliases(): boolean {
+    return this.providerUsesFeatureSenderAliases(this.selectedEmailProvider);
+  }
+
   get selectedProviderOption(): EmailProviderOption | undefined {
     return this.emailProviders.find((provider) => provider.value === this.selectedEmailProvider);
   }
@@ -245,7 +249,7 @@ export class Settings implements OnInit {
       this.form.controls.emailSmtpPassword.setValue('');
     }
 
-    if (provider !== 'smtp') {
+    if (!this.providerUsesFeatureSenderAliases(provider)) {
       this.syncFeatureSenderControlsToGlobal();
       this.openEmailAliasFlow = null;
     }
@@ -264,7 +268,7 @@ export class Settings implements OnInit {
   }
 
   syncKnownProviderSender(): void {
-    if (!this.usesCustomSmtp) {
+    if (!this.usesFeatureSenderAliases) {
       this.syncUsernameWithFromAddress(true);
       this.syncFeatureSenderControlsToGlobal();
     }
@@ -426,7 +430,7 @@ export class Settings implements OnInit {
 
   private patchForm(settings: SiteSettings): void {
     const globalSender = settings.emailFromAddress || 'washingtonlopes2003@gmail.com';
-    const usesAliases = settings.emailProvider === 'smtp';
+    const usesAliases = this.providerUsesFeatureSenderAliases(settings.emailProvider);
 
     this.form.reset({
       articlesEnabled: settings.articlesEnabled,
@@ -473,7 +477,7 @@ export class Settings implements OnInit {
 
     if (section === 'email') {
       const fromAddress = rawValue.emailFromAddress.trim();
-      const usesAliases = rawValue.emailProvider === 'smtp';
+      const usesAliases = this.providerUsesFeatureSenderAliases(rawValue.emailProvider);
       const senderFallback = fromAddress || 'washingtonlopes2003@gmail.com';
 
       if (rawValue.emailProvider === 'disabled') {
@@ -494,7 +498,7 @@ export class Settings implements OnInit {
       const contactFormSenderEmail = usesAliases
         ? rawValue.contactFormSenderEmail.trim() || senderFallback
         : fromAddress;
-      const smtpUsername = usesAliases
+      const smtpUsername = this.providerRequiresSmtpSettings(rawValue.emailProvider)
         ? rawValue.emailSmtpUsername.trim()
         : fromAddress;
       const payload: SiteSettingsPayload = {
@@ -549,7 +553,7 @@ export class Settings implements OnInit {
         return this.form.controls.emailProvider.valid;
       }
 
-      if (!this.usesCustomSmtp) {
+      if (!this.usesFeatureSenderAliases) {
         this.syncFeatureSenderControlsToGlobal();
       }
 
@@ -567,6 +571,11 @@ export class Settings implements OnInit {
           this.form.controls.emailSmtpPort,
           this.form.controls.emailSmtpSecurity,
           this.form.controls.emailSmtpUsername,
+        );
+      }
+
+      if (this.usesFeatureSenderAliases) {
+        controls.push(
           this.form.controls.contactNotificationRecipients,
           this.form.controls.contactNotificationCcRecipients,
           this.form.controls.passwordRecoverySenderEmail,
@@ -612,7 +621,7 @@ export class Settings implements OnInit {
         }
       }
 
-      const invalidRecipients = this.usesCustomSmtp
+      const invalidRecipients = this.usesFeatureSenderAliases
         ? [
             ...this.getInvalidRecipients(this.form.controls.contactNotificationRecipients.value),
             ...this.getInvalidRecipients(this.form.controls.contactNotificationCcRecipients.value),
@@ -657,15 +666,19 @@ export class Settings implements OnInit {
       return true;
     }
 
-    if (rawValue.emailProvider !== 'smtp') {
+    if (!this.providerUsesFeatureSenderAliases(rawValue.emailProvider)) {
       return false;
     }
 
+    const transportChanged = this.providerRequiresSmtpSettings(rawValue.emailProvider)
+      ? normalize(rawValue.emailSmtpHost) !== normalize(settings.emailSmtpHost) ||
+        Number(rawValue.emailSmtpPort) !== settings.emailSmtpPort ||
+        rawValue.emailSmtpSecurity !== settings.emailSmtpSecurity ||
+        normalize(rawValue.emailSmtpUsername) !== normalize(settings.emailSmtpUsername)
+      : false;
+
     return (
-      normalize(rawValue.emailSmtpHost) !== normalize(settings.emailSmtpHost) ||
-      Number(rawValue.emailSmtpPort) !== settings.emailSmtpPort ||
-      rawValue.emailSmtpSecurity !== settings.emailSmtpSecurity ||
-      normalize(rawValue.emailSmtpUsername) !== normalize(settings.emailSmtpUsername) ||
+      transportChanged ||
       normalizeRecipients(rawValue.contactNotificationRecipients) !== normalizeRecipientArray(settings.contactNotificationRecipients) ||
       normalizeRecipients(rawValue.contactNotificationCcRecipients) !== normalizeRecipientArray(settings.contactNotificationCcRecipients) ||
       normalize(rawValue.passwordRecoverySenderEmail).toLowerCase() !== normalize(settings.passwordRecoverySenderEmail).toLowerCase() ||
@@ -673,6 +686,14 @@ export class Settings implements OnInit {
       normalize(rawValue.emailChangeSenderEmail).toLowerCase() !== normalize(settings.emailChangeSenderEmail).toLowerCase() ||
       normalize(rawValue.contactFormSenderEmail).toLowerCase() !== normalize(settings.contactFormSenderEmail).toLowerCase()
     );
+  }
+
+  private providerUsesFeatureSenderAliases(provider: EmailProvider): boolean {
+    return provider === 'smtp' || provider === 'resend';
+  }
+
+  private providerRequiresSmtpSettings(provider: EmailProvider): boolean {
+    return provider === 'smtp';
   }
 
   private formatEmailTestError(error: string | null | undefined): string {

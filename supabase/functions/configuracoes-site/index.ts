@@ -495,7 +495,7 @@ function applyProviderSenderPolicy(
 ): void {
   const provider = normalizeEmailProvider(payload['email_provider'] ?? currentSettings['email_provider'])
 
-  if (provider === 'smtp') {
+  if (usesFeatureSenderAliases(provider)) {
     return
   }
 
@@ -514,6 +514,10 @@ function applyProviderSenderPolicy(
   if (provider === 'gmail' || provider === 'microsoft') {
     payload['email_smtp_username'] = globalSender
   }
+}
+
+function usesFeatureSenderAliases(provider: EmailProvider): boolean {
+  return provider === 'smtp' || provider === 'resend'
 }
 
 function hasOwnProperty(object: SiteSettingsRequest, key: keyof SiteSettingsRequest): boolean {
@@ -731,7 +735,7 @@ function mapSettings(row: Record<string, unknown>): Record<string, unknown> {
     normalizeEmail(row['email_from_address']) ??
     normalizeEmail(row['email_sender_address']) ??
     'washingtonlopes2003@gmail.com'
-  const useAliases = provider === 'smtp'
+  const useAliases = usesFeatureSenderAliases(provider)
 
   return {
     articlesEnabled: row['articles_enabled'] !== false,
