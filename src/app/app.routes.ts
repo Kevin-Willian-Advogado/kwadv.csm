@@ -12,6 +12,7 @@ const loadSettings = () => import('./features/settings/settings').then((m) => m.
 const loadMessages = () => import('./features/messages/messages').then((m) => m.Messages);
 const loadLogin = () => import('./features/login/login/login').then((m) => m.Login);
 const loadResetPassword = () => import('./features/login/reset-password/reset-password').then((m) => m.ResetPassword);
+const loadValidateEmail = () => import('./features/login/validate-email/validate-email').then((m) => m.ValidateEmail);
 
 export const routes: Routes = [
   {
@@ -27,6 +28,10 @@ export const routes: Routes = [
   {
     path: 'redefinir-senha',
     loadComponent: loadResetPassword,
+  },
+  {
+    path: 'validar-email',
+    loadComponent: loadValidateEmail,
   },
   {
     path: 'artigos/novo',

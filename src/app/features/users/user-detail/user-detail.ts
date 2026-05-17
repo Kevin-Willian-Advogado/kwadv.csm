@@ -218,7 +218,9 @@ export class UserDetail implements OnInit, OnChanges {
           this.userId = user.id;
           this.isCreating = false;
           this.currentLinkedAuthorId = this.form.controls.authorId.value;
-          this.feedbackMessage = 'Usuario salvo com sucesso.';
+          this.feedbackMessage = user.emailChangeValidationSent && user.pendingEmail
+            ? `Usuario salvo. Enviamos um link para validar ${user.pendingEmail}. O e-mail de acesso sera alterado apos a validacao.`
+            : 'Usuario salvo com sucesso.';
           this.saved.emit(user);
           if (!this.modalMode) {
             this.router.navigate(['/usuarios', user.id]);

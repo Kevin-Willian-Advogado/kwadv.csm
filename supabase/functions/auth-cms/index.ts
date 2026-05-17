@@ -1,7 +1,7 @@
 import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js@2'
 import { sendTransactionalEmail, type EmailDeliveryConfig, type EmailProvider, type SmtpSecurity } from '../_shared/email-delivery.ts'
 
-type AuthCmsAction = 'login' | 'forgot-password' | 'update-password'
+type AuthCmsAction = 'login' | 'forgot-password' | 'update-password' | 'verify-email-change'
 
 interface AuthCmsRequest {
   action?: AuthCmsAction | null
@@ -73,7 +73,11 @@ Deno.serve(async (req) => {
       return await updatePassword(adminClient, body)
     }
 
-    throw new RequestError("Acao invalida. Envie 'login', 'forgot-password' ou 'update-password'.")
+    if (body.action === 'verify-email-change') {
+      return await verifyEmailChange(adminClient, body)
+    }
+
+    throw new RequestError("Acao invalida. Envie 'login', 'forgot-password', 'update-password' ou 'verify-email-change'.")
   } catch (error) {
     const message = extractErrorMessage(error)
     const status = error instanceof RequestError ? error.status : extractErrorStatus(error) ?? 400
@@ -418,6 +422,56 @@ async function verifyAccessTokenUserId(accessToken: unknown): Promise<string | n
   }
 
   return data.user.id
+}
+
+async function verifyEmailChange(adminClient: SupabaseClient, body: AuthCmsRequest): Promise<Response> {
+  const tokenHash = normalizeText(body.tokenHash)
+  if (!tokenHash) {
+    throw new RequestError('Link de validacao invalido ou expirado.', 401)
+  }
+
+  const client = createAnonClient()
+  const { data, error } = await client.auth.verifyOtp({
+    token_hash: tokenHash,
+    type: 'email_change',
+  })
+
+  const userId = normalizeText(data.user?.id)
+  const email = normalizeEmail(data.user?.email)
+
+  if (error || !userId || !email) {
+    throw error ?? new RequestError('Link de validacao invalido ou expirado.', 401)
+  }
+
+  await syncPublicUserEmail(adminClient, userId, email)
+
+  return jsonResponse({
+    mensagem: 'E-mail validado com sucesso.',
+  })
+}
+
+async function syncPublicUserEmail(
+  supabase: SupabaseClient,
+  authUserId: string,
+  email: string,
+): Promise<void> {
+  const { data, error } = await supabase
+    .from('users')
+    .update({
+      email,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('auth_user_id', authUserId)
+    .select('id,email')
+    .maybeSingle()
+
+  if (error) {
+    throw error
+  }
+
+  if (!data) {
+    throw new RequestError('Usuario do CMS nao encontrado para sincronizar o e-mail.', 404)
+  }
 }
 
 async function findPublicUserByEmail(

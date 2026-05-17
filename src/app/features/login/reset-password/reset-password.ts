@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 
 import { LoginService } from '../../../core/login.service';
@@ -15,6 +15,7 @@ import { LoginService } from '../../../core/login.service';
 export class ResetPassword implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly loginService = inject(LoginService);
+  private readonly router = inject(Router);
 
   readonly form = this.formBuilder.nonNullable.group({
     password: ['', [Validators.required, Validators.minLength(6)]],
@@ -77,7 +78,11 @@ export class ResetPassword implements OnInit {
         next: (response) => {
           this.feedbackMessage = response.mensagem ?? 'Senha atualizada com sucesso.';
           this.form.reset();
-          window.history.replaceState(null, document.title, '/redefinir-senha');
+          this.loginService.clearSession();
+          this.router.navigate(['/login'], {
+            queryParams: { passwordUpdated: '1' },
+            replaceUrl: true,
+          });
         },
         error: (error: unknown) => {
           this.errorMessage = this.extractErrorMessage(error) || 'Nao foi possivel atualizar a senha.';

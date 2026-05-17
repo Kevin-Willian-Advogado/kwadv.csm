@@ -238,7 +238,7 @@ async function sendUserEmailChangeValidationEmail(
       throw error
     }
 
-    const actionLink = extractActionLink(data)
+    const actionLink = buildEmailChangeValidationLink(getEmailChangeRedirectUrl(requestedRedirectTo), data)
     const settings = await getSiteSettings(supabase)
     const emailConfig = buildEmailDeliveryConfig(settings)
 
@@ -316,7 +316,7 @@ async function editUser(
   }
 
   const updatePayload: Record<string, unknown> = {
-    email,
+    email: emailChanged ? currentEmail : email,
     updated_at: new Date().toISOString(),
     updated_by: actorId,
   }
@@ -352,9 +352,10 @@ async function editUser(
     data: {
       authUser: {
         id: authUserId,
-        email,
+        email: emailChanged ? currentEmail : email,
       },
       publicUser: data,
+      pendingEmail: emailChanged ? email : null,
       userEmailChangeValidationSent: emailChangeValidation.sent,
       userEmailChangeValidationError: emailChangeValidation.error,
     },
@@ -793,12 +794,12 @@ function getUserPasswordRedirectUrl(requestedRedirectTo?: string | null): string
 }
 
 function getEmailChangeRedirectUrl(requestedRedirectTo?: string | null): string {
-  return resolveAllowedRedirectUrl(requestedRedirectTo, '/login') ??
+  return resolveAllowedRedirectUrl(requestedRedirectTo, '/validar-email') ??
     normalizeText(Deno.env.get('CMS_EMAIL_CHANGE_REDIRECT_URL')) ??
-    'https://admin.washingtonlopes.com/login'
+    'https://admin.washingtonlopes.com/validar-email'
 }
 
-function resolveAllowedRedirectUrl(value: unknown, expectedPath: '/redefinir-senha' | '/login'): string | null {
+function resolveAllowedRedirectUrl(value: unknown, expectedPath: '/redefinir-senha' | '/validar-email'): string | null {
   const text = normalizeText(value)
   if (!text) {
     return null
@@ -817,7 +818,7 @@ function resolveAllowedRedirectUrl(value: unknown, expectedPath: '/redefinir-sen
 }
 
 function buildPasswordResetLink(redirectTo: string, data: unknown): string {
-  const tokenHash = extractRecoveryTokenHash(data)
+  const tokenHash = extractActionTokenHash(data)
   if (tokenHash) {
     const url = new URL(redirectTo)
     url.searchParams.set('token_hash', tokenHash)
@@ -828,7 +829,19 @@ function buildPasswordResetLink(redirectTo: string, data: unknown): string {
   return extractActionLink(data)
 }
 
-function extractRecoveryTokenHash(data: unknown): string | null {
+function buildEmailChangeValidationLink(redirectTo: string, data: unknown): string {
+  const tokenHash = extractActionTokenHash(data)
+  if (tokenHash) {
+    const url = new URL(redirectTo)
+    url.searchParams.set('token_hash', tokenHash)
+    url.searchParams.set('type', 'email_change')
+    return url.toString()
+  }
+
+  return extractActionLink(data)
+}
+
+function extractActionTokenHash(data: unknown): string | null {
   if (!data || typeof data !== 'object') {
     return null
   }
@@ -845,7 +858,7 @@ function extractRecoveryTokenHash(data: unknown): string | null {
     }
 
     const actionLink = normalizeText(propertiesRecord['action_link'])
-    const tokenFromLink = extractRecoveryTokenHashFromActionLink(actionLink)
+    const tokenFromLink = extractTokenHashFromActionLink(actionLink)
     if (tokenFromLink) {
       return tokenFromLink
     }
@@ -854,7 +867,7 @@ function extractRecoveryTokenHash(data: unknown): string | null {
   return null
 }
 
-function extractRecoveryTokenHashFromActionLink(actionLink: string | null): string | null {
+function extractTokenHashFromActionLink(actionLink: string | null): string | null {
   if (!actionLink) {
     return null
   }

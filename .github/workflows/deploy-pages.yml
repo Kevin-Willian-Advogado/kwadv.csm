@@ -41,6 +41,7 @@ jobs:
           for route in \
             login \
             redefinir-senha \
+            validar-email \
             artigos \
             artigos/novo \
             autores \

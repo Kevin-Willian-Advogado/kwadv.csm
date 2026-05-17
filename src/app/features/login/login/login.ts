@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -11,7 +11,7 @@ import { LoginService } from '../../../core/login.service';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login {
+export class Login implements OnInit {
   loginForm: FormGroup<{
     email: FormControl<string>;
     senha: FormControl<string>;
@@ -26,6 +26,7 @@ export class Login {
   isSendingRecovery = false;
   errorMessage: string | null = null;
   recoveryMessage: string | null = null;
+  successMessage: string | null = null;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -52,6 +53,17 @@ export class Login {
     });
   }
 
+  ngOnInit(): void {
+    if (this.route.snapshot.queryParamMap.get('passwordUpdated') === '1') {
+      this.successMessage = 'Senha atualizada com sucesso. Faca login com a nova senha.';
+      return;
+    }
+
+    if (this.route.snapshot.queryParamMap.get('emailValidated') === '1') {
+      this.successMessage = 'E-mail validado com sucesso. Faca login novamente.';
+    }
+  }
+
   togglePassword(): void {
     this.isPasswordVisible = !this.isPasswordVisible;
   }
@@ -61,12 +73,14 @@ export class Login {
     this.recoveryForm.patchValue({ email });
     this.errorMessage = null;
     this.recoveryMessage = null;
+    this.successMessage = null;
     this.isRecoveryMode = true;
   }
 
   closeRecovery(): void {
     this.errorMessage = null;
     this.recoveryMessage = null;
+    this.successMessage = null;
     this.isRecoveryMode = false;
   }
 
@@ -78,6 +92,7 @@ export class Login {
 
     this.isLoading = true;
     this.errorMessage = null;
+    this.successMessage = null;
 
     const { email, senha } = this.loginForm.getRawValue();
 
@@ -110,6 +125,7 @@ export class Login {
     this.isSendingRecovery = true;
     this.errorMessage = null;
     this.recoveryMessage = null;
+    this.successMessage = null;
 
     const { email } = this.recoveryForm.getRawValue();
 

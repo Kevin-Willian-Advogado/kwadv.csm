@@ -18,6 +18,10 @@ export interface PasswordUpdatePayload {
   password: string;
 }
 
+export interface EmailChangeVerificationPayload {
+  tokenHash: string;
+}
+
 export interface SupabaseAuthResponse {
   access_token: string;
   expires_at: number;
@@ -82,6 +86,17 @@ export class LoginService {
         accessToken: payload.accessToken ?? null,
         tokenHash: payload.tokenHash ?? null,
         password: payload.password,
+      },
+      { headers: this.getAnonymousHeaders() },
+    );
+  }
+
+  verifyEmailChange(payload: EmailChangeVerificationPayload): Observable<{ mensagem?: string }> {
+    return this.http.post<{ mensagem?: string }>(
+      this.AUTH_CMS_URL,
+      {
+        action: 'verify-email-change',
+        tokenHash: payload.tokenHash,
       },
       { headers: this.getAnonymousHeaders() },
     );

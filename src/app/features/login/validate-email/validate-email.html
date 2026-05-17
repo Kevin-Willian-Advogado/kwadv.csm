@@ -1,0 +1,35 @@
+<main class="flex min-h-screen w-full items-center justify-center bg-[#E6E8E9] px-4">
+  <section class="w-full max-w-[25rem] rounded-3xl bg-white p-8 shadow-2xl">
+    <div class="flex flex-col items-center gap-6 text-center">
+      <img src="/logos/logo-3.svg" alt="Logo" class="h-[6.25rem]">
+
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">Validacao de e-mail</h1>
+        <p class="mt-1 text-sm text-gray-500">Estamos conferindo o link recebido.</p>
+      </div>
+
+      @if (isValidating) {
+        <div class="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+          <span class="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#273F4B] animate-spin"></span>
+          <span>Validando...</span>
+        </div>
+      }
+
+      @if (feedbackMessage) {
+        <p class="w-full rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+          {{ feedbackMessage }}
+        </p>
+        <p class="text-xs text-slate-500">Voce sera direcionado para o login.</p>
+      }
+
+      @if (errorMessage) {
+        <p class="w-full rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {{ errorMessage }}
+        </p>
+        <a [routerLink]="['/login']" class="text-xs font-semibold text-[#273F4B] hover:text-[#1e323c]">
+          Voltar para o login
+        </a>
+      }
+    </div>
+  </section>
+</main>

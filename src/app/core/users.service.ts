@@ -27,6 +27,8 @@ export interface UserListItem {
   email: string;
   displayName: string;
   isActive: boolean | null;
+  pendingEmail?: string | null;
+  emailChangeValidationSent?: boolean;
 }
 
 export interface UserUpsertPayload {
@@ -61,6 +63,8 @@ interface ManageUserFunctionResponse {
       id?: string | null;
       email?: string | null;
     } | null;
+    pendingEmail?: string | null;
+    userEmailChangeValidationSent?: boolean | null;
   } | null;
   error?: string;
   erro?: string;
@@ -164,9 +168,12 @@ export class UsersService {
       displayName: payload.displayName.trim(),
       status: payload.isActive ?? true,
       isActive: payload.isActive ?? true,
-      emailChangeRedirectTo: payload.emailChangeRedirectTo ?? this.getLoginRedirectUrl(),
+      emailChangeRedirectTo: payload.emailChangeRedirectTo ?? this.getEmailChangeRedirectUrl(),
     }).pipe(
-      map((response) => this.extractUser(response.data?.publicUser, payload)),
+      map((response) => this.extractUser(response.data?.publicUser, payload, {
+        emailChangeValidationSent: response.data?.userEmailChangeValidationSent === true,
+        pendingEmail: response.data?.pendingEmail ?? null,
+      })),
       tap(() => {
         this.usersCache$ = undefined;
       }),
@@ -209,12 +216,12 @@ export class UsersService {
     return `${window.location.origin}/redefinir-senha`;
   }
 
-  private getLoginRedirectUrl(): string {
+  private getEmailChangeRedirectUrl(): string {
     if (typeof window === 'undefined' || !window.location?.origin) {
-      return 'https://admin.washingtonlopes.com/login';
+      return 'https://admin.washingtonlopes.com/validar-email';
     }
 
-    return `${window.location.origin}/login`;
+    return `${window.location.origin}/validar-email`;
   }
 
   private mapUser(row: UserLookupRow | undefined): UserListItem | null {
@@ -242,7 +249,11 @@ export class UsersService {
     };
   }
 
-  private extractUser(row: UserLookupRow | null | undefined, payload: UserUpsertPayload): UserListItem {
+  private extractUser(
+    row: UserLookupRow | null | undefined,
+    payload: UserUpsertPayload,
+    options: { pendingEmail?: string | null; emailChangeValidationSent?: boolean } = {},
+  ): UserListItem {
     const user = this.mapUser(row ?? undefined);
 
     if (!user) {
@@ -251,7 +262,8 @@ export class UsersService {
 
     const requestedEmail = payload.email.trim().toLowerCase();
     const requestedName = payload.displayName.trim();
-    const emailWasIgnored = user.email.trim().toLowerCase() !== requestedEmail;
+    const pendingEmail = this.normalizeEmail(options.pendingEmail);
+    const emailWasIgnored = user.email.trim().toLowerCase() !== requestedEmail && pendingEmail !== requestedEmail;
     const nameWasIgnored = requestedName.length > 0 && user.displayName.trim() !== requestedName;
     const statusWasIgnored = payload.isActive !== null && user.isActive !== payload.isActive;
 
@@ -259,7 +271,11 @@ export class UsersService {
       throw new Error('O Supabase aceitou a requisicao, mas devolveu o usuario sem as alteracoes.');
     }
 
-    return user;
+    return {
+      ...user,
+      pendingEmail,
+      emailChangeValidationSent: options.emailChangeValidationSent === true,
+    };
   }
 
   private inferIsActive(row: UserLookupRow): boolean | null {

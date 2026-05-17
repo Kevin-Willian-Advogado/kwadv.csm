@@ -158,14 +158,19 @@ site_url = "https://admin.washingtonlopes.com"
 additional_redirect_urls = [
   "https://admin.washingtonlopes.com/redefinir-senha",
   "https://admin.washingtonlopes.com/login",
+  "https://admin.washingtonlopes.com/validar-email",
   "http://localhost:4200/redefinir-senha",
   "http://localhost:4200/login",
+  "http://localhost:4200/validar-email",
   "http://localhost:4201/redefinir-senha",
   "http://localhost:4201/login",
+  "http://localhost:4201/validar-email",
   "http://127.0.0.1:4200/redefinir-senha",
   "http://127.0.0.1:4200/login",
+  "http://127.0.0.1:4200/validar-email",
   "http://127.0.0.1:4201/redefinir-senha",
   "http://127.0.0.1:4201/login",
+  "http://127.0.0.1:4201/validar-email",
 ]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 (1 week).
 jwt_expiry = 3600
