@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { ArticleListItem, ArticlesService } from '../../../core/articles.service';
 import { ContactMessagesService } from '../../../core/contact-messages.service';
 import { LoginService } from '../../../core/login.service';
+import { SettingsService } from '../../../core/settings.service';
 
 interface GithubWorkflowRun {
   status?: string | null;
@@ -24,6 +26,7 @@ export class Sidebar implements OnInit, OnDestroy {
   private readonly loginService = inject(LoginService);
   private readonly articlesService = inject(ArticlesService);
   private readonly contactMessagesService = inject(ContactMessagesService);
+  private readonly settingsService = inject(SettingsService);
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
   private readonly processingStatus = 0;
@@ -31,7 +34,9 @@ export class Sidebar implements OnInit, OnDestroy {
   private readonly githubActionsUrl =
     'https://api.github.com/repos/Kevin-Willian-Advogado/kwadv.page/actions/runs?per_page=10';
   private summaryIntervalId: ReturnType<typeof setInterval> | null = null;
+  private readonly settingsSubscription = new Subscription();
 
+  articlesEnabled = true;
   isLoadingArticlesSummary = true;
   isLoadingActionsSummary = true;
   articlesSummaryError = '';
@@ -41,7 +46,26 @@ export class Sidebar implements OnInit, OnDestroy {
   unreadMessagesCount = 0;
 
   ngOnInit(): void {
-    this.loadSummary();
+    this.settingsSubscription.add(
+      this.settingsService.settingsChanges$.subscribe((settings) => {
+        if (settings) {
+          this.applyArticlesEnabled(settings.articlesEnabled);
+        }
+      }),
+    );
+
+    this.settingsService.getSettings().subscribe({
+      next: (settings) => {
+        this.applyArticlesEnabled(settings.articlesEnabled);
+        this.loadSummary();
+      },
+      error: (error: unknown) => {
+        console.error('Erro ao consultar configuracoes do site:', error);
+        this.articlesEnabled = true;
+        this.loadSummary();
+      },
+    });
+
     this.summaryIntervalId = setInterval(() => {
       this.loadSummary(true);
     }, this.summaryRefreshMs);
@@ -52,6 +76,12 @@ export class Sidebar implements OnInit, OnDestroy {
       clearInterval(this.summaryIntervalId);
       this.summaryIntervalId = null;
     }
+
+    this.settingsSubscription.unsubscribe();
+  }
+
+  get homeLink(): string {
+    return this.articlesEnabled ? '/artigos' : '/configuracoes';
   }
 
   get hasProcessingArticles(): boolean {
@@ -126,9 +156,38 @@ export class Sidebar implements OnInit, OnDestroy {
   }
 
   private loadSummary(forceRefresh = false): void {
-    this.loadArticlesSummary(forceRefresh);
-    this.loadActionsSummary(forceRefresh);
+    if (this.articlesEnabled) {
+      this.loadArticlesSummary(forceRefresh);
+      this.loadActionsSummary(forceRefresh);
+    } else {
+      this.resetPublicationSummary();
+    }
+
     this.loadMessagesSummary(forceRefresh);
+  }
+
+  private applyArticlesEnabled(articlesEnabled: boolean): void {
+    const wasEnabled = this.articlesEnabled;
+
+    this.articlesEnabled = articlesEnabled;
+
+    if (!articlesEnabled) {
+      this.resetPublicationSummary();
+      return;
+    }
+
+    if (!wasEnabled) {
+      this.loadSummary(true);
+    }
+  }
+
+  private resetPublicationSummary(): void {
+    this.processingArticlesCount = 0;
+    this.runningActionsCount = 0;
+    this.articlesSummaryError = '';
+    this.actionsSummaryError = '';
+    this.isLoadingArticlesSummary = false;
+    this.isLoadingActionsSummary = false;
   }
 
   private loadArticlesSummary(forceRefresh = false): void {

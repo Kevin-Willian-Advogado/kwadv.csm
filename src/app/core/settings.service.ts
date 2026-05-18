@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, map, shareReplay, tap } from 'rxjs';
+import { BehaviorSubject, Observable, map, shareReplay, tap } from 'rxjs';
 
 import { LoginService } from './login.service';
 
@@ -85,6 +85,9 @@ export class SettingsService {
   private readonly ANON_KEY = 'sb_publishable_EREcwSKRXkRIRknqHOMh0g_FyIU7He0';
 
   private settingsCache$?: Observable<SiteSettings>;
+  private readonly settingsStateSubject = new BehaviorSubject<SiteSettings | null>(null);
+
+  readonly settingsChanges$ = this.settingsStateSubject.asObservable();
 
   constructor(
     private readonly http: HttpClient,
@@ -104,6 +107,9 @@ export class SettingsService {
       .get<SettingsFunctionResponse>(this.SETTINGS_FUNCTION_URL, { headers: this.getAuthHeaders() })
       .pipe(
         map((response) => this.mapSettings(response.data)),
+        tap((settings) => {
+          this.settingsStateSubject.next(settings);
+        }),
         shareReplay({ bufferSize: 1, refCount: true }),
       );
 
@@ -118,6 +124,7 @@ export class SettingsService {
       .pipe(
         map((response) => this.mapSettings(response.data)),
         tap((settings) => {
+          this.settingsStateSubject.next(settings);
           this.settingsCache$ = undefined;
           this.settingsCache$ = new Observable<SiteSettings>((subscriber) => {
             subscriber.next(settings);
@@ -145,6 +152,7 @@ export class SettingsService {
           error: this.parseNullableText(response.emailTest?.error),
         })),
         tap(({ settings }) => {
+          this.settingsStateSubject.next(settings);
           this.settingsCache$ = undefined;
           this.settingsCache$ = new Observable<SiteSettings>((subscriber) => {
             subscriber.next(settings);

@@ -850,15 +850,15 @@ export class Settings implements OnInit {
   private buildConfirmationConfig(section: SettingsSaveSection): ActionConfirmationModalConfig {
     if (section === 'articles') {
       return {
-        title: this.pendingArticlesEnabled ? 'Ativar blog?' : 'Desativar blog?',
+        title: this.pendingArticlesEnabled ? 'Ativar modulo editorial?' : 'Desativar modulo editorial?',
         description: this.pendingArticlesEnabled
-          ? 'Ao confirmar, os artigos ficam marcados como ativos para consumo do site.'
-          : 'Ao confirmar, os artigos ficam marcados como inativos para consumo do site.',
-        confirmLabel: this.pendingArticlesEnabled ? 'Ativar blog' : 'Desativar blog',
+          ? 'Ao confirmar, o conteudo editorial volta a ser consumido pelo site.'
+          : 'Ao confirmar, o conteudo editorial deixa de ser consumido pelo site.',
+        confirmLabel: this.pendingArticlesEnabled ? 'Ativar modulo' : 'Desativar modulo',
         highlights: [
           this.pendingArticlesEnabled
-            ? 'O blog sera salvo como ativo imediatamente.'
-            : 'O blog sera salvo como inativo imediatamente.',
+            ? 'O modulo sera salvo como ativo imediatamente.'
+            : 'O modulo sera salvo como inativo imediatamente.',
         ],
       };
     }
@@ -887,7 +887,7 @@ export class Settings implements OnInit {
 
   private getSectionLabel(section: SettingsSaveSection | null): string {
     if (section === 'articles') {
-      return 'Configuracoes de artigos';
+      return 'Configuracoes editoriais';
     }
 
     if (section === 'contact') {

@@ -1,6 +1,6 @@
 <aside class="fixed top-0 left-0 z-50 flex h-screen w-64 flex-col border-r border-slate-200 bg-white shadow-sm">
     <div class="flex h-28 items-center justify-center border-b border-slate-200 px-5 py-4">
-        <a [routerLink]="['/artigos']" class="inline-flex items-center justify-center rounded-lg focus:outline-none focus:ring-2 focus:ring-(--color-1)/30" aria-label="Ir para a pagina principal">
+        <a [routerLink]="[homeLink]" class="inline-flex items-center justify-center rounded-lg focus:outline-none focus:ring-2 focus:ring-(--color-1)/30" aria-label="Ir para a pagina principal">
             <img src="/logos/logo-3.svg" alt="Kevin Willian Advogado" class="h-20 w-auto max-w-full object-contain" />
         </a>
     </div>
@@ -8,33 +8,35 @@
     <nav class="flex-1 space-y-1 px-3 py-5">
         <p class="px-3 pb-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">Menu</p>
 
-        <a [routerLink]="['/artigos']" routerLinkActive="bg-(--color-2) text-(--color-1)" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1)">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z" />
-            </svg>
-            Artigos
-        </a>
+        @if (articlesEnabled) {
+            <a [routerLink]="['/artigos']" routerLinkActive="bg-(--color-2) text-(--color-1)" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1)">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                    <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z" />
+                </svg>
+                Artigos
+            </a>
 
-        <a [routerLink]="['/autores']" routerLinkActive="bg-(--color-2) text-(--color-1)" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1)">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>
-            Autores
-        </a>
+            <a [routerLink]="['/autores']" routerLinkActive="bg-(--color-2) text-(--color-1)" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1)">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                Autores
+            </a>
 
-        <a [routerLink]="['/categorias']" routerLinkActive="bg-(--color-2) text-(--color-1)" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1)">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect width="7" height="7" x="3" y="3" rx="1" />
-                <rect width="7" height="7" x="14" y="3" rx="1" />
-                <rect width="7" height="7" x="14" y="14" rx="1" />
-                <rect width="7" height="7" x="3" y="14" rx="1" />
-            </svg>
-            Categorias
-        </a>
+            <a [routerLink]="['/categorias']" routerLinkActive="bg-(--color-2) text-(--color-1)" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1)">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect width="7" height="7" x="3" y="3" rx="1" />
+                    <rect width="7" height="7" x="14" y="3" rx="1" />
+                    <rect width="7" height="7" x="14" y="14" rx="1" />
+                    <rect width="7" height="7" x="3" y="14" rx="1" />
+                </svg>
+                Categorias
+            </a>
+        }
 
         <a [routerLink]="['/mensagens']" routerLinkActive="bg-(--color-2) text-(--color-1)" class="flex items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1)">
             <span class="flex min-w-0 items-center gap-3">
@@ -60,19 +62,21 @@
         </a>
     </nav>
 
-    <div class="mx-3 mb-3 rounded-xl border border-orange-300/50 bg-orange-100/60 px-3 py-3 text-orange-950 shadow-sm">
-        <div class="flex items-start gap-2.5">
-            <span [class]="summaryDotClasses"></span>
+    @if (articlesEnabled) {
+        <div class="mx-3 mb-3 rounded-xl border border-orange-300/50 bg-orange-100/60 px-3 py-3 text-orange-950 shadow-sm">
+            <div class="flex items-start gap-2.5">
+                <span [class]="summaryDotClasses"></span>
 
-            <div class="min-w-0 flex-1">
-                <p class="text-[10px] font-bold uppercase tracking-widest text-orange-700/80">Atualizacoes</p>
-                <div class="mt-2 space-y-1.5">
-                    <p class="text-sm font-bold leading-snug text-orange-950">{{ processingArticlesLabel }}</p>
-                    <p class="text-xs font-semibold leading-5 text-orange-900/80">{{ actionsStatusLabel }}</p>
+                <div class="min-w-0 flex-1">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-orange-700/80">Atualizacoes</p>
+                    <div class="mt-2 space-y-1.5">
+                        <p class="text-sm font-bold leading-snug text-orange-950">{{ processingArticlesLabel }}</p>
+                        <p class="text-xs font-semibold leading-5 text-orange-900/80">{{ actionsStatusLabel }}</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
 
     <div class="border-t border-slate-200 p-3">
         <a [routerLink]="['/configuracoes']" routerLinkActive="bg-(--color-2) text-(--color-1)" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1)">

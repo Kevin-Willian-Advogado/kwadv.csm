@@ -9,11 +9,11 @@ import { Subscription, filter } from 'rxjs';
   styleUrl: './topbar.css',
 })
 export class Topbar implements OnDestroy {
-  pageTitle = 'Artigos';
-  pageDescription = 'Gerencie as publicacoes do portal juridico.';
-  primaryActionLabel = 'Novo artigo';
-  primaryActionLink = '/artigos/novo';
-  showPrimaryAction = true;
+  pageTitle = 'Painel';
+  pageDescription = 'Gerencie o site.';
+  primaryActionLabel = '';
+  primaryActionLink = '/configuracoes';
+  showPrimaryAction = false;
 
   private readonly navigationSubscription: Subscription;
 

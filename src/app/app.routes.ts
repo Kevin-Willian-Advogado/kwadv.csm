@@ -1,6 +1,12 @@
 import { Routes } from '@angular/router';
 
-import { authChildGuard, authGuard, guestGuard } from './core/auth.guard';
+import {
+  articlesFeatureGuard,
+  articlesHomeMatchGuard,
+  authChildGuard,
+  authGuard,
+  guestGuard,
+} from './core/auth.guard';
 
 const loadLayout = () => import('./layout/layout/layout').then((m) => m.Layout);
 const loadArticlesList = () => import('./features/articles/pages/articles-list/articles-list').then((m) => m.ArticlesList);
@@ -17,7 +23,13 @@ const loadValidateEmail = () => import('./features/login/validate-email/validate
 export const routes: Routes = [
   {
     path: '',
+    canMatch: [articlesHomeMatchGuard],
     redirectTo: 'artigos',
+    pathMatch: 'full',
+  },
+  {
+    path: '',
+    redirectTo: 'configuracoes',
     pathMatch: 'full',
   },
   {
@@ -35,12 +47,12 @@ export const routes: Routes = [
   },
   {
     path: 'artigos/novo',
-    canActivate: [authGuard],
+    canActivate: [authGuard, articlesFeatureGuard],
     loadComponent: loadArticleDetail,
   },
   {
     path: 'artigos/:slug',
-    canActivate: [authGuard],
+    canActivate: [authGuard, articlesFeatureGuard],
     loadComponent: loadArticleDetail,
   },
   {
@@ -60,30 +72,37 @@ export const routes: Routes = [
     children: [
       {
         path: 'artigos',
+        canActivate: [articlesFeatureGuard],
         loadComponent: loadArticlesList,
       },
       {
         path: 'autores/novo',
+        canActivate: [articlesFeatureGuard],
         loadComponent: loadAuthorList,
       },
       {
         path: 'autores/:id',
+        canActivate: [articlesFeatureGuard],
         loadComponent: loadAuthorList,
       },
       {
         path: 'autores',
+        canActivate: [articlesFeatureGuard],
         loadComponent: loadAuthorList,
       },
       {
         path: 'categorias/nova',
+        canActivate: [articlesFeatureGuard],
         loadComponent: loadCategoryList,
       },
       {
         path: 'categorias/:id',
+        canActivate: [articlesFeatureGuard],
         loadComponent: loadCategoryList,
       },
       {
         path: 'categorias',
+        canActivate: [articlesFeatureGuard],
         loadComponent: loadCategoryList,
       },
       {
@@ -110,6 +129,11 @@ export const routes: Routes = [
   },
   {
     path: '**',
+    canMatch: [articlesHomeMatchGuard],
     redirectTo: 'artigos',
+  },
+  {
+    path: '**',
+    redirectTo: 'configuracoes',
   },
 ];
