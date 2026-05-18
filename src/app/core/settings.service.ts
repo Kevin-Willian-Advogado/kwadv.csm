@@ -192,7 +192,7 @@ export class SettingsService {
         ? raw.contactNotificationCcRecipients.filter((email): email is string => typeof email === 'string')
         : [],
       emailProvider: this.parseEmailProvider(raw?.emailProvider),
-      emailFromName: this.parseText(raw?.emailFromName, 'KW Advocacia'),
+      emailFromName: this.parseText(raw?.emailFromName, 'Kevin Willian Advogado'),
       emailFromAddress: this.parseText(raw?.emailFromAddress, 'washingtonlopes2003@gmail.com'),
       emailReplyToEmail: this.parseText(raw?.emailReplyToEmail),
       emailSmtpHost: this.parseText(raw?.emailSmtpHost),

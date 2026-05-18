@@ -32,6 +32,7 @@ export class ArticleTextEditor implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('editorElement') private editorElement?: ElementRef<HTMLElement>;
 
   editor: Editor | null = null;
+  readonly insertToolsDisabled = true;
 
   constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
 
@@ -94,7 +95,7 @@ export class ArticleTextEditor implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   addLink(): void {
-    if (!this.editor) {
+    if (!this.editor || this.insertToolsDisabled) {
       return;
     }
 
@@ -113,7 +114,7 @@ export class ArticleTextEditor implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   addImage(): void {
-    if (!this.editor) {
+    if (!this.editor || this.insertToolsDisabled) {
       return;
     }
 

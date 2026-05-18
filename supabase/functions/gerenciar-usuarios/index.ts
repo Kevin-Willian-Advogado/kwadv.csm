@@ -85,7 +85,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const authPayload = requireAuthenticatedRequest(req)
+    const authPayload = await requireAuthenticatedRequest(req)
     const body = await readRequestBody(req)
     const supabase = createAdminClient()
     const actorId = await resolveActorId(supabase, authPayload)
@@ -222,7 +222,7 @@ async function sendUserDefinitionEmail(
 
     await sendEmail({
       fromEmail: resolveUserCreationSenderEmail(settings, emailConfig),
-      fromName: normalizeText(emailConfig.fromName) ?? 'KW Advocacia',
+      fromName: normalizeText(emailConfig.fromName) ?? 'Kevin Willian Advogado',
       to: [email],
       subject: 'Valide seu e-mail e defina sua senha',
       html: renderUserDefinitionEmail(displayName, actionLink),
@@ -317,7 +317,7 @@ async function sendUserEmailChangeValidationEmail(
 
     await sendEmail({
       fromEmail: resolveEmailChangeSenderEmail(settings, emailConfig),
-      fromName: normalizeText(emailConfig.fromName) ?? 'KW Advocacia',
+      fromName: normalizeText(emailConfig.fromName) ?? 'Kevin Willian Advogado',
       to: [newEmail],
       subject: 'Validacao de novo e-mail',
       html: renderUserEmailChangeValidationEmail(displayName, previousEmail, newEmail, actionLink),
@@ -829,7 +829,7 @@ async function getSiteSettings(supabase: SupabaseClient): Promise<SiteSettingsRo
 function buildEmailDeliveryConfig(settings: SiteSettingsRow): EmailDeliveryConfig {
   return {
     provider: normalizeEmailProvider(settings.email_provider),
-    fromName: normalizeText(settings.email_from_name) ?? 'KW Advocacia',
+    fromName: normalizeText(settings.email_from_name) ?? 'Kevin Willian Advogado',
     fromEmail: normalizeEmail(settings.email_from_address) ??
       normalizeEmail(settings.user_validation_sender_email) ??
       normalizeEmail(settings.email_change_sender_email) ??
@@ -1137,6 +1137,44 @@ function createAdminClient(): SupabaseClient {
   })
 }
 
+function createUserScopedClient(accessToken: string): SupabaseClient {
+  return createClient(getSupabaseUrl(), getSupabaseAnonKey(), {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+    global: {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  })
+}
+
+function getSupabaseUrl(): string {
+  const supabaseUrl = Deno.env.get('SUPABASE_URL')?.trim() ?? ''
+
+  if (!supabaseUrl) {
+    throw new RequestError('Variavel SUPABASE_URL e obrigatoria.', 500)
+  }
+
+  return supabaseUrl
+}
+
+function getSupabaseAnonKey(): string {
+  const anonKey =
+    Deno.env.get('SUPABASE_ANON_KEY')?.trim() ??
+    Deno.env.get('SUPABASE_PUBLISHABLE_KEY')?.trim() ??
+    Deno.env.get('ANON_KEY')?.trim() ??
+    ''
+
+  if (!anonKey) {
+    throw new RequestError('Variavel SUPABASE_ANON_KEY e obrigatoria.', 500)
+  }
+
+  return anonKey
+}
+
 async function resolveActorId(supabase: SupabaseClient, payload: JwtPayload): Promise<number> {
   const email = normalizeEmail(payload.email)
   if (!email) {
@@ -1165,32 +1203,28 @@ async function readRequestBody(req: Request): Promise<ManageUserRequest> {
   }
 }
 
-function requireAuthenticatedRequest(req: Request): JwtPayload {
-  const payload = decodeJwtPayload(req.headers.get('authorization'))
-  const role = normalizeText(payload?.role)
+async function requireAuthenticatedRequest(req: Request): Promise<JwtPayload> {
+  const accessToken = extractBearerToken(req.headers.get('authorization'))
 
-  if (role !== 'authenticated') {
+  if (!accessToken) {
     throw new RequestError('Sessao autenticada obrigatoria para gerenciar usuarios.', 401)
   }
 
-  return payload ?? {}
+  const client = createUserScopedClient(accessToken)
+  const { data, error } = await client.auth.getUser()
+
+  if (error || !data.user) {
+    throw new RequestError('Sessao autenticada obrigatoria para gerenciar usuarios.', 401)
+  }
+
+  return {
+    role: 'authenticated',
+    email: data.user.email,
+  }
 }
 
-function decodeJwtPayload(authorizationHeader: string | null): JwtPayload | null {
-  const token = authorizationHeader?.replace(/^Bearer\s+/i, '').trim() ?? ''
-  const [, payload] = token.split('.')
-
-  if (!payload) {
-    return null
-  }
-
-  try {
-    const base64 = payload.replace(/-/g, '+').replace(/_/g, '/')
-    const paddedBase64 = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=')
-    return JSON.parse(atob(paddedBase64)) as JwtPayload
-  } catch {
-    return null
-  }
+function extractBearerToken(authorizationHeader: string | null): string {
+  return authorizationHeader?.replace(/^Bearer\s+/i, '').trim() ?? ''
 }
 
 function jsonResponse(payload: Record<string, unknown>, status = 200): Response {

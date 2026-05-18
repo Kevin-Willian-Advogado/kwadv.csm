@@ -89,11 +89,6 @@ export class ArticleForm implements OnChanges {
     this.selectCategory(selectedCategoryId);
   }
 
-  onCoverImageUrlChange(value: string): void {
-    this.formData.coverImageUrl = value.trim();
-    this.emitChange();
-  }
-
   onCoverImageFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement | null;
     const file = input?.files?.[0];

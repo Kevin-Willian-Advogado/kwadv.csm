@@ -1,59 +1,72 @@
-# KwadvCsm
+# kwadv.csm
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.8.
+CMS administrativo do site Kevin Willian Advogado, construido com Angular 20 e Supabase.
 
-## Development server
+## Requisitos
 
-To start a local development server, run:
+- Node.js 22
+- npm
+- Supabase CLI 2.x para migrations e deploy de Edge Functions
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Comandos
 
 ```bash
-ng generate component component-name
+npm ci
+npm start
+npm run build
+npm test -- --watch=false --browsers=ChromeHeadless
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Estrutura
+
+- `src/app/features`: telas do CMS.
+- `src/app/core`: servicos HTTP usados pelo Angular.
+- `supabase/functions`: Edge Functions do Auth, usuarios, configuracoes, mensagens e publicacao.
+- `supabase/migrations`: historico de schema, Storage e defaults.
+- `.github/workflows/deploy-pages.yml`: build e deploy do CMS no GitHub Pages.
+
+## Supabase
+
+O CMS usa a publishable key no navegador e envia o token do usuario autenticado para REST, Storage e Edge Functions. Segredos como `SUPABASE_SERVICE_ROLE_KEY`, SMTP, criptografia e `GITHUB_TOKEN` ficam apenas no Supabase/GitHub.
+
+Para aplicar schema em ambiente vinculado:
 
 ```bash
-ng generate --help
+npx supabase db push --dry-run
+npx supabase db push
 ```
 
-## Building
-
-To build the project run:
+Para publicar a Edge Function de rebuild:
 
 ```bash
-ng build
+npx supabase functions deploy publicar-artigo --project-ref wwwntzwmvjvivputmlqg
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Build e deploy
 
-## Running unit tests
+O deploy do CMS roda em push na `main`. O workflow gera `dist/kwadv.csm/browser`, cria entrypoints de rotas SPA e publica no GitHub Pages.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+O fluxo de publicacao de artigos chama `supabase/functions/publicar-artigo`, que valida a sessao no Supabase Auth e dispara o workflow `deploy-pages.yml` do repositorio `kwadv.page`.
+
+Variaveis esperadas na Edge Function:
+
+- `GITHUB_TOKEN` com permissao para `actions:write` no repo `kwadv.page`.
+- `GITHUB_OWNER`, `GITHUB_REPO`, `GITHUB_WORKFLOW_ID` e `GITHUB_REF` opcionais.
+- `SUPABASE_URL` e `SUPABASE_ANON_KEY` ou `SUPABASE_PUBLISHABLE_KEY`.
+
+## Validacao
+
+Antes de subir mudancas, rode:
 
 ```bash
-ng test
+npm run build
+npm test -- --watch=false --browsers=ChromeHeadless
+npm audit --audit-level=high
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+Tambem revise se nao ha arquivos gerados versionados:
 
 ```bash
-ng e2e
+git status --short
+git ls-files | rg "^(dist|node_modules|\\.angular|out-tsc|coverage|\\.env)"
 ```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

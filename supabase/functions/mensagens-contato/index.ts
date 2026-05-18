@@ -300,7 +300,7 @@ async function deliverContactEmails(
   const senderEmail =
     normalizeEmail(message.notification_sender_email) ??
     fallbackRouting.notificationSenderEmail
-  const senderName = normalizeText(emailConfig.fromName) ?? normalizeText(settings.email_sender_name) ?? 'KW Advocacia'
+  const senderName = normalizeText(emailConfig.fromName) ?? normalizeText(settings.email_sender_name) ?? 'Kevin Willian Advogado'
   const notificationRecipients = normalizeRecipients(message.notification_recipient_emails).length > 0
     ? normalizeRecipients(message.notification_recipient_emails)
     : fallbackRouting.notificationRecipients
@@ -428,7 +428,7 @@ function buildEmailDeliveryConfig(settings: SiteSettingsRow): EmailDeliveryConfi
     provider: normalizeEmailProvider(settings.email_provider),
     fromName: normalizeText(settings.email_from_name) ??
       normalizeText(settings.email_sender_name) ??
-      'KW Advocacia',
+      'Kevin Willian Advogado',
     fromEmail: normalizeEmail(settings.email_from_address) ??
       normalizeEmail(settings.contact_notification_sender_email) ??
       normalizeEmail(settings.email_sender_address) ??

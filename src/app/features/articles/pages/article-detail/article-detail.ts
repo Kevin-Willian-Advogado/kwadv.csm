@@ -415,8 +415,11 @@ export class ArticleDetail implements OnInit, OnDestroy {
       errors.slug = 'Nao foi possivel validar a disponibilidade do slug.';
     }
 
-    if (!this.article.coverImageUrl.trim()) {
+    const coverImageUrl = this.article.coverImageUrl.trim();
+    if (!coverImageUrl) {
       errors.coverImageUrl = 'Informe uma capa para o artigo.';
+    } else if (!this.imageStorageService.isArticleCoverImageUrl(coverImageUrl)) {
+      errors.coverImageUrl = 'Use uma capa enviada pelo Storage do CMS.';
     }
 
     if (!this.article.metaDescription.trim()) {

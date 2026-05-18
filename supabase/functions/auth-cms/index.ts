@@ -174,7 +174,7 @@ async function requestPasswordReset(adminClient: SupabaseClient, body: AuthCmsRe
     const emailConfig = buildEmailDeliveryConfig(settings)
     await sendEmail({
       fromEmail: resolvePasswordRecoverySenderEmail(settings, emailConfig),
-      fromName: normalizeText(emailConfig.fromName) ?? 'KW Advocacia',
+      fromName: normalizeText(emailConfig.fromName) ?? 'Kevin Willian Advogado',
       to: [email],
       subject: 'Recuperacao de senha',
       html: renderPasswordRecoveryEmail(publicUser, actionLink),
@@ -203,7 +203,7 @@ async function getSiteSettings(supabase: SupabaseClient): Promise<SiteSettingsRo
 function buildEmailDeliveryConfig(settings: SiteSettingsRow): EmailDeliveryConfig {
   return {
     provider: normalizeEmailProvider(settings.email_provider),
-    fromName: normalizeText(settings.email_from_name) ?? 'KW Advocacia',
+    fromName: normalizeText(settings.email_from_name) ?? 'Kevin Willian Advogado',
     fromEmail: normalizeEmail(settings.email_from_address) ??
       normalizeEmail(settings.password_recovery_sender_email) ??
       'washingtonlopes2003@gmail.com',

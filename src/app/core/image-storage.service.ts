@@ -67,6 +67,11 @@ export class ImageStorageService {
     );
   }
 
+  isArticleCoverImageUrl(imageUrl: string): boolean {
+    const storagePath = this.extractStoragePathFromUrl(imageUrl);
+    return storagePath?.startsWith('articles/') === true && storagePath.includes('/cover/');
+  }
+
   private getUploadHeaders(file: File): HttpHeaders {
     return this.getAuthHeaders()
       .set('Cache-Control', '3600')

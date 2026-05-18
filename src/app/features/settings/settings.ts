@@ -47,10 +47,10 @@ export class Settings implements OnInit {
     contactNotificationRecipients: ['', [Validators.maxLength(1200), recipientsValidator(true)]],
     contactNotificationCcRecipients: ['', [Validators.maxLength(1200), recipientsValidator(false)]],
     emailProvider: ['disabled' as EmailProvider],
-    emailFromName: ['KW Advocacia', [Validators.required, Validators.maxLength(120)]],
+    emailFromName: ['Kevin Willian Advogado', [Validators.required, Validators.maxLength(120)]],
     emailFromAddress: ['', [Validators.required, Validators.email, Validators.maxLength(180)]],
     emailReplyToEmail: ['', [Validators.email, Validators.maxLength(180)]],
-    emailSmtpHost: ['', [Validators.maxLength(180)]],
+    emailSmtpHost: ['', [Validators.maxLength(180), smtpHostValidator]],
     emailSmtpPort: [587, [Validators.required, Validators.min(1), Validators.max(65535)]],
     emailSmtpSecurity: ['starttls' as SmtpSecurity],
     emailSmtpUsername: ['', [Validators.maxLength(180)]],
@@ -273,7 +273,66 @@ export class Settings implements OnInit {
     this.isEmailPasswordVisible = !this.isEmailPasswordVisible;
   }
 
+  formatContactPhoneInput(): void {
+    const control = this.form.controls.contactPhoneWhatsapp;
+    const formattedValue = formatBrazilianPhone(control.value);
+
+    if (formattedValue !== control.value) {
+      control.setValue(formattedValue, { emitEvent: false });
+    }
+  }
+
+  normalizeInstagramInput(): void {
+    const control = this.form.controls.instagramUrl;
+    const normalizedValue = normalizeInstagramValue(control.value);
+
+    if (normalizedValue !== control.value) {
+      control.setValue(normalizedValue, { emitEvent: false });
+    }
+  }
+
+  normalizeLinkedinInput(): void {
+    const control = this.form.controls.linkedinUrl;
+    const normalizedValue = normalizeUrlValue(control.value);
+
+    if (normalizedValue !== control.value) {
+      control.setValue(normalizedValue, { emitEvent: false });
+    }
+  }
+
+  normalizeEmailControl(
+    controlName:
+      | 'contactEmail'
+      | 'emailFromAddress'
+      | 'emailReplyToEmail'
+      | 'emailTestRecipient'
+      | 'passwordRecoverySenderEmail'
+      | 'userValidationSenderEmail'
+      | 'emailChangeSenderEmail'
+      | 'contactFormSenderEmail',
+  ): void {
+    const control = this.form.controls[controlName];
+    const normalizedValue = control.value.trim().toLowerCase();
+
+    if (normalizedValue !== control.value) {
+      control.setValue(normalizedValue, { emitEvent: false });
+    }
+  }
+
+  normalizeRecipientsControl(
+    controlName: 'contactNotificationRecipients' | 'contactNotificationCcRecipients',
+  ): void {
+    const control = this.form.controls[controlName];
+    const normalizedValue = this.parseRecipients(control.value).join('\n');
+
+    if (normalizedValue !== control.value) {
+      control.setValue(normalizedValue, { emitEvent: false });
+    }
+  }
+
   syncKnownProviderSender(): void {
+    this.normalizeEmailControl('emailFromAddress');
+
     if (!this.usesFeatureSenderAliases) {
       this.syncUsernameWithFromAddress(true);
       this.syncFeatureSenderControlsToGlobal();
@@ -539,6 +598,11 @@ export class Settings implements OnInit {
 
   private validateSection(section: SettingsSaveSection): boolean {
     if (section === 'contact') {
+      this.formatContactPhoneInput();
+      this.normalizeEmailControl('contactEmail');
+      this.normalizeInstagramInput();
+      this.normalizeLinkedinInput();
+
       const controls: AbstractControl[] = [
         this.form.controls.contactPhoneWhatsapp,
         this.form.controls.contactEmail,
@@ -554,6 +618,16 @@ export class Settings implements OnInit {
     }
 
     if (section === 'email') {
+      this.normalizeEmailControl('emailFromAddress');
+      this.normalizeEmailControl('emailReplyToEmail');
+      this.normalizeEmailControl('emailTestRecipient');
+      this.normalizeEmailControl('passwordRecoverySenderEmail');
+      this.normalizeEmailControl('userValidationSenderEmail');
+      this.normalizeEmailControl('emailChangeSenderEmail');
+      this.normalizeEmailControl('contactFormSenderEmail');
+      this.normalizeRecipientsControl('contactNotificationRecipients');
+      this.normalizeRecipientsControl('contactNotificationCcRecipients');
+
       if (this.isEmailDisabled) {
         this.form.controls.emailProvider.markAsTouched();
         return this.form.controls.emailProvider.valid;
@@ -860,6 +934,25 @@ function phoneValidator(control: AbstractControl<string>): ValidationErrors | nu
   return /^[+()\d\s-]{8,40}$/.test(value) ? null : { phone: true };
 }
 
+function smtpHostValidator(control: AbstractControl<string>): ValidationErrors | null {
+  const value = control.value?.trim();
+  if (!value) {
+    return null;
+  }
+
+  if (/^(?=.{1,253}$)([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/.test(value)) {
+    return null;
+  }
+
+  if (/^(?:\d{1,3}\.){3}\d{1,3}$/.test(value)) {
+    return value.split('.').every((part) => Number(part) >= 0 && Number(part) <= 255)
+      ? null
+      : { host: true };
+  }
+
+  return { host: true };
+}
+
 function instagramValidator(control: AbstractControl<string>): ValidationErrors | null {
   const value = control.value?.trim();
   if (!value) {
@@ -871,6 +964,79 @@ function instagramValidator(control: AbstractControl<string>): ValidationErrors 
   }
 
   return isHttpUrl(value) ? null : { url: true };
+}
+
+function formatBrazilianPhone(value: string): string {
+  const trimmedValue = value.trim();
+  const hasLeadingPlus = trimmedValue.startsWith('+');
+  let digits = trimmedValue.replace(/\D/g, '').slice(0, 13);
+
+  if (!digits) {
+    return '';
+  }
+
+  if (hasLeadingPlus || digits.startsWith('55')) {
+    if (!digits.startsWith('55')) {
+      digits = `55${digits}`;
+    }
+
+    const country = digits.slice(0, 2);
+    const area = digits.slice(2, 4);
+    const number = digits.slice(4);
+    return formatPhoneParts(`+${country}`, area, number);
+  }
+
+  const area = digits.slice(0, 2);
+  const number = digits.slice(2);
+  return formatPhoneParts('', area, number);
+}
+
+function formatPhoneParts(country: string, area: string, number: string): string {
+  const prefix = [country, area ? `(${area}` : '']
+    .filter((part) => part.length > 0)
+    .join(' ');
+  const closedArea = area.length === 2 ? prefix.replace(`(${area}`, `(${area})`) : prefix;
+
+  if (!number) {
+    return closedArea;
+  }
+
+  const splitIndex = number.length > 8 ? 5 : 4;
+  const first = number.slice(0, splitIndex);
+  const second = number.slice(splitIndex, splitIndex + 4);
+  const formattedNumber = second ? `${first}-${second}` : first;
+
+  return [closedArea, formattedNumber].filter((part) => part.length > 0).join(' ');
+}
+
+function normalizeInstagramValue(value: string): string {
+  const normalizedValue = value.trim();
+  if (!normalizedValue) {
+    return '';
+  }
+
+  if (normalizedValue.startsWith('@') || /^https?:\/\//i.test(normalizedValue)) {
+    return normalizedValue;
+  }
+
+  if (/^(www\.)?instagram\.com\//i.test(normalizedValue)) {
+    return `https://${normalizedValue}`;
+  }
+
+  return normalizedValue;
+}
+
+function normalizeUrlValue(value: string): string {
+  const normalizedValue = value.trim();
+  if (!normalizedValue || /^https?:\/\//i.test(normalizedValue)) {
+    return normalizedValue;
+  }
+
+  if (/^(www\.)?[a-z0-9.-]+\.[a-z]{2,}/i.test(normalizedValue)) {
+    return `https://${normalizedValue}`;
+  }
+
+  return normalizedValue;
 }
 
 function urlValidator(control: AbstractControl<string>): ValidationErrors | null {

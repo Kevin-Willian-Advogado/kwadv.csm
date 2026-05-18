@@ -19,6 +19,7 @@ export class Messages implements OnInit, OnDestroy {
   private readonly contactMessagesService = inject(ContactMessagesService);
   private readonly autoRefreshIntervalMs = 30000;
   private autoRefreshSubscription?: Subscription;
+  private copiedFieldTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   messages: ContactMessage[] = [];
   selectedMessage: ContactMessage | null = null;
@@ -28,6 +29,7 @@ export class Messages implements OnInit, OnDestroy {
   errorMessage = '';
   searchTerm = '';
   filterUnread = false;
+  copiedField: 'email' | 'phone' | null = null;
 
   ngOnInit(): void {
     this.loadMessages();
@@ -36,6 +38,9 @@ export class Messages implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.autoRefreshSubscription?.unsubscribe();
+    if (this.copiedFieldTimeoutId !== null) {
+      clearTimeout(this.copiedFieldTimeoutId);
+    }
   }
 
   get visibleMessages(): ContactMessage[] {
@@ -106,7 +111,11 @@ export class Messages implements OnInit, OnDestroy {
     this.loadMessages(true);
   }
 
-  async copyToClipboard(value: string | null | undefined, event?: Event): Promise<void> {
+  async copyToClipboard(
+    value: string | null | undefined,
+    event?: Event,
+    field: 'email' | 'phone' | null = null,
+  ): Promise<void> {
     event?.stopPropagation();
 
     const text = value?.trim();
@@ -115,6 +124,7 @@ export class Messages implements OnInit, OnDestroy {
     }
 
     await navigator.clipboard.writeText(text);
+    this.showCopiedFeedback(field);
   }
 
   getStatusClasses(message: ContactMessage): string {
@@ -252,5 +262,22 @@ export class Messages implements OnInit, OnDestroy {
     }
 
     return messages.find((message) => message.id === this.selectedMessage?.id) ?? null;
+  }
+
+  private showCopiedFeedback(field: 'email' | 'phone' | null): void {
+    if (!field) {
+      return;
+    }
+
+    this.copiedField = field;
+
+    if (this.copiedFieldTimeoutId !== null) {
+      clearTimeout(this.copiedFieldTimeoutId);
+    }
+
+    this.copiedFieldTimeoutId = setTimeout(() => {
+      this.copiedField = null;
+      this.copiedFieldTimeoutId = null;
+    }, 1200);
   }
 }

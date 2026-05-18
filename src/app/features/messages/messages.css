@@ -19,3 +19,45 @@
 .messages-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
+
+.copy-button {
+  position: relative;
+  transform: translateZ(0);
+}
+
+.copy-button:not(:disabled):active {
+  transform: scale(0.94);
+}
+
+.copy-button--copied {
+  border-color: #86efac;
+  background: #ecfdf5;
+  color: #047857;
+  animation: copy-confirm 480ms ease-out;
+}
+
+.copy-button__icon {
+  animation: copy-icon-pop 240ms ease-out;
+}
+
+@keyframes copy-confirm {
+  0% {
+    box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.26);
+  }
+
+  100% {
+    box-shadow: 0 0 0 12px rgba(5, 150, 105, 0);
+  }
+}
+
+@keyframes copy-icon-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.72) rotate(-12deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}

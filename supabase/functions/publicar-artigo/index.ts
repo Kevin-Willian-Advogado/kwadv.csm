@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    requireAuthenticatedRequest(req)
+    await requireAuthenticatedRequest(req)
 
     const body = await readRequestBody(req)
     const articleId = parsePositiveInteger(body.articleId)
@@ -194,30 +194,57 @@ function normalizePublicationAction(value: unknown): ArticlePublicationAction {
   return 'publish'
 }
 
-function requireAuthenticatedRequest(req: Request): void {
-  const payload = decodeJwtPayload(req.headers.get('authorization'))
-  const role = normalizeText(payload?.['role'])
+async function requireAuthenticatedRequest(req: Request): Promise<void> {
+  const accessToken = extractBearerToken(req.headers.get('authorization'))
+  if (!accessToken) {
+    throw new RequestError('Sessao autenticada obrigatoria para acionar publicacao.', 401)
+  }
 
-  if (role !== 'authenticated') {
+  const response = await fetch(`${getSupabaseUrl()}/auth/v1/user`, {
+    headers: {
+      apikey: getSupabaseAnonKey(),
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+
+  if (!response.ok) {
+    throw new RequestError('Sessao autenticada obrigatoria para acionar publicacao.', 401)
+  }
+
+  try {
+    const payload = await response.json() as { id?: unknown }
+    if (typeof payload.id !== 'string' || !payload.id.trim()) {
+      throw new RequestError('Sessao autenticada obrigatoria para acionar publicacao.', 401)
+    }
+  } catch {
     throw new RequestError('Sessao autenticada obrigatoria para acionar publicacao.', 401)
   }
 }
 
-function decodeJwtPayload(authorizationHeader: string | null): Record<string, unknown> | null {
-  const token = authorizationHeader?.replace(/^Bearer\s+/i, '').trim() ?? ''
-  const [, payload] = token.split('.')
+function extractBearerToken(authorizationHeader: string | null): string {
+  return authorizationHeader?.replace(/^Bearer\s+/i, '').trim() ?? ''
+}
 
-  if (!payload) {
-    return null
+function getSupabaseUrl(): string {
+  const supabaseUrl = Deno.env.get('SUPABASE_URL')?.trim() ?? ''
+
+  if (!supabaseUrl) {
+    throw new RequestError('Variavel SUPABASE_URL e obrigatoria para validar a sessao.', 500)
   }
 
-  try {
-    const base64 = payload.replace(/-/g, '+').replace(/_/g, '/')
-    const paddedBase64 = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=')
-    return JSON.parse(atob(paddedBase64)) as Record<string, unknown>
-  } catch {
-    return null
+  return supabaseUrl.replace(/\/+$/g, '')
+}
+
+function getSupabaseAnonKey(): string {
+  const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')?.trim() ??
+    Deno.env.get('SUPABASE_PUBLISHABLE_KEY')?.trim() ??
+    ''
+
+  if (!supabaseAnonKey) {
+    throw new RequestError('Variavel SUPABASE_ANON_KEY e obrigatoria para validar a sessao.', 500)
   }
+
+  return supabaseAnonKey
 }
 
 function normalizeText(value: unknown): string | null {

@@ -156,7 +156,7 @@ function normalizeConfig(
 ): NormalizedEmailDeliveryConfig {
   return {
     provider: normalizeProvider(config?.provider),
-    fromName: normalizeText(config?.fromName) ?? normalizeText(options.fromName) ?? 'KW Advocacia',
+    fromName: normalizeText(config?.fromName) ?? normalizeText(options.fromName) ?? 'Kevin Willian Advogado',
     fromEmail:
       normalizeEmail(options.fromEmail) ??
       normalizeEmail(config?.fromEmail) ??
@@ -454,7 +454,7 @@ async function sendResendEmail(
   }
 
   const fromEmail = normalizeEmail(options.fromEmail) ?? normalizeEmail(config.fromEmail)
-  const fromName = normalizeText(options.fromName) ?? normalizeText(config.fromName) ?? 'KW Advocacia'
+  const fromName = normalizeText(options.fromName) ?? normalizeText(config.fromName) ?? 'Kevin Willian Advogado'
 
   if (!fromEmail) {
     return { sent: false, error: 'E-mail base de envio nao configurado.' }

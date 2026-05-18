@@ -19,7 +19,7 @@ interface BrandEmailOptions {
 }
 
 const brandLogoUrl = 'https://admin.washingtonlopes.com/logos/logo-1.svg'
-const brandName = 'Kevin Willian Advocacia'
+const brandName = 'Kevin Willian Advogado'
 
 export function renderBrandEmail(options: BrandEmailOptions): string {
   const paragraphs = (options.paragraphs ?? [])

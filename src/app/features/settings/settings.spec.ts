@@ -209,7 +209,7 @@ function buildSettings(): SiteSettings {
     contactNotificationRecipients: ['admin@example.com'],
     contactNotificationCcRecipients: [],
     emailProvider: 'gmail',
-    emailFromName: 'KW Advocacia',
+    emailFromName: 'Kevin Willian Advogado',
     emailFromAddress: 'global@example.com',
     emailReplyToEmail: 'responder@example.com',
     emailSmtpHost: 'smtp.gmail.com',

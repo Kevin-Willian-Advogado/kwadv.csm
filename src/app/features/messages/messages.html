@@ -146,15 +146,22 @@
 
                                 <button
                                     type="button"
-                                    (click)="copyToClipboard(selectedMessage.email, $event)"
-                                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1)"
+                                    (click)="copyToClipboard(selectedMessage.email, $event, 'email')"
+                                    class="copy-button inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1)"
+                                    [class.copy-button--copied]="copiedField === 'email'"
                                     title="Copiar e-mail"
                                     aria-label="Copiar e-mail"
                                 >
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                        <rect x="8" y="8" width="12" height="12" rx="2" stroke-width="2" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 4H6a2 2 0 0 0-2 2v10" />
-                                    </svg>
+                                    @if (copiedField === 'email') {
+                                        <svg class="copy-button__icon h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    } @else {
+                                        <svg class="copy-button__icon h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <rect x="8" y="8" width="12" height="12" rx="2" stroke-width="2" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 4H6a2 2 0 0 0-2 2v10" />
+                                        </svg>
+                                    }
                                 </button>
                             </div>
 
@@ -166,16 +173,23 @@
 
                                 <button
                                     type="button"
-                                    (click)="copyToClipboard(selectedMessage.phone, $event)"
+                                    (click)="copyToClipboard(selectedMessage.phone, $event, 'phone')"
                                     [disabled]="!selectedMessage.phone"
-                                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1) disabled:cursor-not-allowed disabled:opacity-40"
+                                    class="copy-button inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white text-(--color-3) transition hover:bg-slate-50 hover:text-(--color-1) disabled:cursor-not-allowed disabled:opacity-40"
+                                    [class.copy-button--copied]="copiedField === 'phone'"
                                     title="Copiar telefone"
                                     aria-label="Copiar telefone"
                                 >
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                        <rect x="8" y="8" width="12" height="12" rx="2" stroke-width="2" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 4H6a2 2 0 0 0-2 2v10" />
-                                    </svg>
+                                    @if (copiedField === 'phone') {
+                                        <svg class="copy-button__icon h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    } @else {
+                                        <svg class="copy-button__icon h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <rect x="8" y="8" width="12" height="12" rx="2" stroke-width="2" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 4H6a2 2 0 0 0-2 2v10" />
+                                        </svg>
+                                    }
                                 </button>
                             </div>
                         </div>

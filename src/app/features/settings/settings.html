@@ -87,6 +87,7 @@
                                         type="text"
                                         formControlName="contactPhoneWhatsapp"
                                         maxlength="40"
+                                        (input)="formatContactPhoneInput()"
                                         class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
                                         placeholder="+55 11 99999-9999"
                                     />
@@ -102,6 +103,7 @@
                                         type="email"
                                         formControlName="contactEmail"
                                         maxlength="180"
+                                        (blur)="normalizeEmailControl('contactEmail')"
                                         class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
                                         placeholder="contato@dominio.com"
                                     />
@@ -117,6 +119,7 @@
                                         type="text"
                                         formControlName="instagramUrl"
                                         maxlength="300"
+                                        (blur)="normalizeInstagramInput()"
                                         class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
                                         placeholder="@seuperfil ou https://instagram.com/seuperfil"
                                     />
@@ -132,6 +135,7 @@
                                         type="url"
                                         formControlName="linkedinUrl"
                                         maxlength="300"
+                                        (blur)="normalizeLinkedinInput()"
                                         class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
                                         placeholder="https://linkedin.com/in/seuperfil"
                                     />
@@ -227,6 +231,7 @@
                                     formControlName="emailFromAddress"
                                     maxlength="180"
                                     (input)="syncKnownProviderSender()"
+                                    (blur)="syncKnownProviderSender()"
                                     class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
                                 />
                                 @if (form.controls.emailFromAddress.touched && form.controls.emailFromAddress.invalid) {
@@ -245,6 +250,9 @@
                                         class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
                                         placeholder="smtp.dominio.com"
                                     />
+                                    @if (form.controls.emailSmtpHost.touched && form.controls.emailSmtpHost.invalid) {
+                                        <p class="mt-2 text-xs text-red-600">Informe um host SMTP valido.</p>
+                                    }
                                 </div>
 
                                 <div class="grid grid-cols-[1fr_9rem] gap-3">
@@ -271,6 +279,9 @@
                                             max="65535"
                                             class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
                                         />
+                                        @if (form.controls.emailSmtpPort.touched && form.controls.emailSmtpPort.invalid) {
+                                            <p class="mt-2 text-xs text-red-600">Use uma porta entre 1 e 65535.</p>
+                                        }
                                     </div>
                                 </div>
 
@@ -283,6 +294,9 @@
                                         maxlength="180"
                                         class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
                                     />
+                                    @if (form.controls.emailSmtpUsername.touched && form.controls.emailSmtpUsername.invalid) {
+                                        <p class="mt-2 text-xs text-red-600">Informe um usuario com ate 180 caracteres.</p>
+                                    }
                                 </div>
                             }
 
@@ -329,6 +343,7 @@
                                     type="email"
                                     formControlName="emailReplyToEmail"
                                     maxlength="180"
+                                    (blur)="normalizeEmailControl('emailReplyToEmail')"
                                     class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
                                 />
                                 @if (form.controls.emailReplyToEmail.touched && form.controls.emailReplyToEmail.invalid) {
@@ -339,11 +354,11 @@
                     }
 
                     @if (usesFeatureSenderAliases) {
-                    <div class="mt-6 divide-y divide-slate-100 border-y border-slate-100">
+                    <div class="mx-auto mt-6 max-w-2xl divide-y divide-slate-200 rounded-xl border border-slate-200 bg-slate-50/70 p-2">
                         <div>
                             <button
                                 type="button"
-                                class="flex w-full items-center justify-between gap-4 py-4 text-left transition hover:text-slate-700"
+                                class="flex w-full items-center justify-between gap-4 rounded-lg px-4 py-3 text-left transition hover:bg-slate-50 hover:text-slate-700"
                                 [attr.aria-expanded]="openEmailAliasFlow === 'userCreation'"
                                 (click)="toggleEmailAliasFlow('userCreation')"
                             >
@@ -357,7 +372,7 @@
                             </button>
 
                             @if (openEmailAliasFlow === 'userCreation') {
-                                <div class="grid gap-5 pb-5 md:grid-cols-2">
+                                <div class="grid gap-4 px-4 pb-4">
                                     <div>
                                         <label class="mb-2 block text-sm font-semibold text-slate-900" for="user-validation-email">Remetente</label>
                                         <input
@@ -365,6 +380,7 @@
                                             type="email"
                                             formControlName="userValidationSenderEmail"
                                             maxlength="180"
+                                            (blur)="normalizeEmailControl('userValidationSenderEmail')"
                                             placeholder="suporte@dominio.com"
                                             class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
                                         />
@@ -379,7 +395,7 @@
                         <div>
                             <button
                                 type="button"
-                                class="flex w-full items-center justify-between gap-4 py-4 text-left transition hover:text-slate-700"
+                                class="flex w-full items-center justify-between gap-4 rounded-lg px-4 py-3 text-left transition hover:bg-slate-50 hover:text-slate-700"
                                 [attr.aria-expanded]="openEmailAliasFlow === 'passwordChange'"
                                 (click)="toggleEmailAliasFlow('passwordChange')"
                             >
@@ -393,7 +409,7 @@
                             </button>
 
                             @if (openEmailAliasFlow === 'passwordChange') {
-                                <div class="grid gap-5 pb-5 md:grid-cols-2">
+                                <div class="grid gap-4 px-4 pb-4">
                                     <div>
                                         <label class="mb-2 block text-sm font-semibold text-slate-900" for="password-recovery-email">Remetente</label>
                                         <input
@@ -401,6 +417,7 @@
                                             type="email"
                                             formControlName="passwordRecoverySenderEmail"
                                             maxlength="180"
+                                            (blur)="normalizeEmailControl('passwordRecoverySenderEmail')"
                                             placeholder="no-reply@dominio.com"
                                             class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
                                         />
@@ -415,7 +432,7 @@
                         <div>
                             <button
                                 type="button"
-                                class="flex w-full items-center justify-between gap-4 py-4 text-left transition hover:text-slate-700"
+                                class="flex w-full items-center justify-between gap-4 rounded-lg px-4 py-3 text-left transition hover:bg-slate-50 hover:text-slate-700"
                                 [attr.aria-expanded]="openEmailAliasFlow === 'emailChange'"
                                 (click)="toggleEmailAliasFlow('emailChange')"
                             >
@@ -429,7 +446,7 @@
                             </button>
 
                             @if (openEmailAliasFlow === 'emailChange') {
-                                <div class="grid gap-5 pb-5 md:grid-cols-2">
+                                <div class="grid gap-4 px-4 pb-4">
                                     <div>
                                         <label class="mb-2 block text-sm font-semibold text-slate-900" for="email-change-email">Remetente</label>
                                         <input
@@ -437,6 +454,7 @@
                                             type="email"
                                             formControlName="emailChangeSenderEmail"
                                             maxlength="180"
+                                            (blur)="normalizeEmailControl('emailChangeSenderEmail')"
                                             placeholder="validacao@dominio.com"
                                             class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
                                         />
@@ -451,7 +469,7 @@
                         <div>
                             <button
                                 type="button"
-                                class="flex w-full items-center justify-between gap-4 py-4 text-left transition hover:text-slate-700"
+                                class="flex w-full items-center justify-between gap-4 rounded-lg px-4 py-3 text-left transition hover:bg-slate-50 hover:text-slate-700"
                                 [attr.aria-expanded]="openEmailAliasFlow === 'contactClient'"
                                 (click)="toggleEmailAliasFlow('contactClient')"
                             >
@@ -465,7 +483,7 @@
                             </button>
 
                             @if (openEmailAliasFlow === 'contactClient') {
-                                <div class="grid gap-5 pb-5 md:grid-cols-2">
+                                <div class="grid gap-4 px-4 pb-4">
                                     <div>
                                         <label class="mb-2 block text-sm font-semibold text-slate-900" for="contact-form-email">Remetente</label>
                                         <input
@@ -473,6 +491,7 @@
                                             type="email"
                                             formControlName="contactFormSenderEmail"
                                             maxlength="180"
+                                            (blur)="normalizeEmailControl('contactFormSenderEmail')"
                                             placeholder="contato@dominio.com"
                                             class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
                                         />
@@ -488,6 +507,7 @@
                                             formControlName="contactNotificationRecipients"
                                             rows="3"
                                             maxlength="1200"
+                                            (blur)="normalizeRecipientsControl('contactNotificationRecipients')"
                                             class="w-full resize-y rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
                                         ></textarea>
                                         @if (form.controls.contactNotificationRecipients.touched && form.controls.contactNotificationRecipients.hasError('required')) {
@@ -505,6 +525,7 @@
                                             formControlName="contactNotificationCcRecipients"
                                             rows="3"
                                             maxlength="1200"
+                                            (blur)="normalizeRecipientsControl('contactNotificationCcRecipients')"
                                             class="w-full resize-y rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-400"
                                         ></textarea>
                                         @if (form.controls.contactNotificationCcRecipients.touched && form.controls.contactNotificationCcRecipients.hasError('emailList')) {
@@ -527,6 +548,7 @@
                                         type="email"
                                         formControlName="emailTestRecipient"
                                         maxlength="180"
+                                        (blur)="normalizeEmailControl('emailTestRecipient')"
                                         class="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm text-slate-900 outline-none focus:border-slate-400"
                                         placeholder="destinatario@dominio.com"
                                     />

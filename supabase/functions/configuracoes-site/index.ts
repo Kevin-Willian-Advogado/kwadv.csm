@@ -91,7 +91,7 @@ const defaultSettings = {
   contact_email: '',
   instagram_url: '',
   linkedin_url: '',
-  email_sender_name: 'KW Advocacia',
+  email_sender_name: 'Kevin Willian Advogado',
   email_sender_address: 'washingtonlopes2003@gmail.com',
   contact_confirmation_subject: 'Recebemos seu contato',
   contact_confirmation_body: '',
@@ -104,7 +104,7 @@ const defaultSettings = {
   contact_notification_cc_recipients: ['washingtonlopes2003@gmail.com'] as string[],
   contact_notification_subject: 'Novo contato recebido pelo site',
   email_provider: 'disabled',
-  email_from_name: 'KW Advocacia',
+  email_from_name: 'Kevin Willian Advogado',
   email_from_address: 'washingtonlopes2003@gmail.com',
   email_reply_to: '',
   email_smtp_host: '',
@@ -128,7 +128,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const authPayload = requireAuthenticatedRequest(req)
+    const authPayload = await requireAuthenticatedRequest(req)
     const supabase = createAdminClient()
 
     if (req.method === 'GET') {
@@ -187,6 +187,44 @@ function createAdminClient(): SupabaseClient {
       persistSession: false,
     },
   })
+}
+
+function createUserScopedClient(accessToken: string): SupabaseClient {
+  return createClient(getSupabaseUrl(), getSupabaseAnonKey(), {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+    global: {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  })
+}
+
+function getSupabaseUrl(): string {
+  const supabaseUrl = Deno.env.get('SUPABASE_URL')?.trim() ?? ''
+
+  if (!supabaseUrl) {
+    throw new RequestError('Variavel SUPABASE_URL e obrigatoria.', 500)
+  }
+
+  return supabaseUrl
+}
+
+function getSupabaseAnonKey(): string {
+  const anonKey =
+    Deno.env.get('SUPABASE_ANON_KEY')?.trim() ??
+    Deno.env.get('SUPABASE_PUBLISHABLE_KEY')?.trim() ??
+    Deno.env.get('ANON_KEY')?.trim() ??
+    ''
+
+  if (!anonKey) {
+    throw new RequestError('Variavel SUPABASE_ANON_KEY e obrigatoria.', 500)
+  }
+
+  return anonKey
 }
 
 async function getOrCreateSettings(supabase: SupabaseClient): Promise<Record<string, unknown>> {
@@ -261,11 +299,11 @@ async function testEmailDelivery(
 
   const result = await sendTransactionalEmail({
     fromEmail: config.fromEmail ?? 'washingtonlopes2003@gmail.com',
-    fromName: config.fromName ?? 'KW Advocacia',
+    fromName: config.fromName ?? 'Kevin Willian Advogado',
     to: [recipient],
     cc: [],
     replyTo: config.replyToEmail,
-    subject: 'Teste de envio - KW Advocacia',
+    subject: 'Teste de envio - Kevin Willian Advogado',
     html: renderEmailTestHtml(),
   }, config)
 
@@ -296,7 +334,7 @@ function buildEmailDeliveryConfig(row: Record<string, unknown>): EmailDeliveryCo
     provider: normalizeEmailProvider(row['email_provider']),
     fromName: normalizeText(row['email_from_name']) ??
       normalizeText(row['email_sender_name']) ??
-      'KW Advocacia',
+      'Kevin Willian Advogado',
     fromEmail: normalizeEmail(row['email_from_address']) ??
       normalizeEmail(row['contact_notification_sender_email']) ??
       normalizeEmail(row['email_sender_address']) ??
@@ -439,7 +477,7 @@ async function buildSettingsPayload(
   }
 
   if (hasOwnProperty(body, 'emailFromName')) {
-    payload['email_from_name'] = normalizeBoundedText(body.emailFromName, 120, 'KW Advocacia')
+    payload['email_from_name'] = normalizeBoundedText(body.emailFromName, 120, 'Kevin Willian Advogado')
     payload['email_sender_name'] = payload['email_from_name']
   }
 
@@ -700,32 +738,28 @@ async function readRequestBody(req: Request): Promise<SiteSettingsRequest> {
   }
 }
 
-function requireAuthenticatedRequest(req: Request): JwtPayload {
-  const payload = decodeJwtPayload(req.headers.get('authorization'))
-  const role = normalizeText(payload?.role)
+async function requireAuthenticatedRequest(req: Request): Promise<JwtPayload> {
+  const accessToken = extractBearerToken(req.headers.get('authorization'))
 
-  if (role !== 'authenticated') {
+  if (!accessToken) {
     throw new RequestError('Sessao autenticada obrigatoria para gerenciar configuracoes.', 401)
   }
 
-  return payload ?? {}
+  const client = createUserScopedClient(accessToken)
+  const { data, error } = await client.auth.getUser()
+
+  if (error || !data.user) {
+    throw new RequestError('Sessao autenticada obrigatoria para gerenciar configuracoes.', 401)
+  }
+
+  return {
+    role: 'authenticated',
+    email: data.user.email,
+  }
 }
 
-function decodeJwtPayload(authorizationHeader: string | null): JwtPayload | null {
-  const token = authorizationHeader?.replace(/^Bearer\s+/i, '').trim() ?? ''
-  const [, payload] = token.split('.')
-
-  if (!payload) {
-    return null
-  }
-
-  try {
-    const base64 = payload.replace(/-/g, '+').replace(/_/g, '/')
-    const paddedBase64 = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=')
-    return JSON.parse(atob(paddedBase64)) as JwtPayload
-  } catch {
-    return null
-  }
+function extractBearerToken(authorizationHeader: string | null): string {
+  return authorizationHeader?.replace(/^Bearer\s+/i, '').trim() ?? ''
 }
 
 function mapSettings(row: Record<string, unknown>): Record<string, unknown> {
@@ -771,7 +805,7 @@ function mapSettings(row: Record<string, unknown>): Record<string, unknown> {
     emailProvider: provider,
     emailFromName: normalizeText(row['email_from_name']) ??
       normalizeText(row['email_sender_name']) ??
-      'KW Advocacia',
+      'Kevin Willian Advogado',
     emailFromAddress: normalizeEmail(row['email_from_address']) ??
       normalizeEmail(row['contact_notification_sender_email']) ??
       normalizeEmail(row['email_sender_address']) ??
