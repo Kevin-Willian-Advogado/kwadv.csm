@@ -11,6 +11,7 @@ import {
 import { ArticlePublicationService } from '../../../../core/article-publication.service';
 import { AuthorsService, CurrentAuthorContext } from '../../../../core/authors.service';
 import { ImageStorageService } from '../../../../core/image-storage.service';
+import { SettingsService } from '../../../../core/settings.service';
 import {
   ArticleEditorFormData,
   ArticleEditorValidationErrors,
@@ -60,6 +61,7 @@ export class ArticleDetail implements OnInit, OnDestroy {
   private readonly articlePublicationService = inject(ArticlePublicationService);
   private readonly authorsService = inject(AuthorsService);
   private readonly imageStorageService = inject(ImageStorageService);
+  private readonly settingsService = inject(SettingsService);
   private readonly destroy$ = new Subject<void>();
   private readonly slugValidation$ = new Subject<{ slug: string; articleId: number | null }>();
   private readonly fallbackUpdatedBy = 10447;
@@ -73,6 +75,7 @@ export class ArticleDetail implements OnInit, OnDestroy {
   isLoadingArticle = false;
   isLoadingCategories = false;
   isLoadingCurrentAuthor = false;
+  isLoadingSettings = false;
   isSaving = false;
   isUploadingCoverImage = false;
   isCreating = true;
@@ -84,6 +87,7 @@ export class ArticleDetail implements OnInit, OnDestroy {
   toastState: ArticleDetailToastState | null = null;
   slugValidationStatus: SlugValidationStatus = 'idle';
   slugValidationMessage = '';
+  articlesEnabled = true;
   private hasAttemptedSave = false;
   private lastValidatedSlug = '';
   private draftUploadedCoverImageUrls = new Set<string>();
@@ -92,6 +96,7 @@ export class ArticleDetail implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.listenSlugValidation();
+    this.loadArticlePublishingSettings();
     this.loadCurrentAuthorContext();
     this.loadCategories();
     this.listenRouteChanges();
@@ -106,7 +111,7 @@ export class ArticleDetail implements OnInit, OnDestroy {
   }
 
   get isLoading(): boolean {
-    return this.isLoadingArticle || this.isLoadingCategories || this.isLoadingCurrentAuthor;
+    return this.isLoadingArticle || this.isLoadingCategories || this.isLoadingCurrentAuthor || this.isLoadingSettings;
   }
 
   onSave(action: ArticleSaveAction): void {
@@ -264,6 +269,23 @@ export class ArticleDetail implements OnInit, OnDestroy {
         error: (error: unknown) => {
           console.error('Erro ao carregar categorias:', error);
           this.showErrorToast('Nao foi possivel carregar as categorias.');
+        },
+      });
+  }
+
+  private loadArticlePublishingSettings(): void {
+    this.isLoadingSettings = true;
+
+    this.settingsService
+      .getSettings()
+      .pipe(finalize(() => (this.isLoadingSettings = false)))
+      .subscribe({
+        next: (settings) => {
+          this.articlesEnabled = settings.articlesEnabled;
+        },
+        error: (error: unknown) => {
+          console.warn('Nao foi possivel carregar a configuracao de artigos:', error);
+          this.articlesEnabled = true;
         },
       });
   }
@@ -618,6 +640,10 @@ export class ArticleDetail implements OnInit, OnDestroy {
     savedArticle: ArticleEditorData,
     action: ArticleSaveAction,
   ): Observable<ArticleEditorData> {
+    if (!this.articlesEnabled) {
+      return of(savedArticle);
+    }
+
     const dispatch$ = this.shouldDispatchPublication(action)
       ? this.articlePublicationService.dispatchPublication({
           articleId: savedArticle.id,
@@ -678,6 +704,16 @@ export class ArticleDetail implements OnInit, OnDestroy {
   }
 
   private showPersistSuccessToast(action: ArticleSaveAction): void {
+    if (!this.articlesEnabled) {
+      if (action === 'publish' || action === 'unpublish') {
+        this.showSuccessToast('Artigo salvo em processamento. O build ficara pendente ate o blog ser reativado nas configuracoes.');
+        return;
+      }
+
+      this.showSuccessToast('Artigo salvo no CMS. O build do site esta bloqueado enquanto o blog estiver desativado.');
+      return;
+    }
+
     if (action === 'publish') {
       this.showPublishQueuedToast();
       return;

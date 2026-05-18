@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 
 import { Settings } from './settings';
+import { ArticlePublicationService } from '../../core/article-publication.service';
 import { SettingsService, SiteSettings, SiteSettingsPayload } from '../../core/settings.service';
 
 class FakeSettingsService {
@@ -30,19 +31,26 @@ class FakeSettingsService {
   });
 }
 
+class FakeArticlePublicationService {
+  dispatchContentRefresh = jasmine.createSpy('dispatchContentRefresh').and.returnValue(of(void 0));
+}
+
 describe('Settings e-mail configuration', () => {
   let fixture: ComponentFixture<Settings>;
   let component: Settings;
   let settingsService: FakeSettingsService;
+  let articlePublicationService: FakeArticlePublicationService;
 
   beforeEach(async () => {
     settingsService = new FakeSettingsService();
+    articlePublicationService = new FakeArticlePublicationService();
 
     await TestBed.configureTestingModule({
       imports: [Settings],
       providers: [
         provideZonelessChangeDetection(),
         { provide: SettingsService, useValue: settingsService },
+        { provide: ArticlePublicationService, useValue: articlePublicationService },
       ],
     }).compileComponents();
 

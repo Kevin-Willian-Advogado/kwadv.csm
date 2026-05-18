@@ -81,6 +81,7 @@ export class UsersService {
   private readonly SUPABASE_URL = 'https://wwwntzwmvjvivputmlqg.supabase.co';
   private readonly MANAGE_USERS_FUNCTION_URL = `${this.SUPABASE_URL}/functions/v1/gerenciar-usuarios`;
   private readonly ANON_KEY = 'sb_publishable_EREcwSKRXkRIRknqHOMh0g_FyIU7He0';
+  private readonly ROOT_USER_ID = 10447;
 
   private usersCache$?: Observable<UserListItem[]>;
 
@@ -99,11 +100,13 @@ export class UsersService {
     }
 
     this.usersCache$ = this.invokeManageUsersFunction({ acao: 'list' }).pipe(
-      map((response) =>
-        (Array.isArray(response.data?.users) ? response.data?.users : [])
+      map((response) => {
+        const users = (Array.isArray(response.data?.users) ? response.data?.users : [])
           .map((row) => this.mapUser(row))
-          .filter((user): user is UserListItem => user !== null),
-      ),
+          .filter((user): user is UserListItem => user !== null);
+
+        return this.filterRootUserForCurrentSession(users);
+      }),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
 
@@ -254,6 +257,19 @@ export class UsersService {
       displayName: displayName || 'Usuario sem nome',
       isActive: this.inferIsActive(row),
     };
+  }
+
+  private filterRootUserForCurrentSession(users: UserListItem[]): UserListItem[] {
+    const currentEmail = this.normalizeEmail(this.loginService.getCurrentUserEmail());
+    const currentUser = currentEmail
+      ? users.find((user) => this.normalizeEmail(user.email) === currentEmail)
+      : null;
+
+    if (currentUser?.id === this.ROOT_USER_ID) {
+      return users;
+    }
+
+    return users.filter((user) => user.id !== this.ROOT_USER_ID);
   }
 
   private extractUser(

@@ -68,11 +68,11 @@ export class ArticleTopbar {
   }
 
   get showSaveDraftButton(): boolean {
-    return !this.isPublished && !this.isProcessing;
+    return !this.isPublished;
   }
 
   get showPublishButton(): boolean {
-    return !this.isPublished && !this.isProcessing;
+    return !this.isPublished;
   }
 
   get showUnpublishButton(): boolean {

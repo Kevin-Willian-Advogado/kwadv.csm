@@ -4,6 +4,7 @@ import { catchError, map, Observable, of, shareReplay, switchMap, tap, throwErro
 
 import { ArticlePublicationService } from './article-publication.service';
 import { LoginService } from './login.service';
+import { SettingsService } from './settings.service';
 
 export interface ArticleEditorAuthor {
   id: number;
@@ -117,6 +118,7 @@ export class ArticlesService {
     private http: HttpClient,
     private readonly loginService: LoginService,
     private readonly articlePublicationService: ArticlePublicationService,
+    private readonly settingsService: SettingsService,
   ) {}
 
   private getAuthHeaders(): HttpHeaders {
@@ -363,19 +365,24 @@ export class ArticlesService {
   }
 
   private queueArticleRefresh(articleId: number | null): Observable<void> {
-    return this.articlePublicationService
-      .dispatchContentRefresh({
-        entityType: 'article',
-        entityId: articleId,
-        operation: 'update',
-        updatedAt: new Date().toISOString(),
-      })
-      .pipe(
-        catchError((error: unknown) => {
-          console.warn('Nao foi possivel acionar a Action apos alterar artigo:', error);
+    return this.settingsService.getSettings().pipe(
+      switchMap((settings) => {
+        if (!settings.articlesEnabled) {
           return of(void 0);
-        }),
-      );
+        }
+
+        return this.articlePublicationService.dispatchContentRefresh({
+          entityType: 'article',
+          entityId: articleId,
+          operation: 'update',
+          updatedAt: new Date().toISOString(),
+        });
+      }),
+      catchError((error: unknown) => {
+        console.warn('Nao foi possivel acionar a Action apos alterar artigo:', error);
+        return of(void 0);
+      }),
+    );
   }
 
   private extractArticleId(rows: unknown): number {

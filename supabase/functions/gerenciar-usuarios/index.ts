@@ -89,13 +89,14 @@ Deno.serve(async (req) => {
     const body = await readRequestBody(req)
     const supabase = createAdminClient()
     const actorId = await resolveActorId(supabase, authPayload)
+    const canManageRootUser = await isAuthenticatedRootUser(supabase, authPayload)
 
     if (body.acao === 'list') {
-      return await listUsers(supabase)
+      return await listUsers(supabase, canManageRootUser)
     }
 
     if (body.acao === 'get') {
-      return await getUser(supabase, body)
+      return await getUser(supabase, body, canManageRootUser)
     }
 
     if (body.acao === 'create') {
@@ -103,11 +104,11 @@ Deno.serve(async (req) => {
     }
 
     if (body.acao === 'edit') {
-      return await editUser(supabase, body, actorId)
+      return await editUser(supabase, body, actorId, canManageRootUser)
     }
 
     if (body.acao === 'delete') {
-      return await deleteUser(supabase, body)
+      return await deleteUser(supabase, body, canManageRootUser)
     }
 
     throw new RequestError("Acao invalida. Envie 'list', 'get', 'create', 'edit' ou 'delete'.")
@@ -119,11 +120,16 @@ Deno.serve(async (req) => {
   }
 })
 
-async function listUsers(supabase: SupabaseClient): Promise<Response> {
-  const { data, error } = await supabase
+async function listUsers(supabase: SupabaseClient, canManageRootUser: boolean): Promise<Response> {
+  let query = supabase
     .from('users')
     .select(publicUserProfileSelect)
-    .order('id', { ascending: true })
+
+  if (!canManageRootUser) {
+    query = query.neq('id', fallbackActorId)
+  }
+
+  const { data, error } = await query.order('id', { ascending: true })
 
   if (error) {
     throw error
@@ -136,12 +142,17 @@ async function listUsers(supabase: SupabaseClient): Promise<Response> {
   })
 }
 
-async function getUser(supabase: SupabaseClient, body: ManageUserRequest): Promise<Response> {
+async function getUser(
+  supabase: SupabaseClient,
+  body: ManageUserRequest,
+  canManageRootUser: boolean,
+): Promise<Response> {
   const publicUser = await resolvePublicUser(supabase, body, false)
+  const publicUserId = parsePositiveInteger(publicUser?.id)
 
   return jsonResponse({
     data: {
-      publicUser,
+      publicUser: publicUserId === fallbackActorId && !canManageRootUser ? null : publicUser,
     },
   })
 }
@@ -387,12 +398,17 @@ async function editUser(
   supabase: SupabaseClient,
   body: ManageUserRequest,
   actorId: number,
+  canManageRootUser: boolean,
 ): Promise<Response> {
   const publicUser = await resolvePublicUser(supabase, body, true)
   const publicUserId = parsePositiveInteger(publicUser?.id)
 
   if (!publicUser || publicUserId === null) {
     throw new RequestError('Usuario nao encontrado.', 404)
+  }
+
+  if (publicUserId === fallbackActorId && !canManageRootUser) {
+    throw new RequestError('Usuario root nao pode ser alterado por este acesso.', 403)
   }
 
   const currentEmail = requireEmail(publicUser.email)
@@ -494,8 +510,18 @@ async function editUser(
   })
 }
 
-async function deleteUser(supabase: SupabaseClient, body: ManageUserRequest): Promise<Response> {
+async function deleteUser(
+  supabase: SupabaseClient,
+  body: ManageUserRequest,
+  canManageRootUser: boolean,
+): Promise<Response> {
   const publicUser = await resolvePublicUser(supabase, body, false)
+  const publicUserId = parsePositiveInteger(publicUser?.id)
+
+  if (publicUserId === fallbackActorId && !canManageRootUser) {
+    throw new RequestError('Usuario root nao pode ser excluido por este acesso.', 403)
+  }
+
   const authUserId = await resolveAuthUserId(supabase, {
     ...body,
     authUserId: publicUser?.auth_user_id ?? body.authUserId,
@@ -512,7 +538,6 @@ async function deleteUser(supabase: SupabaseClient, body: ManageUserRequest): Pr
     }
   }
 
-  const publicUserId = parsePositiveInteger(publicUser?.id)
   if (publicUserId !== null) {
     const { error } = await supabase
       .from('users')
@@ -1192,6 +1217,25 @@ async function resolveActorId(supabase: SupabaseClient, payload: JwtPayload): Pr
   }
 
   return parsePositiveInteger(data?.id) ?? fallbackActorId
+}
+
+async function isAuthenticatedRootUser(supabase: SupabaseClient, payload: JwtPayload): Promise<boolean> {
+  const email = normalizeEmail(payload.email)
+  if (!email) {
+    return false
+  }
+
+  const { data, error } = await supabase
+    .from('users')
+    .select('id')
+    .eq('email', email)
+    .maybeSingle()
+
+  if (error) {
+    return false
+  }
+
+  return parsePositiveInteger(data?.id) === fallbackActorId
 }
 
 async function readRequestBody(req: Request): Promise<ManageUserRequest> {

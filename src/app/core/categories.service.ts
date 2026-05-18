@@ -4,6 +4,7 @@ import { catchError, map, Observable, of, shareReplay, switchMap, tap } from 'rx
 
 import { ArticlePublicationService, ContentRefreshOperation } from './article-publication.service';
 import { LoginService } from './login.service';
+import { SettingsService } from './settings.service';
 import { UsersService } from './users.service';
 
 interface CategoryLookupRow {
@@ -46,6 +47,7 @@ export class CategoriesService {
     private readonly loginService: LoginService,
     private readonly usersService: UsersService,
     private readonly articlePublicationService: ArticlePublicationService,
+    private readonly settingsService: SettingsService,
   ) {}
 
   getCategories(forceRefresh = false): Observable<CategoryListItem[]> {
@@ -150,19 +152,24 @@ export class CategoriesService {
   }
 
   private queueCategoryRefresh(operation: ContentRefreshOperation, categoryId: number | null): Observable<void> {
-    return this.articlePublicationService
-      .dispatchContentRefresh({
-        entityType: 'category',
-        entityId: categoryId,
-        operation,
-        updatedAt: new Date().toISOString(),
-      })
-      .pipe(
-        catchError((error: unknown) => {
-          console.warn('Nao foi possivel acionar a Action apos alterar categoria:', error);
+    return this.settingsService.getSettings().pipe(
+      switchMap((settings) => {
+        if (!settings.articlesEnabled) {
           return of(void 0);
-        }),
-      );
+        }
+
+        return this.articlePublicationService.dispatchContentRefresh({
+          entityType: 'category',
+          entityId: categoryId,
+          operation,
+          updatedAt: new Date().toISOString(),
+        });
+      }),
+      catchError((error: unknown) => {
+        console.warn('Nao foi possivel acionar a Action apos alterar categoria:', error);
+        return of(void 0);
+      }),
+    );
   }
 
   private getAuthHeaders(): HttpHeaders {

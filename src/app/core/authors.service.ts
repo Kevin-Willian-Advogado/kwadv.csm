@@ -4,6 +4,7 @@ import { catchError, map, Observable, of, shareReplay, switchMap, tap } from 'rx
 import { ArticleEditorAuthor } from './articles.service';
 import { ArticlePublicationService, ContentRefreshOperation } from './article-publication.service';
 import { CurrentAuthIdentity, LoginService } from './login.service';
+import { SettingsService } from './settings.service';
 import { UsersService } from './users.service';
 
 interface AuthorLookupRow {
@@ -60,6 +61,7 @@ export class AuthorsService {
     private readonly loginService: LoginService,
     private readonly usersService: UsersService,
     private readonly articlePublicationService: ArticlePublicationService,
+    private readonly settingsService: SettingsService,
   ) {}
 
   getAuthors(forceRefresh = false): Observable<ArticleEditorAuthor[]> {
@@ -197,19 +199,24 @@ export class AuthorsService {
   }
 
   private queueAuthorRefresh(operation: ContentRefreshOperation, authorId: number | null): Observable<void> {
-    return this.articlePublicationService
-      .dispatchContentRefresh({
-        entityType: 'author',
-        entityId: authorId,
-        operation,
-        updatedAt: new Date().toISOString(),
-      })
-      .pipe(
-        catchError((error: unknown) => {
-          console.warn('Nao foi possivel acionar a Action apos alterar autor:', error);
+    return this.settingsService.getSettings().pipe(
+      switchMap((settings) => {
+        if (!settings.articlesEnabled) {
           return of(void 0);
-        }),
-      );
+        }
+
+        return this.articlePublicationService.dispatchContentRefresh({
+          entityType: 'author',
+          entityId: authorId,
+          operation,
+          updatedAt: new Date().toISOString(),
+        });
+      }),
+      catchError((error: unknown) => {
+        console.warn('Nao foi possivel acionar a Action apos alterar autor:', error);
+        return of(void 0);
+      }),
+    );
   }
 
   setAuthorUserLink(authorId: number, userId: number | null): Observable<void> {

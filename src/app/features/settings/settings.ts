@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { finalize } from 'rxjs';
+import { catchError, finalize, map, of, switchMap } from 'rxjs';
 
 import {
   EmailProvider,
@@ -10,6 +10,7 @@ import {
   SiteSettingsPayload,
   SmtpSecurity,
 } from '../../core/settings.service';
+import { ArticlePublicationService } from '../../core/article-publication.service';
 import {
   ActionConfirmationModal,
   ActionConfirmationModalConfig,
@@ -33,6 +34,7 @@ type EmailProviderOption = {
 export class Settings implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly settingsService = inject(SettingsService);
+  private readonly articlePublicationService = inject(ArticlePublicationService);
 
   readonly form = this.formBuilder.nonNullable.group({
     articlesEnabled: [true],
@@ -438,15 +440,37 @@ export class Settings implements OnInit {
 
     this.settingsService
       .saveSettings(payload)
+      .pipe(
+        switchMap((settings) => {
+          if (!this.shouldQueueBuildAfterSave(section)) {
+            return of({ settings, buildQueued: false, buildAttempted: false });
+          }
+
+          return this.articlePublicationService
+            .dispatchContentRefresh({
+              entityType: 'settings',
+              entityId: 1,
+              operation: 'update',
+              updatedAt: settings.updatedAt ?? new Date().toISOString(),
+            })
+            .pipe(
+              map(() => ({ settings, buildQueued: true, buildAttempted: true })),
+              catchError((error: unknown) => {
+                console.warn('Nao foi possivel acionar a Action apos salvar configuracoes:', error);
+                return of({ settings, buildQueued: false, buildAttempted: true });
+              }),
+            );
+        }),
+      )
       .pipe(finalize(() => {
         this.isSaving = false;
       }))
       .subscribe({
-        next: (settings) => {
+        next: ({ settings, buildQueued, buildAttempted }) => {
           this.lastUpdatedAt = settings.updatedAt;
           this.loadedSettings = settings;
           this.patchForm(settings);
-          this.feedbackMessage = `${this.getSectionLabel(section)} salvas com sucesso.`;
+          this.feedbackMessage = this.getSaveFeedbackMessage(section, buildQueued, buildAttempted);
           this.form.markAsPristine();
           this.pendingSaveSection = null;
           this.pendingArticlesEnabled = null;
@@ -871,6 +895,26 @@ export class Settings implements OnInit {
     }
 
     return 'Configuracoes de e-mail';
+  }
+
+  private shouldQueueBuildAfterSave(section: SettingsSaveSection | null): boolean {
+    return section === 'articles' || section === 'contact';
+  }
+
+  private getSaveFeedbackMessage(
+    section: SettingsSaveSection | null,
+    buildQueued: boolean,
+    buildAttempted: boolean,
+  ): string {
+    const baseMessage = `${this.getSectionLabel(section)} salvas com sucesso.`;
+
+    if (!buildAttempted) {
+      return baseMessage;
+    }
+
+    return buildQueued
+      ? `${baseMessage} Action de build acionada para atualizar o site.`
+      : `${baseMessage} Nao foi possivel acionar a Action de build; acione o deploy manualmente.`;
   }
 
   private parseRecipients(value: string): string[] {

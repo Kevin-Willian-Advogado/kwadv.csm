@@ -5,7 +5,7 @@ import { Observable, map } from 'rxjs';
 import { LoginService } from './login.service';
 
 export type ArticlePublicationAction = 'publish' | 'unpublish';
-export type ContentRefreshEntityType = 'article' | 'author' | 'category';
+export type ContentRefreshEntityType = 'article' | 'author' | 'category' | 'settings';
 export type ContentRefreshOperation = 'create' | 'update' | 'delete' | 'draft';
 
 export interface ArticlePublicationRequest {
