@@ -89,6 +89,7 @@ export class Settings implements OnInit {
   isTestingEmail = false;
   isContactInfoOpen = false;
   isEmailConfigOpen = false;
+  isEmailPasswordVisible = false;
   openEmailAliasFlow: EmailAliasFlow | null = null;
   errorMessage = '';
   feedbackMessage = '';
@@ -247,6 +248,7 @@ export class Settings implements OnInit {
 
     if (provider === 'disabled') {
       this.form.controls.emailSmtpPassword.setValue('');
+      this.isEmailPasswordVisible = false;
     }
 
     if (!this.providerUsesFeatureSenderAliases(provider)) {
@@ -265,6 +267,10 @@ export class Settings implements OnInit {
 
   toggleEmailAliasFlow(flow: EmailAliasFlow): void {
     this.openEmailAliasFlow = this.openEmailAliasFlow === flow ? null : flow;
+  }
+
+  toggleEmailPasswordVisibility(): void {
+    this.isEmailPasswordVisible = !this.isEmailPasswordVisible;
   }
 
   syncKnownProviderSender(): void {

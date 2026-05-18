@@ -28,6 +28,8 @@ export class ResetPassword implements OnInit {
   tokenHash = '';
   mode: ResetPasswordMode = 'recovery';
   isSaving = false;
+  isPasswordVisible = false;
+  isPasswordConfirmationVisible = false;
   errorMessage = '';
   feedbackMessage = '';
 
@@ -74,6 +76,14 @@ export class ResetPassword implements OnInit {
 
   get passwordsDoNotMatch(): boolean {
     return this.form.controls.password.value.trim() !== this.form.controls.passwordConfirmation.value.trim();
+  }
+
+  togglePasswordVisibility(): void {
+    this.isPasswordVisible = !this.isPasswordVisible;
+  }
+
+  togglePasswordConfirmationVisibility(): void {
+    this.isPasswordConfirmationVisible = !this.isPasswordConfirmationVisible;
   }
 
   updatePassword(): void {

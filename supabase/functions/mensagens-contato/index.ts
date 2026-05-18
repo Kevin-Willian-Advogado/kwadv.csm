@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js@2'
+import { renderBrandEmail } from '../_shared/brand-email.ts'
 import { sendTransactionalEmail, type EmailDeliveryConfig, type EmailProvider, type SmtpSecurity } from '../_shared/email-delivery.ts'
 
 type MessageStatus = 'unread' | 'read' | 'archived'
@@ -260,7 +261,7 @@ function buildContactMessagePayload(
     name: requireBoundedText(body.name, 'Informe seu nome.', 160),
     email: requireEmail(body.email),
     phone: requirePhone(body.phone),
-    message: requireBoundedText(body.message, 'Informe a mensagem.', 4000),
+    message: requireBoundedText(body.message, 'Informe a mensagem.', 1000),
     status: 'unread',
     confirmation_sender_email: emailRouting.confirmationSenderEmail,
     confirmation_recipient_email: emailRouting.confirmationRecipientEmail,
@@ -347,34 +348,29 @@ async function sendEmail(options: {
 }
 
 function renderConfirmationEmail(message: ContactMessageRow): string {
-  return `
-    <div style="font-family:Arial,sans-serif;background:#f8fafc;padding:24px;color:#1f2937">
-      <div style="max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:14px;padding:28px">
-        <h1 style="margin:0 0 14px;color:#273F4B;font-size:22px">Recebemos seu contato</h1>
-        <p style="margin:0 0 12px;line-height:1.6">Ola, ${escapeHtml(normalizeText(message.name) ?? 'tudo bem')}.</p>
-        <p style="margin:0 0 12px;line-height:1.6">Sua mensagem foi registrada e sera analisada pela equipe juridica.</p>
-        <p style="margin:0;line-height:1.6;color:#475569">Em breve retornaremos pelo e-mail ou telefone informado.</p>
-      </div>
-    </div>
-  `
+  return renderBrandEmail({
+    title: 'Recebemos seu contato',
+    greeting: `Ola, ${normalizeText(message.name) ?? 'tudo bem'}.`,
+    paragraphs: [
+      'Sua mensagem foi registrada e sera analisada pela equipe juridica.',
+      'Em breve retornaremos pelo e-mail ou telefone informado.',
+    ],
+  })
 }
 
 function renderNotificationEmail(message: ContactMessageRow): string {
-  return `
-    <div style="font-family:Arial,sans-serif;background:#f8fafc;padding:24px;color:#1f2937">
-      <div style="max-width:640px;margin:0 auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:14px;padding:28px">
-        <h1 style="margin:0 0 14px;color:#273F4B;font-size:22px">Novo contato recebido</h1>
-        <p style="margin:0 0 16px;color:#475569">Uma nova mensagem foi enviada pelo site.</p>
-        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:16px">
-          <p style="margin:0 0 8px"><strong>Nome:</strong> ${escapeHtml(normalizeText(message.name) ?? '')}</p>
-          <p style="margin:0 0 8px"><strong>E-mail:</strong> ${escapeHtml(normalizeText(message.email) ?? '')}</p>
-          <p style="margin:0"><strong>Telefone:</strong> ${escapeHtml(normalizeText(message.phone) ?? '')}</p>
-        </div>
-        <p style="margin:0 0 8px"><strong>Mensagem:</strong></p>
-        <p style="margin:0;line-height:1.6">${escapeHtml(normalizeText(message.message) ?? '').replace(/\n/g, '<br>')}</p>
-      </div>
-    </div>
-  `
+  return renderBrandEmail({
+    title: 'Novo contato recebido',
+    paragraphs: [
+      'Uma nova mensagem foi enviada pelo site.',
+    ],
+    rows: [
+      { label: 'Nome', value: normalizeText(message.name) ?? '' },
+      { label: 'E-mail', value: normalizeText(message.email) ?? '' },
+      { label: 'Telefone', value: normalizeText(message.phone) ?? '' },
+    ],
+    messageBlock: normalizeText(message.message),
+  })
 }
 
 function buildEmailRouting(
@@ -645,9 +641,10 @@ function requireBoundedText(value: unknown, errorMessage: string, maxLength: num
 }
 
 function requirePhone(value: unknown): string {
-  const phone = requireBoundedText(value, 'Informe seu telefone.', 60)
+  const phone = requireBoundedText(value, 'Informe seu telefone.', 20)
+  const digits = phone.replace(/\D/g, '')
 
-  if (!/^[+()\d\s-]{8,60}$/.test(phone)) {
+  if (!/^[+()\d\s-]{10,20}$/.test(phone) || digits.length < 10 || digits.length > 13) {
     throw new RequestError('Telefone invalido.')
   }
 
@@ -683,15 +680,6 @@ function parsePositiveInteger(value: unknown): number | null {
   }
 
   return null
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
 }
 
 function jsonResponse(payload: Record<string, unknown>, status = 200): Response {

@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js@2'
+import { renderBrandEmail } from '../_shared/brand-email.ts'
 import { sendTransactionalEmail, type EmailDeliveryConfig, type EmailProvider, type SmtpSecurity } from '../_shared/email-delivery.ts'
 
 type UserAction = 'list' | 'get' | 'create' | 'edit' | 'delete'
@@ -1081,17 +1082,19 @@ async function sendEmail(options: {
 }
 
 function renderUserDefinitionEmail(displayName: string, actionLink: string): string {
-  return `
-    <div style="font-family:Arial,sans-serif;background:#f8fafc;padding:24px;color:#1f2937">
-      <div style="max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:14px;padding:28px">
-        <h1 style="margin:0 0 14px;color:#273F4B;font-size:22px">Acesso ao CMS</h1>
-        <p style="margin:0 0 12px;line-height:1.6">Ola, ${escapeHtml(displayName)}.</p>
-        <p style="margin:0 0 20px;line-height:1.6">Seu usuario foi criado. Valide este e-mail e defina sua senha para acessar o painel administrativo.</p>
-        <a href="${escapeHtml(actionLink)}" style="display:inline-block;background:#273F4B;color:#ffffff;text-decoration:none;border-radius:10px;padding:12px 18px;font-weight:700">Validar e definir senha</a>
-        <p style="margin:20px 0 0;font-size:12px;line-height:1.5;color:#64748b">Este link expira em 24 horas. Se voce nao esperava este acesso, ignore este e-mail.</p>
-      </div>
-    </div>
-  `
+  return renderBrandEmail({
+    title: 'Acesso ao CMS',
+    greeting: `Ola, ${displayName}.`,
+    paragraphs: [
+      'Seu usuario foi criado.',
+      'Valide este e-mail e defina sua senha para acessar o painel administrativo.',
+    ],
+    action: {
+      label: 'Validar e definir senha',
+      url: actionLink,
+    },
+    footer: 'Este link expira em 24 horas. Se voce nao esperava este acesso, ignore este e-mail.',
+  })
 }
 
 function renderUserEmailChangeValidationEmail(
@@ -1100,30 +1103,22 @@ function renderUserEmailChangeValidationEmail(
   newEmail: string,
   actionLink: string,
 ): string {
-  return `
-    <div style="font-family:Arial,sans-serif;background:#f8fafc;padding:24px;color:#1f2937">
-      <div style="max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:14px;padding:28px">
-        <h1 style="margin:0 0 14px;color:#273F4B;font-size:22px">Validacao de novo e-mail</h1>
-        <p style="margin:0 0 12px;line-height:1.6">Ola, ${escapeHtml(displayName)}.</p>
-        <p style="margin:0 0 12px;line-height:1.6">Recebemos uma solicitacao para alterar seu e-mail de acesso ao CMS.</p>
-        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin:16px 0">
-          <p style="margin:0 0 8px"><strong>Anterior:</strong> ${escapeHtml(previousEmail)}</p>
-          <p style="margin:0"><strong>Novo:</strong> ${escapeHtml(newEmail)}</p>
-        </div>
-        <a href="${escapeHtml(actionLink)}" style="display:inline-block;background:#273F4B;color:#ffffff;text-decoration:none;border-radius:10px;padding:12px 18px;font-weight:700">Validar novo e-mail</a>
-        <p style="margin:20px 0 0;font-size:12px;line-height:1.5;color:#64748b">Este link expira em 30 minutos. Se voce nao reconhece essa alteracao, ignore este e-mail e fale com o administrador.</p>
-      </div>
-    </div>
-  `
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
+  return renderBrandEmail({
+    title: 'Validacao de novo e-mail',
+    greeting: `Ola, ${displayName}.`,
+    paragraphs: [
+      'Recebemos uma solicitacao para alterar seu e-mail de acesso ao CMS.',
+    ],
+    rows: [
+      { label: 'Anterior', value: previousEmail },
+      { label: 'Novo', value: newEmail },
+    ],
+    action: {
+      label: 'Validar novo e-mail',
+      url: actionLink,
+    },
+    footer: 'Este link expira em 30 minutos. Se voce nao reconhece essa alteracao, ignore este e-mail e fale com o administrador.',
+  })
 }
 
 function createAdminClient(): SupabaseClient {

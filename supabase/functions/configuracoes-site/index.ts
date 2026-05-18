@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js@2'
+import { renderBrandEmail } from '../_shared/brand-email.ts'
 import {
   encryptEmailSecret,
   sendTransactionalEmail,
@@ -318,14 +319,12 @@ function normalizeSmtpPortOrDefault(value: unknown): number {
 }
 
 function renderEmailTestHtml(): string {
-  return `
-    <div style="font-family:Arial,sans-serif;background:#f8fafc;padding:24px;color:#1f2937">
-      <div style="max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:14px;padding:28px">
-        <h1 style="margin:0 0 14px;color:#273F4B;font-size:22px">Teste de envio</h1>
-        <p style="margin:0;line-height:1.6">Se voce recebeu este e-mail, o provedor de envio do CMS foi configurado corretamente.</p>
-      </div>
-    </div>
-  `
+  return renderBrandEmail({
+    title: 'Teste de envio',
+    paragraphs: [
+      'Se voce recebeu este e-mail, o provedor de envio do CMS foi configurado corretamente.',
+    ],
+  })
 }
 
 async function buildSettingsPayload(

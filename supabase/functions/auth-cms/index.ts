@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js@2'
+import { renderBrandEmail } from '../_shared/brand-email.ts'
 import { sendTransactionalEmail, type EmailDeliveryConfig, type EmailProvider, type SmtpSecurity } from '../_shared/email-delivery.ts'
 
 type AuthCmsAction = 'login' | 'forgot-password' | 'update-password' | 'complete-user-setup' | 'verify-email-change'
@@ -364,28 +365,19 @@ async function sendEmail(options: {
 }
 
 function renderPasswordRecoveryEmail(publicUser: PublicUserRow, actionLink: string): string {
-  const name = escapeHtml(normalizeText(publicUser.name) ?? 'tudo bem')
-
-  return `
-    <div style="font-family:Arial,sans-serif;background:#f8fafc;padding:24px;color:#1f2937">
-      <div style="max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:14px;padding:28px">
-        <h1 style="margin:0 0 14px;color:#273F4B;font-size:22px">Recuperacao de senha</h1>
-        <p style="margin:0 0 12px;line-height:1.6">Ola, ${name}.</p>
-        <p style="margin:0 0 20px;line-height:1.6">Recebemos uma solicitacao para redefinir sua senha de acesso ao CMS.</p>
-        <a href="${escapeHtml(actionLink)}" style="display:inline-block;background:#273F4B;color:#ffffff;text-decoration:none;border-radius:10px;padding:12px 18px;font-weight:700">Redefinir senha</a>
-        <p style="margin:20px 0 0;font-size:12px;line-height:1.5;color:#64748b">Se voce nao solicitou essa alteracao, ignore este e-mail.</p>
-      </div>
-    </div>
-  `
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
+  return renderBrandEmail({
+    title: 'Recuperacao de senha',
+    greeting: `Ola, ${normalizeText(publicUser.name) ?? 'tudo bem'}.`,
+    paragraphs: [
+      'Recebemos uma solicitacao para redefinir sua senha de acesso ao CMS.',
+      'Clique no botao abaixo para cadastrar uma nova senha.',
+    ],
+    action: {
+      label: 'Redefinir senha',
+      url: actionLink,
+    },
+    footer: 'Se voce nao solicitou essa alteracao, ignore este e-mail.',
+  })
 }
 
 async function updatePassword(adminClient: SupabaseClient, body: AuthCmsRequest): Promise<Response> {
